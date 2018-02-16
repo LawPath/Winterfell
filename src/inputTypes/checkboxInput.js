@@ -1,72 +1,75 @@
-var React = require('react');
+import React from 'react';
 
 class CheckboxInput extends React.Component {
 
-  constructor(props) {
-    super(props);
+    constructor(props) {
+        super(props);
 
-    this.state = {
-      checked : props.defaultChecked
-    };
-  }
-
-  handleChange(e) {
-    if (e) {
-      this.setState({
-        checked : !this.state.checked
-      }, () => {
-        this.props.onChange(this.state.checked
-                            ? this.props.value
-                            : undefined);
-      });
-    } else {
-      this.props.onChange(this.state.checked
-                            ? this.props.value
-                            : undefined);
+        this.state = {
+            checked: props.defaultChecked
+        };
     }
-  }
 
-  componentDidMount() {
-    if (this.state.checked) {
-      this.handleChange();
+    handleChange(e) {
+        if (e) {
+            this.setState({
+                checked: !this.state.checked
+            }, () => {
+                this.props.onChange(this.state.checked
+                    ? this.props.value
+                    : undefined);
+            });
+        } else {
+            this.props.onChange(this.state.checked
+                ? this.props.value
+                : undefined);
+        }
     }
-  }
 
-  render() {
-    return (
-      <div className={this.props.classes.checkboxInput}>
-        <label className={this.props.classes.checkboxLabel}
-               id={this.props.labelId}>
-          <input type="checkbox"
-                 name={this.props.name}
-                 aria-labelledby={this.props.labelId}
-                 className={this.props.classes.checkbox}
-                 defaultChecked={this.state.checked}
-                 value={this.props.value}
-                 required={this.props.required
-                             ? 'required'
-                             : undefined}
-                 onChange={this.handleChange.bind(this)}
-                 onFocus={this.props.onFocus.bind(null, this.props.id)}
-                 onBlur={this.props.onBlur.bind(null, (this.state.checked
-                                                        ? this.props.value
-                                                        : undefined))} />
-          {this.props.text}
-        </label>
-      </div>
-    );
-  }
+    componentDidMount() {
+        if (this.state.checked) {
+            this.handleChange();
+        }
+    }
 
-};
+    render() {
+        return (
+            <div className={this.props.classes.checkboxInput}>
+                <label className={this.props.classes.checkboxLabel}
+                    id={this.props.labelId}
+                >
+                    <input type="checkbox"
+                        name={this.props.name}
+                        aria-labelledby={this.props.labelId}
+                        className={this.props.classes.checkbox}
+                        defaultChecked={this.state.checked}
+                        value={this.props.value}
+                        required={this.props.required
+                            ? 'required'
+                            : undefined}
+                        onChange={this.handleChange.bind(this)}
+                        onFocus={this.props.onFocus.bind(null, this.props.id)}
+                        onBlur={this.props.onBlur.bind(null, (this.state.checked
+                            ? this.props.value
+                            : undefined))}
+                    />
+                    {this.props.text}
+                </label >
+            </div >
+        );
+    }
+}
 
 CheckboxInput.defaultProps = {
-  text     : '',
-  defaultChecked: false,
-  classes  : {},
-  name     : '',
-  value    : '',
-  onChange : () => {},
-  onBlur   : () => {}
+    text: '',
+    defaultChecked: false,
+    classes: {},
+    name: '',
+    value: '',
+    onChange: () => {
+    },
+    onBlur: () => {
+    }
 };
 
-module.exports = CheckboxInput;
+export default CheckboxInput;
