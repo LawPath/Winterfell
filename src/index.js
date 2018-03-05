@@ -21,7 +21,7 @@ class Winterfell extends React.Component {
     }, props.schema);
 
     schema.formPanels = schema.formPanels
-                              .sort((a, b) => a.index > b.index);
+                              .sort((a, b) => a.index - b.index);
 
     var panelId = (typeof props.panelId !== 'undefined'
                      ? props.panelId

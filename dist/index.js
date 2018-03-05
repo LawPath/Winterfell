@@ -34,7 +34,7 @@ var Winterfell = (function (_React$Component) {
     }, props.schema);
 
     schema.formPanels = schema.formPanels.sort(function (a, b) {
-      return a.index > b.index;
+      return a.index - b.index;
     });
 
     var panelId = typeof props.panelId !== 'undefined' ? props.panelId : schema.formPanels.length > 0 ? schema.formPanels[0].panelId : undefined;
