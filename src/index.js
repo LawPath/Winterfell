@@ -156,7 +156,7 @@ class Winterfell extends React.Component {
             panel => panel.panelId == this.state.currentPanel.panelId
         );
 
-        console("this.state.currentPanel",this.state.currentPanel);
+        console.log("this.state.currentPanel",this.state.currentPanel);
 
         var numPanels = this.state.schema.questionPanels.length;
         var currentPanelIndex = _.indexOf(this.state.schema.questionPanels, currentPanel) + 1;
