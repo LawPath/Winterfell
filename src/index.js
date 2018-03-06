@@ -64,20 +64,20 @@ class Winterfell extends React.Component {
 
             let questionPanels = s.questionSets.map(qs => {
                     console.log("qs", qs);
-                    return qs.questions.map(q2 => q2.questionId).map(q2 => {
+                    return qs.questions.map(q2 => {
                         console.log("q2", q2);
                         return {
-                            questionId: q2,
-                            panel: s.formPanels.find(p => {
-                                console.log("p - 1", p);
-                                return s.questionPanels.find(p => {
-                                        console.log("p - 2", p);
-                                        return p.questionSets.find(pqs => {
+                            questionId: q2.questionId,
+                            panel: s.formPanels.find(p1 => {
+                                console.log("p - 1", p1);
+                                return s.questionPanels.find(p2 => {
+                                        console.log("p - 2", p2);
+                                        return p2.questionSets.find(pqs => {
                                             console.log("pqs", pqs);
                                             return pqs.questionSetId === qs.questionSetId
                                         })
                                     }
-                                ).panelId === p.panelId
+                                ).panelId === p1.panelId
                             })
                         };
                     })

@@ -72,20 +72,18 @@ var Winterfell = (function (_React$Component) {
                 var questionPanels = s.questionSets.map(function (qs) {
                     console.log("qs", qs);
                     return qs.questions.map(function (q2) {
-                        return q2.questionId;
-                    }).map(function (q2) {
                         console.log("q2", q2);
                         return {
-                            questionId: q2,
-                            panel: s.formPanels.find(function (p) {
-                                console.log("p - 1", p);
-                                return s.questionPanels.find(function (p) {
-                                    console.log("p - 2", p);
-                                    return p.questionSets.find(function (pqs) {
+                            questionId: q2.questionId,
+                            panel: s.formPanels.find(function (p1) {
+                                console.log("p - 1", p1);
+                                return s.questionPanels.find(function (p2) {
+                                    console.log("p - 2", p2);
+                                    return p2.questionSets.find(function (pqs) {
                                         console.log("pqs", pqs);
                                         return pqs.questionSetId === qs.questionSetId;
                                     });
-                                }).panelId === p.panelId;
+                                }).panelId === p1.panelId;
                             })
                         };
                     });
