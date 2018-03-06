@@ -57,14 +57,14 @@ class Winterfell extends React.Component {
         let newState = {
             action: nextProps.action,
             schema: s,
-            questionAnswers: nextProps.questionAnswers,
-            currentQuestionId: nextProps.currentQuestionId
+            questionAnswers: nextProps.questionAnswers
         };
 
         console.log("componentWillReceiveProps", nextProps);
         console.log("this.state.currentQuestionId", this.state.currentQuestionId);
 
-        if(this.state.currentQuestionId !== newState.currentQuestionId && !this.state.panelMoved) {
+        if(this.state.currentQuestionId &&
+            this.state.currentQuestionId !== nextProps.currentQuestionId ){//&& !this.state.panelMoved) {
             let questionPanels = s.questionSets.map(qs =>
                 qs.questions.map(q2 => {
                     return {
@@ -92,7 +92,7 @@ class Winterfell extends React.Component {
                 this.panelHistory.push(questionPanel.panel.panelId);
                 newState.currentPanel = questionPanel.panel;
                 newState.currentQuestionId = nextProps.currentQuestionId;
-                newState.panelMoved = false;
+                // newState.panelMoved = false;
             }
         }
 
@@ -126,7 +126,7 @@ class Winterfell extends React.Component {
         this.setState({
             currentPanel: panel,
             currentQuestionId: undefined,
-            panelMoved: true
+            // panelMoved: true
         }, this.props.onSwitchPanel.bind(null, panel));
     }
 

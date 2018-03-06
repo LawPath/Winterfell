@@ -64,14 +64,14 @@ var Winterfell = (function (_React$Component) {
             var newState = {
                 action: nextProps.action,
                 schema: s,
-                questionAnswers: nextProps.questionAnswers,
-                currentQuestionId: nextProps.currentQuestionId
+                questionAnswers: nextProps.questionAnswers
             };
 
             console.log("componentWillReceiveProps", nextProps);
             console.log("this.state.currentQuestionId", this.state.currentQuestionId);
 
-            if (this.state.currentQuestionId !== newState.currentQuestionId && !this.state.panelMoved) {
+            if (this.state.currentQuestionId && this.state.currentQuestionId !== nextProps.currentQuestionId) {
+                //&& !this.state.panelMoved) {
                 var questionPanels = s.questionSets.map(function (qs) {
                     return qs.questions.map(function (q2) {
                         return {
@@ -101,7 +101,7 @@ var Winterfell = (function (_React$Component) {
                     this.panelHistory.push(questionPanel.panel.panelId);
                     newState.currentPanel = questionPanel.panel;
                     newState.currentQuestionId = nextProps.currentQuestionId;
-                    newState.panelMoved = false;
+                    // newState.panelMoved = false;
                 }
             }
 
@@ -133,9 +133,9 @@ var Winterfell = (function (_React$Component) {
 
             this.setState({
                 currentPanel: panel,
-                currentQuestionId: undefined,
-                panelMoved: true
-            }, this.props.onSwitchPanel.bind(null, panel));
+                currentQuestionId: undefined
+            }, // panelMoved: true
+            this.props.onSwitchPanel.bind(null, panel));
         }
     }, {
         key: 'handleBackButtonClick',
