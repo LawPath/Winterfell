@@ -60,31 +60,30 @@ class Winterfell extends React.Component {
             currentQuestionId: nextProps.currentQuestionId
         };
 
-        if (this.state.currentPanel !== nextProps.currentQuestionId) {
 
-            let questionPanels = s.questionSets.map(qs =>
-                qs.questions.map(q2 => {
-                    return {
-                        questionId: q2.questionId,
-                        panel: s.formPanels.find(p1 =>
-                            s.questionPanels.find(p2 =>
-                                p2.questionSets.find(pqs =>
-                                    pqs.questionSetId === qs.questionSetId
-                                )
-                            ).panelId === p1.panelId
-                        )
-                    };
-                })
-            ).reduce((acc, el) => acc.concat(el), []);
+        let questionPanels = s.questionSets.map(qs =>
+            qs.questions.map(q2 => {
+                return {
+                    questionId: q2.questionId,
+                    panel: s.formPanels.find(p1 =>
+                        s.questionPanels.find(p2 =>
+                            p2.questionSets.find(pqs =>
+                                pqs.questionSetId === qs.questionSetId
+                            )
+                        ).panelId === p1.panelId
+                    )
+                };
+            })
+        ).reduce((acc, el) => acc.concat(el), []);
 
-            let questionPanel = questionPanels.find(qs => {
-                if (nextProps.currentQuestionId === qs.questionId) {
-                    return qs.panel;
-                }
-            });
+        let questionPanel = questionPanels.find(qs => {
+            if (nextProps.currentQuestionId === qs.questionId) {
+                return qs.panel;
+            }
+        });
 
+        if (this.state.currentPanel.panelId !== questionPanel.panel.panelId) {
             this.handleSwitchPanel(questionPanel.panel.panelId, false);
-            // newState['currentPanel'] = questionPanel.panel;
         }
 
         this.setState(newState);
