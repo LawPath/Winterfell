@@ -49,11 +49,37 @@ class Winterfell extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({
-      action          : nextProps.action,
-      schema          : nextProps.schema,
-      questionAnswers : nextProps.questionAnswers
-    });
+
+      let s = nextProps.schema;
+      let newState = {
+          action: nextProps.action,
+          schema: s,
+          questionAnswers: nextProps.questionAnswers,
+          currentQuestionId: nextProps.currentQuestionId
+      };
+
+      let questionPanels = s.questionSets.map(qs =>
+          qs.questions.map(q2 => q2.questionId).map(q2 => {
+              return {
+                  questionId: q2,
+                  panel: s.formPanels.find(p => s.questionPanels.find(p =>
+                      p.questionSets.find(pqs => pqs.questionSetId === qs.questionSetId)
+                  ).panelId === p.panelId)
+              };
+          })
+      ).reduce((acc, el) => acc.concat(el), []);
+
+      if (this.props.currentQuestionId !== nextProps.currentQuestionId) {
+          let panel = questionPanels.find(qs => {
+              if (nextProps.currentQuestionId === qs.questionId) {
+                  return qs.panel;
+              }
+          });
+          console.log("props", panel);
+          newState['currentPanel'] = panel;
+      }
+
+      this.setState(newState);
   }
 
   handleAnswerChange(questionId, questionAnswer) {
@@ -184,6 +210,7 @@ Winterfell.defaultProps = {
   disableSubmit          : false,
   renderError            : undefined,
   renderRequiredAsterisk : undefined,
+  currentQuestionId      : undefined,
   onSubmit               : () => {},
   onUpdate               : () => {},
   onFocus                : () => {},

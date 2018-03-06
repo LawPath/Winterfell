@@ -58,11 +58,45 @@ var Winterfell = (function (_React$Component) {
   _createClass(Winterfell, [{
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(nextProps) {
-      this.setState({
+
+      var s = nextProps.schema;
+      var newState = {
         action: nextProps.action,
-        schema: nextProps.schema,
-        questionAnswers: nextProps.questionAnswers
-      });
+        schema: s,
+        questionAnswers: nextProps.questionAnswers,
+        currentQuestionId: nextProps.currentQuestionId
+      };
+
+      var questionPanels = s.questionSets.map(function (qs) {
+        return qs.questions.map(function (q2) {
+          return q2.questionId;
+        }).map(function (q2) {
+          return {
+            questionId: q2,
+            panel: s.formPanels.find(function (p) {
+              return s.questionPanels.find(function (p) {
+                return p.questionSets.find(function (pqs) {
+                  return pqs.questionSetId === qs.questionSetId;
+                });
+              }).panelId === p.panelId;
+            })
+          };
+        });
+      }).reduce(function (acc, el) {
+        return acc.concat(el);
+      }, []);
+
+      if (this.props.currentQuestionId !== nextProps.currentQuestionId) {
+        var panel = questionPanels.find(function (qs) {
+          if (nextProps.currentQuestionId === qs.questionId) {
+            return qs.panel;
+          }
+        });
+        console.log("props", panel);
+        newState['currentPanel'] = panel;
+      }
+
+      this.setState(newState);
     }
   }, {
     key: 'handleAnswerChange',
@@ -207,6 +241,7 @@ Winterfell.defaultProps = {
   disableSubmit: false,
   renderError: undefined,
   renderRequiredAsterisk: undefined,
+  currentQuestionId: undefined,
   onSubmit: function onSubmit() {},
   onUpdate: function onUpdate() {},
   onFocus: function onFocus() {},
