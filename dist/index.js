@@ -67,8 +67,7 @@ var Winterfell = (function (_React$Component) {
                 currentQuestionId: nextProps.currentQuestionId
             };
 
-            console.log("componentWillReceiveProps");
-            if (this.props.currentQuestionId !== nextProps.currentQuestionId) {
+            if (this.state.currentPanel !== nextProps.currentQuestionId) {
 
                 var questionPanels = s.questionSets.map(function (qs) {
                     return qs.questions.map(function (q2) {
@@ -93,7 +92,6 @@ var Winterfell = (function (_React$Component) {
                     }
                 });
 
-                console.log("handleSwitchPanel", questionPanel.panel.panelId);
                 this.handleSwitchPanel(questionPanel.panel.panelId, false);
                 // newState['currentPanel'] = questionPanel.panel;
             }
@@ -167,8 +165,6 @@ var Winterfell = (function (_React$Component) {
             var currentPanel = _.find(this.state.schema.questionPanels, function (panel) {
                 return panel.panelId == _this2.state.currentPanel.panelId;
             });
-
-            console.log("this.state.currentPanel", this.state.currentPanel);
 
             var numPanels = this.state.schema.questionPanels.length;
             var currentPanelIndex = _.indexOf(this.state.schema.questionPanels, currentPanel) + 1;
