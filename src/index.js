@@ -62,37 +62,28 @@ class Winterfell extends React.Component {
 
         if (this.props.currentQuestionId !== nextProps.currentQuestionId) {
 
-            let questionPanels = s.questionSets.map(qs => {
-                    // console.log("qs", qs);
-                    return qs.questions.map(q2 => {
-                        // console.log("q2", q2);
-                        return {
-                            questionId: q2.questionId,
-                            panel: s.formPanels.find(p1 => {
-                                // console.log("p - 1", p1);
-                                return s.questionPanels.find(p2 => {
-                                        // console.log("p - 2", p2);
-                                        return p2.questionSets.find(pqs => {
-                                            // console.log("pqs", pqs);
-                                            return pqs.questionSetId === qs.questionSetId
-                                        })
-                                    }
-                                ).panelId === p1.panelId
-                            })
-                        };
-                    })
-                }
+            let questionPanels = s.questionSets.map(qs =>
+                qs.questions.map(q2 => {
+                    return {
+                        questionId: q2.questionId,
+                        panel: s.formPanels.find(p1 =>
+                            s.questionPanels.find(p2 =>
+                                p2.questionSets.find(pqs =>
+                                    pqs.questionSetId === qs.questionSetId
+                                )
+                            ).panelId === p1.panelId
+                        )
+                    };
+                })
             ).reduce((acc, el) => acc.concat(el), []);
 
-            console.log("questionPanels", questionPanels);
-
-            let panel = questionPanels.find(qs => {
+            let questionPanel = questionPanels.find(qs => {
                 if (nextProps.currentQuestionId === qs.questionId) {
                     return qs.panel;
                 }
             });
-            console.log("props", panel);
-            newState['currentPanel'] = panel;
+
+            newState['currentPanel'] = questionPanel.panel;
         }
 
         this.setState(newState);
