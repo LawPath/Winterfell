@@ -60,30 +60,37 @@ class Winterfell extends React.Component {
             currentQuestionId: nextProps.currentQuestionId
         };
 
+        console.log("componentWillReceiveProps", nextProps);
 
-        let questionPanels = s.questionSets.map(qs =>
-            qs.questions.map(q2 => {
-                return {
-                    questionId: q2.questionId,
-                    panel: s.formPanels.find(p1 =>
-                        s.questionPanels.find(p2 =>
-                            p2.questionSets.find(pqs =>
-                                pqs.questionSetId === qs.questionSetId
-                            )
-                        ).panelId === p1.panelId
-                    )
-                };
-            })
-        ).reduce((acc, el) => acc.concat(el), []);
+        if(this.state.currentQuestionId !== newState.currentQuestionId) {
+            let questionPanels = s.questionSets.map(qs =>
+                qs.questions.map(q2 => {
+                    return {
+                        questionId: q2.questionId,
+                        panel: s.formPanels.find(p1 =>
+                            s.questionPanels.find(p2 =>
+                                p2.questionSets.find(pqs =>
+                                    pqs.questionSetId === qs.questionSetId
+                                )
+                            ).panelId === p1.panelId
+                        )
+                    };
+                })
+            ).reduce((acc, el) => acc.concat(el), []);
 
-        let questionPanel = questionPanels.find(qs => {
-            if (nextProps.currentQuestionId === qs.questionId) {
-                return qs.panel;
+            let questionPanel = questionPanels.find(qs => {
+                if (nextProps.currentQuestionId === qs.questionId) {
+                    return qs.panel;
+                }
+            });
+
+            console.log("switching for panel", questionPanel.panel);
+
+            if (this.state.currentPanel.panelId !== questionPanel.panel.panelId) {
+                this.panelHistory.push(questionPanel.panel.panelId);
+                newState.currentPanel = questionPanel.panel;
+                newState.currentQuestionId = nextProps.currentQuestionId;
             }
-        });
-
-        if (this.state.currentPanel.panelId !== questionPanel.panel.panelId) {
-            this.handleSwitchPanel(questionPanel.panel.panelId, false);
         }
 
         this.setState(newState);

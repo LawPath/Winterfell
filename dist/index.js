@@ -67,31 +67,39 @@ var Winterfell = (function (_React$Component) {
                 currentQuestionId: nextProps.currentQuestionId
             };
 
-            var questionPanels = s.questionSets.map(function (qs) {
-                return qs.questions.map(function (q2) {
-                    return {
-                        questionId: q2.questionId,
-                        panel: s.formPanels.find(function (p1) {
-                            return s.questionPanels.find(function (p2) {
-                                return p2.questionSets.find(function (pqs) {
-                                    return pqs.questionSetId === qs.questionSetId;
-                                });
-                            }).panelId === p1.panelId;
-                        })
-                    };
+            console.log("componentWillReceiveProps", nextProps);
+
+            if (this.state.currentQuestionId !== newState.currentQuestionId) {
+                var questionPanels = s.questionSets.map(function (qs) {
+                    return qs.questions.map(function (q2) {
+                        return {
+                            questionId: q2.questionId,
+                            panel: s.formPanels.find(function (p1) {
+                                return s.questionPanels.find(function (p2) {
+                                    return p2.questionSets.find(function (pqs) {
+                                        return pqs.questionSetId === qs.questionSetId;
+                                    });
+                                }).panelId === p1.panelId;
+                            })
+                        };
+                    });
+                }).reduce(function (acc, el) {
+                    return acc.concat(el);
+                }, []);
+
+                var questionPanel = questionPanels.find(function (qs) {
+                    if (nextProps.currentQuestionId === qs.questionId) {
+                        return qs.panel;
+                    }
                 });
-            }).reduce(function (acc, el) {
-                return acc.concat(el);
-            }, []);
 
-            var questionPanel = questionPanels.find(function (qs) {
-                if (nextProps.currentQuestionId === qs.questionId) {
-                    return qs.panel;
+                console.log("switching for panel", questionPanel.panel);
+
+                if (this.state.currentPanel.panelId !== questionPanel.panel.panelId) {
+                    this.panelHistory.push(questionPanel.panel.panelId);
+                    newState.currentPanel = questionPanel.panel;
+                    newState.currentQuestionId = nextProps.currentQuestionId;
                 }
-            });
-
-            if (this.state.currentPanel.panelId !== questionPanel.panel.panelId) {
-                this.handleSwitchPanel(questionPanel.panel.panelId, false);
             }
 
             this.setState(newState);
