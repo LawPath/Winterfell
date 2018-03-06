@@ -68,6 +68,7 @@ var Winterfell = (function (_React$Component) {
             };
 
             console.log("componentWillReceiveProps", nextProps);
+            console.log("this.state.currentQuestionId", this.state.currentQuestionId);
 
             if (this.state.currentQuestionId !== newState.currentQuestionId) {
                 var questionPanels = s.questionSets.map(function (qs) {
@@ -129,7 +130,8 @@ var Winterfell = (function (_React$Component) {
             }
 
             this.setState({
-                currentPanel: panel
+                currentPanel: panel,
+                currentQuestionId: undefined
             }, this.props.onSwitchPanel.bind(null, panel));
         }
     }, {

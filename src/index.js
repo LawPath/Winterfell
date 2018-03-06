@@ -61,6 +61,7 @@ class Winterfell extends React.Component {
         };
 
         console.log("componentWillReceiveProps", nextProps);
+        console.log("this.state.currentQuestionId", this.state.currentQuestionId);
 
         if(this.state.currentQuestionId !== newState.currentQuestionId) {
             let questionPanels = s.questionSets.map(qs =>
@@ -121,7 +122,8 @@ class Winterfell extends React.Component {
         }
 
         this.setState({
-            currentPanel: panel
+            currentPanel: panel,
+            currentQuestionId: undefined
         }, this.props.onSwitchPanel.bind(null, panel));
     }
 
