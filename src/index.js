@@ -63,8 +63,7 @@ class Winterfell extends React.Component {
         console.log("componentWillReceiveProps", nextProps);
         console.log("this.state.currentQuestionId", this.state.currentQuestionId);
 
-        if(this.state.currentQuestionId &&
-            this.state.currentQuestionId !== nextProps.currentQuestionId ){//&& !this.state.panelMoved) {
+        if(nextProps.currentQuestionId ){//&& !this.state.panelMoved) {
             let questionPanels = s.questionSets.map(qs =>
                 qs.questions.map(q2 => {
                     return {

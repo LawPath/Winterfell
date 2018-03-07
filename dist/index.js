@@ -70,7 +70,7 @@ var Winterfell = (function (_React$Component) {
             console.log("componentWillReceiveProps", nextProps);
             console.log("this.state.currentQuestionId", this.state.currentQuestionId);
 
-            if (this.state.currentQuestionId && this.state.currentQuestionId !== nextProps.currentQuestionId) {
+            if (nextProps.currentQuestionId) {
                 //&& !this.state.panelMoved) {
                 var questionPanels = s.questionSets.map(function (qs) {
                     return qs.questions.map(function (q2) {
