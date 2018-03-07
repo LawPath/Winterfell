@@ -60,10 +60,7 @@ class Winterfell extends React.Component {
             questionAnswers: nextProps.questionAnswers
         };
 
-        console.log("componentWillReceiveProps", nextProps);
-        console.log("this.state.currentQuestionId", this.state.currentQuestionId);
-
-        if(nextProps.currentQuestionId ){//&& !this.state.panelMoved) {
+        if (nextProps.currentQuestionId) {
             let questionPanels = s.questionSets.map(qs =>
                 qs.questions.map(q2 => {
                     return {
@@ -85,13 +82,11 @@ class Winterfell extends React.Component {
                 }
             });
 
-            console.log("switching for panel", questionPanel.panel);
-
             if (this.state.currentPanel.panelId !== questionPanel.panel.panelId) {
                 this.panelHistory.push(questionPanel.panel.panelId);
                 newState.currentPanel = questionPanel.panel;
                 newState.currentQuestionId = nextProps.currentQuestionId;
-                // newState.panelMoved = false;
+                this.props.onFocus(nextProps.currentQuestionId);
             }
         }
 
@@ -125,7 +120,6 @@ class Winterfell extends React.Component {
         this.setState({
             currentPanel: panel,
             currentQuestionId: undefined,
-            // panelMoved: true
         }, this.props.onSwitchPanel.bind(null, panel));
     }
 
