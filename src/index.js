@@ -122,6 +122,7 @@ class Winterfell extends React.Component {
         let newPanelIndex = panelIndex > 0 ? this.state.schema.formPanels.find(fp =>
             fp.index === panelIndex - 1) : null;
 
+        console.log("this.state.schema.formPanels", JSON.stringify(this.state.schema.formPanels));
         console.log("panelIndex", JSON.stringify(panelIndex));
         console.log("newPanelIndex", JSON.stringify(newPanelIndex));
 

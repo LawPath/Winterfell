@@ -135,6 +135,7 @@ var Winterfell = (function (_React$Component) {
                 return fp.index === panelIndex - 1;
             }) : null;
 
+            console.log("this.state.schema.formPanels", JSON.stringify(this.state.schema.formPanels));
             console.log("panelIndex", JSON.stringify(panelIndex));
             console.log("newPanelIndex", JSON.stringify(newPanelIndex));
 
