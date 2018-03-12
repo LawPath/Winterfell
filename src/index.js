@@ -11,8 +11,6 @@ class Winterfell extends React.Component {
 
         this.formComponent = null;
 
-        this.panelHistory = [];
-
         var schema = _.extend({
             classes: {},
             formPanels: [],
@@ -83,7 +81,6 @@ class Winterfell extends React.Component {
             });
 
             if (this.state.currentPanel.panelId !== questionPanel.panel.panelId) {
-                this.panelHistory.push(questionPanel.panel.panelId);
                 newState.currentPanel = questionPanel.panel;
                 newState.currentQuestionId = nextProps.currentQuestionId;
                 this.props.onFocus(nextProps.currentQuestionId);
@@ -113,10 +110,6 @@ class Winterfell extends React.Component {
                 + panelId + '", which does not exist.');
         }
 
-        if (!preventHistory) {
-            this.panelHistory.push(panel.panelId);
-        }
-
         this.setState({
             currentPanel: panel,
             currentQuestionId: undefined,
@@ -124,10 +117,13 @@ class Winterfell extends React.Component {
     }
 
     handleBackButtonClick() {
-        this.panelHistory.pop();
+        let panelIndex = this.state.schema.formPanels.find(fp =>
+            fp.panelId === this.state.currentPanel.panelId).index;
+        let newPanelIndex = panelIndex > 0 ? this.state.schema.formPanels.find(fp =>
+            fp.index === panelIndex - 1) : null;
 
         this.handleSwitchPanel.call(
-            this, this.panelHistory[this.panelHistory.length - 1], true
+            this, newPanelIndex ? newPanelIndex.panelId : 0, true
         );
     }
 
@@ -183,7 +179,6 @@ class Winterfell extends React.Component {
                         numPanels={numPanels}
                         currentPanelIndex={currentPanelIndex}
                         questionAnswers={this.state.questionAnswers}
-                        panelHistory={this.panelHistory}
                         renderError={this.props.renderError}
                         renderRequiredAsterisk={this.props.renderRequiredAsterisk}
                         onAnswerChange={this.handleAnswerChange.bind(this)}
@@ -198,7 +193,6 @@ class Winterfell extends React.Component {
     }
 
     componentDidMount() {
-        this.panelHistory.push(this.state.currentPanel.panelId);
         this.props.onRender();
     }
 

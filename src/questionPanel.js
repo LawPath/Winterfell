@@ -125,10 +125,6 @@ class QuestionPanel extends React.Component {
   }
 
   handleBackButtonClick() {
-    if (this.props.panelHistory.length == 0) {
-      return;
-    }
-
     this.props.onPanelBack();
   }
 
@@ -206,6 +202,7 @@ class QuestionPanel extends React.Component {
             </div>
         </div>);
     }
+      console.log("this.props.currentPanelIndex",this.props.currentPanelIndex);
 
     return (
       <div className={this.props.classes.questionPanel}>
@@ -236,7 +233,7 @@ class QuestionPanel extends React.Component {
         </div>
         { this.props.progress && this.props.progress.position==='middle' ? progressBar : undefined }
         <div className={this.props.classes.buttonBar}>
-          {this.props.panelHistory.length > 1
+          {this.props.currentPanelIndex > 0
             && !this.props.backButton.disabled
             ? (
                 <Button text={this.props.backButton.text || 'Back'}
@@ -288,7 +285,6 @@ QuestionPanel.defaultProps = {
   onSwitchPanel          : () => {},
   onPanelBack            : () => {},
   onFocus                : () => {},
-  panelHistory           : [],
 };
 
 module.exports = QuestionPanel;

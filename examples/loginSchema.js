@@ -9,7 +9,7 @@ module.exports = {
     "buttonBar" : "button-bar"
   },
   "formPanels" : [{
-    "index" : 1,
+    "index" : 0,
     "panelId" : "register-panel"
   }],
   "questionPanels" : [{

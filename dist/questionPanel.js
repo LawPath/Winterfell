@@ -137,10 +137,6 @@ var QuestionPanel = (function (_React$Component) {
   }, {
     key: 'handleBackButtonClick',
     value: function handleBackButtonClick() {
-      if (this.props.panelHistory.length == 0) {
-        return;
-      }
-
       this.props.onPanelBack();
     }
   }, {
@@ -229,6 +225,7 @@ var QuestionPanel = (function (_React$Component) {
           )
         );
       }
+      console.log("this.props.currentPanelIndex", this.props.currentPanelIndex);
 
       return React.createElement(
         'div',
@@ -257,7 +254,7 @@ var QuestionPanel = (function (_React$Component) {
         React.createElement(
           'div',
           { className: this.props.classes.buttonBar },
-          this.props.panelHistory.length > 1 && !this.props.backButton.disabled ? React.createElement(Button, { text: this.props.backButton.text || 'Back',
+          this.props.currentPanelIndex > 0 && !this.props.backButton.disabled ? React.createElement(Button, { text: this.props.backButton.text || 'Back',
             onClick: this.handleBackButtonClick.bind(this),
             className: this.props.classes.backButton }) : undefined,
           !this.props.button.disabled ? React.createElement(Button, { text: this.props.button.text,
@@ -302,8 +299,7 @@ QuestionPanel.defaultProps = {
   onAnswerChange: function onAnswerChange() {},
   onSwitchPanel: function onSwitchPanel() {},
   onPanelBack: function onPanelBack() {},
-  onFocus: function onFocus() {},
-  panelHistory: []
+  onFocus: function onFocus() {}
 };
 
 module.exports = QuestionPanel;

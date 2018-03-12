@@ -24,8 +24,6 @@ var Winterfell = (function (_React$Component) {
 
         this.formComponent = null;
 
-        this.panelHistory = [];
-
         var schema = _.extend({
             classes: {},
             formPanels: [],
@@ -92,7 +90,6 @@ var Winterfell = (function (_React$Component) {
                 });
 
                 if (this.state.currentPanel.panelId !== questionPanel.panel.panelId) {
-                    this.panelHistory.push(questionPanel.panel.panelId);
                     newState.currentPanel = questionPanel.panel;
                     newState.currentQuestionId = nextProps.currentQuestionId;
                     this.props.onFocus(nextProps.currentQuestionId);
@@ -121,10 +118,6 @@ var Winterfell = (function (_React$Component) {
                 throw new Error('Winterfell: Tried to switch to panel "' + panelId + '", which does not exist.');
             }
 
-            if (!preventHistory) {
-                this.panelHistory.push(panel.panelId);
-            }
-
             this.setState({
                 currentPanel: panel,
                 currentQuestionId: undefined
@@ -133,14 +126,21 @@ var Winterfell = (function (_React$Component) {
     }, {
         key: 'handleBackButtonClick',
         value: function handleBackButtonClick() {
-            this.panelHistory.pop();
+            var _this = this;
 
-            this.handleSwitchPanel.call(this, this.panelHistory[this.panelHistory.length - 1], true);
+            var panelIndex = this.state.schema.formPanels.find(function (fp) {
+                return fp.panelId === _this.state.currentPanel.panelId;
+            }).index;
+            var newPanelIndex = panelIndex > 0 ? this.state.schema.formPanels.find(function (fp) {
+                return fp.index === panelIndex - 1;
+            }) : null;
+
+            this.handleSwitchPanel.call(this, newPanelIndex ? newPanelIndex.panelId : 0, true);
         }
     }, {
         key: 'handleSubmit',
         value: function handleSubmit(action) {
-            var _this = this;
+            var _this2 = this;
 
             if (this.props.disableSubmit) {
                 this.props.onSubmit(this.state.questionAnswers, action);
@@ -154,20 +154,20 @@ var Winterfell = (function (_React$Component) {
             this.setState({
                 action: action
             }, function () {
-                if (!_this.formComponent) {
+                if (!_this2.formComponent) {
                     return;
                 }
 
-                _this.formComponent.submit();
+                _this2.formComponent.submit();
             });
         }
     }, {
         key: 'render',
         value: function render() {
-            var _this2 = this;
+            var _this3 = this;
 
             var currentPanel = _.find(this.state.schema.questionPanels, function (panel) {
-                return panel.panelId == _this2.state.currentPanel.panelId;
+                return panel.panelId == _this3.state.currentPanel.panelId;
             });
 
             var numPanels = this.state.schema.questionPanels.length;
@@ -179,7 +179,7 @@ var Winterfell = (function (_React$Component) {
                     encType: this.props.encType,
                     action: this.state.action,
                     ref: function (ref) {
-                        return _this2.formComponent = ref;
+                        return _this3.formComponent = ref;
                     },
                     className: this.state.schema.classes.form
                 },
@@ -200,7 +200,6 @@ var Winterfell = (function (_React$Component) {
                         numPanels: numPanels,
                         currentPanelIndex: currentPanelIndex,
                         questionAnswers: this.state.questionAnswers,
-                        panelHistory: this.panelHistory,
                         renderError: this.props.renderError,
                         renderRequiredAsterisk: this.props.renderRequiredAsterisk,
                         onAnswerChange: this.handleAnswerChange.bind(this),
@@ -215,7 +214,6 @@ var Winterfell = (function (_React$Component) {
     }, {
         key: 'componentDidMount',
         value: function componentDidMount() {
-            this.panelHistory.push(this.state.currentPanel.panelId);
             this.props.onRender();
         }
     }]);
