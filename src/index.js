@@ -100,7 +100,7 @@ class Winterfell extends React.Component {
         }, this.props.onUpdate.bind(null, questionAnswers));
     }
 
-    handleSwitchPanel(panelId, preventHistory) {
+    handleSwitchPanel(panelId) {
         var panel = _.find(this.props.schema.formPanels, {
             panelId: panelId
         });
@@ -122,8 +122,11 @@ class Winterfell extends React.Component {
         let newPanelIndex = panelIndex > 0 ? this.state.schema.formPanels.find(fp =>
             fp.index === panelIndex - 1) : null;
 
+        console.log("panelIndex", JSON.stringify(panelIndex));
+        console.log("newPanelIndex", JSON.stringify(newPanelIndex));
+
         this.handleSwitchPanel.call(
-            this, newPanelIndex ? newPanelIndex.panelId : 0, true
+            this, newPanelIndex ? newPanelIndex.panelId : 0
         );
     }
 

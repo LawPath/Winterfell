@@ -109,7 +109,7 @@ var Winterfell = (function (_React$Component) {
         }
     }, {
         key: 'handleSwitchPanel',
-        value: function handleSwitchPanel(panelId, preventHistory) {
+        value: function handleSwitchPanel(panelId) {
             var panel = _.find(this.props.schema.formPanels, {
                 panelId: panelId
             });
@@ -135,7 +135,10 @@ var Winterfell = (function (_React$Component) {
                 return fp.index === panelIndex - 1;
             }) : null;
 
-            this.handleSwitchPanel.call(this, newPanelIndex ? newPanelIndex.panelId : 0, true);
+            console.log("panelIndex", JSON.stringify(panelIndex));
+            console.log("newPanelIndex", JSON.stringify(newPanelIndex));
+
+            this.handleSwitchPanel.call(this, newPanelIndex ? newPanelIndex.panelId : 0);
         }
     }, {
         key: 'handleSubmit',
