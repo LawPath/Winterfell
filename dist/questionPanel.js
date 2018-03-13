@@ -200,15 +200,27 @@ var QuestionPanel = (function (_React$Component) {
             });
 
             var completionPercent = 0;
-            if (typeof this.props.progress !== 'undefined' && this.props.progress.type) {
-                if (!this.props.progress.style || this.props.progress.style === 'classic') {
+
+            if (typeof this.props.progress !== 'undefined') {
+                if (!this.props.progress.variation || this.props.progress.variation === 'classic') {
                     completionPercent = Math.floor(10000 / this.props.numPanels * this.props.currentPanelIndex) / 100;
-                }
-                if (this.props.progress.style === 'only-completed') {
-                    var nQuestionsCompleted = this.props.questionAnswers.reduce(function (qa, accum) {
-                        return qa ? accum++ : accum;
-                    }, 0);
-                    completionPercent = Math.floor(10000 / this.props.questionAnswers.length * nQuestionsCompleted) / 100;
+                } else if (this.props.progress.variation === 'only-completed' && this.props.questionAnswers) {
+                    var questionSetsCompleted = this.props.schema.questionSets.reduce(function (acc, qs) {
+                        return acc.concat(qs.questions.map(function (q) {
+                            return {
+                                questionId: q.questionId,
+                                answered: !!_this3.props.questionAnswers[q.questionId]
+                            };
+                        }));
+                    }, []);
+                    var nQuestionsCompleted = questionSetsCompleted.filter(function (e) {
+                        return e.answered;
+                    }).length;
+                    var nQuestionsTotal = questionSetsCompleted.length;
+                    console.log("nQuestionsCompleted", nQuestionsCompleted);
+                    console.log("nQuestionsTotal", nQuestionsTotal);
+                    console.log("questionSetsCompleted", questionSetsCompleted);
+                    completionPercent = Math.floor(10000 / nQuestionsTotal * nQuestionsCompleted) / 100;
                 }
             }
             var progressBar = undefined;

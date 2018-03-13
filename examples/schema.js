@@ -44,7 +44,8 @@ module.exports = {
             showBar: true,
             showPercent: true,
             text: 'Completed',
-            position: 'bottom'
+            position: 'bottom',
+            variation: 'only-completed'
         },
         action: {
             conditions: [],
@@ -67,7 +68,8 @@ module.exports = {
             showBar: true,
             showPercent: true,
             text: 'Completed',
-            position: 'bottom'
+            position: 'bottom',
+            variation: 'only-completed'
         },
         action: {
             conditions: [],
@@ -90,7 +92,8 @@ module.exports = {
             showBar: true,
             showPercent: true,
             text: 'Completed',
-            position: 'bottom'
+            position: 'bottom',
+            variation: 'only-completed'
         },
         action: {
             conditions: [],
@@ -113,7 +116,8 @@ module.exports = {
             showBar: true,
             showPercent: true,
             text: 'Completed',
-            position: 'bottom'
+            position: 'bottom',
+            variation: 'only-completed'
         },
         action: {
             conditions: [],
@@ -136,7 +140,8 @@ module.exports = {
             showBar: true,
             showPercent: true,
             text: 'Completed',
-            position: 'bottom'
+            position: 'bottom',
+            variation: 'only-completed'
         },
         action: {
             conditions: [],
@@ -220,7 +225,7 @@ module.exports = {
                         questionId: 'discloser_address',
                         question: 'What is the Address of the legal party disclosing the information?',
                         input: {
-                            type: 'addressInput'
+                            type: 'textInput'
                         },
                         validateOn: 'blur',
                         validations: [{
@@ -306,7 +311,7 @@ module.exports = {
                         questionId: 'receiver_address',
                         question: 'What is the address of the party recieving the information?',
                         input: {
-                            type: 'addressInput'
+                            type: 'textInput'
                         },
                         validateOn: 'blur',
                         validations: [{
