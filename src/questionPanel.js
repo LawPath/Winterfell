@@ -200,9 +200,9 @@ class QuestionPanel extends React.Component {
                     }))), []);
                 let nQuestionsCompleted = questionSetsCompleted.filter(e => e.answered).length;
                 let nQuestionsTotal = questionSetsCompleted.length;
-                console.log("nQuestionsCompleted", nQuestionsCompleted);
-                console.log("nQuestionsTotal", nQuestionsTotal);
-                console.log("questionSetsCompleted", questionSetsCompleted);
+                // console.log("nQuestionsCompleted", nQuestionsCompleted);
+                // console.log("nQuestionsTotal", nQuestionsTotal);
+                // console.log("questionSetsCompleted", questionSetsCompleted);
                 completionPercent = Math.floor(10000 / nQuestionsTotal * nQuestionsCompleted) / 100;
             }
         }
@@ -221,7 +221,6 @@ class QuestionPanel extends React.Component {
                     </div >
                 </div >);
         }
-        console.log("this.props.currentPanelIndex", this.props.currentPanelIndex);
 
         return (
             <div className={this.props.classes.questionPanel}>
