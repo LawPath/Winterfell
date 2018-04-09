@@ -26,8 +26,6 @@ var _moment = require('moment');
 
 var _moment2 = _interopRequireDefault(_moment);
 
-require('../css/styles.css');
-
 require('react-datepicker/dist/react-datepicker.css');
 
 var DateInput = (function (_React$Component) {

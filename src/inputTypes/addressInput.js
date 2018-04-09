@@ -1,5 +1,4 @@
 import React from 'react';
-import '../css/styles.css';
 
 export default class AddressInput extends React.Component {
   constructor(props) {

@@ -18,8 +18,6 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-require('../css/styles.css');
-
 var SignatureInput = (function (_React$Component) {
   _inherits(SignatureInput, _React$Component);
 

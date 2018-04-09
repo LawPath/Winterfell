@@ -15,13 +15,7 @@ module.exports = {
     }, {
       test: /\.css$/,
       loader: ExtractTextPlugin.extract("style-loader", "css-loader")
-    }, {
-      test: /\.less$/,
-      loaders: ['style', 'css', 'less']
-    }, {
-      test: /\.(woff|woff2|eot|ttf|otf|svg)$/,
-      loader: 'file-loader'
-    }],
+    }]
   },
   externals: {
     'react': 'React',

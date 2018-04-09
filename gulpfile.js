@@ -4,16 +4,7 @@ var source = require('vinyl-source-stream');
 var babelify = require('babelify');
 var buffer = require('vinyl-buffer');
 var uglify = require('gulp-uglify');
-var less = require('gulp-less');
-var concat = require('gulp-concat');
 var path = require('path');
-
-gulp.task('less', function () {
-  return gulp.src('./src/less/**/*.less')
-    .pipe(less())
-    .pipe(concat('styles.css'))
-    .pipe(gulp.dest('./src/css/'));
-});
 
 gulp.task('build-examples', function () {
   return browserify({
