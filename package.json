@@ -41,7 +41,6 @@
     "lodash": "^3.10.1",
     "moment": "^2.22.0",
     "react-datepicker": "^1.4.1",
-    "react-dom": "^16.3.1",
     "validator": "^4.0.5"
   },
   "devDependencies": {
