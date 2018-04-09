@@ -47,7 +47,7 @@ module.exports = {
             position: 'bottom',
             variation: 'only-completed'
         },
-        action: {
+        action: { 
             conditions: [],
             default: {
                 action: 'GOTO',
@@ -164,7 +164,7 @@ module.exports = {
             questionId: 'Discloser_Name',
             question: 'What is the full name of the legal party disclosing the information? ',
             input: {
-                type: 'textInput',
+                type: 'addressInput',
                 placeholder: 'e.g. John Smith',
             },
             validations: [{

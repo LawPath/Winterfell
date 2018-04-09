@@ -1,0 +1,17 @@
+.city-line {
+  & > div {
+    float: left;
+    &.middle {
+      width: 40%;
+    }
+    &.ending,
+    &.beginning {
+      width: 30%;
+    }
+  }
+  &::after {
+    display: block;
+    content: "";
+    clear: both;
+  }
+}
