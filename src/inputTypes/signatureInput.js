@@ -1,5 +1,5 @@
 import React from 'react';
-import '../less/signatureInput.less';
+import '../css/styles.css';
 
 export default class SignatureInput extends React.Component {
   constructor(props) {

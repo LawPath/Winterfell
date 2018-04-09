@@ -18,7 +18,7 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-require('../less/addressInput.less');
+require('../css/styles.css');
 
 var AddressInput = (function (_React$Component) {
   _inherits(AddressInput, _React$Component);

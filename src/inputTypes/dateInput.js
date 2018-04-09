@@ -1,7 +1,7 @@
 import React from 'react';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
-import '../less/dateInput.less';
+import '../css/styles.css';
 
 import 'react-datepicker/dist/react-datepicker.css';
 

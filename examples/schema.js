@@ -47,7 +47,7 @@ module.exports = {
             position: 'bottom',
             variation: 'only-completed'
         },
-        action: { 
+        action: {
             conditions: [],
             default: {
                 action: 'GOTO',
