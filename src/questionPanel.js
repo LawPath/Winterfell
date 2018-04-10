@@ -210,12 +210,12 @@ class QuestionPanel extends React.Component {
         if (typeof this.props.progress !== 'undefined' && this.props.progress.showBar) {
             progressBar = (
                 <div >
-                    <div className="progress-title">{this.props.progress.text}</div >
+                    <div className={this.props.classes.progressTitle}>{this.props.progress.text}</div >
                     <div className={this.props.classes.progressBarIncomplete}>
                         <div className={this.props.classes.progressBarComplete}
                             style={{width: `${completionPercent}%`}}
                         ></div >
-                        <div className="progress-legend">
+                        <div className={this.props.classes.progressLegend}>
                             {this.props.progress.showPercent ? `${completionPercent}%` : ''}
                         </div >
                     </div >
