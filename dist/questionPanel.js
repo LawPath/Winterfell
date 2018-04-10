@@ -231,13 +231,13 @@ var QuestionPanel = (function (_React$Component) {
           React.createElement(
             'div',
             { className: this.props.classes.progressBarTitle },
-            this.props.progress.text
+            this.props.progress.text,
+            this.props.progress.legendPosition === 'inline' ? completionPercent + '%' : ''
           ),
           this.props.progress.legendPosition === 'top' ? React.createElement(
             'div',
             { className: this.props.classes.progressBarLegend },
-            this.props.progress.showPercent ? completionPercent + '%' : '',
-            this.props.progress.legendPosition === 'inline' ? completionPercent + '%' : ''
+            this.props.progress.showPercent ? completionPercent + '%' : ''
           ) : null,
           React.createElement(
             'div',
