@@ -211,14 +211,14 @@ class QuestionPanel extends React.Component {
       progressBar = (
         <div className={this.props.classes.progressBar}>
           <div className={this.props.classes.progressBarTitle}>{this.props.progress.text}</div >
-          {this.props.progress.position === 'top' ? (<div className={this.props.classes.progressBarLegend}>
+          {this.props.progress.legendPosition === 'top' ? (<div className={this.props.classes.progressBarLegend}>
             {this.props.progress.showPercent ? `${completionPercent}%` : ''}
           </div >) : null}
           <div className={this.props.classes.progressBarIncomplete}>
             <div className={this.props.classes.progressBarComplete}
               style={{width: `${completionPercent}%`}}
             ></div >
-            {this.props.progress.position === 'bar' ? (
+            {this.props.progress.legendPosition === 'bar' ? (
               <div className={this.props.classes.progressBarLegend}>
                 {this.props.progress.showPercent ? `${completionPercent}%` : ''}
               </div >) : null}
