@@ -15,214 +15,215 @@ var _ = require('lodash').noConflict();
 var QuestionPanel = require('./questionPanel');
 
 var Winterfell = (function (_React$Component) {
-    _inherits(Winterfell, _React$Component);
+  _inherits(Winterfell, _React$Component);
 
-    function Winterfell(props) {
-        _classCallCheck(this, Winterfell);
+  function Winterfell(props) {
+    _classCallCheck(this, Winterfell);
 
-        _get(Object.getPrototypeOf(Winterfell.prototype), 'constructor', this).call(this, props);
+    _get(Object.getPrototypeOf(Winterfell.prototype), 'constructor', this).call(this, props);
 
-        this.formComponent = null;
+    this.formComponent = null;
 
-        var schema = _.extend({
-            classes: {},
-            formPanels: [],
-            questionPanels: [],
-            questionSets: []
-        }, props.schema);
+    var schema = _.extend({
+      classes: {},
+      formPanels: [],
+      questionPanels: [],
+      questionSets: []
+    }, props.schema);
 
-        schema.formPanels = schema.formPanels.sort(function (a, b) {
-            return a.index - b.index;
-        });
+    schema.formPanels = schema.formPanels.sort(function (a, b) {
+      return a.index - b.index;
+    });
 
-        var panelId = typeof props.panelId !== 'undefined' ? props.panelId : schema.formPanels.length > 0 ? schema.formPanels[0].panelId : undefined;
+    var panelId = typeof props.panelId !== 'undefined' ? props.panelId : schema.formPanels.length > 0 ? schema.formPanels[0].panelId : undefined;
 
-        var currentPanel = typeof schema !== 'undefined' && typeof schema.formPanels !== 'undefined' && typeof panelId !== 'undefined' ? _.find(schema.formPanels, function (panel) {
-            return panel.panelId == panelId;
-        }) : undefined;
+    var currentPanel = typeof schema !== 'undefined' && typeof schema.formPanels !== 'undefined' && typeof panelId !== 'undefined' ? _.find(schema.formPanels, function (panel) {
+      return panel.panelId == panelId;
+    }) : undefined;
 
-        if (!currentPanel) {
-            throw new Error('Winterfell: Could not find initial panel and failed to render.');
-        }
-
-        this.state = {
-            schema: schema,
-            currentPanel: currentPanel,
-            action: props.action,
-            questionAnswers: props.questionAnswers,
-            panelMoved: false
-        };
+    if (!currentPanel) {
+      throw new Error('Winterfell: Could not find initial panel and failed to render.');
     }
 
-    _createClass(Winterfell, [{
-        key: 'componentWillReceiveProps',
-        value: function componentWillReceiveProps(nextProps) {
+    this.state = {
+      schema: schema,
+      currentPanel: currentPanel,
+      action: props.action,
+      questionAnswers: props.questionAnswers,
+      panelMoved: false
+    };
+  }
 
-            var s = nextProps.schema;
-            var newState = {
-                action: nextProps.action,
-                schema: s,
-                questionAnswers: nextProps.questionAnswers
+  _createClass(Winterfell, [{
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      var s = nextProps.schema;
+      var newState = {
+        action: nextProps.action,
+        schema: s,
+        questionAnswers: nextProps.questionAnswers
+      };
+
+      if (nextProps.currentQuestionId) {
+        var questionPanels = s.questionSets.map(function (qs) {
+          return qs.questions.map(function (q2) {
+            return {
+              questionId: q2.questionId,
+              panel: s.formPanels.find(function (p1) {
+                return s.questionPanels.find(function (p2) {
+                  return p2.questionSets.find(function (pqs) {
+                    return pqs.questionSetId === qs.questionSetId;
+                  });
+                }).panelId === p1.panelId;
+              })
             };
+          });
+        }).reduce(function (acc, el) {
+          return acc.concat(el);
+        }, []);
 
-            if (nextProps.currentQuestionId) {
-                var questionPanels = s.questionSets.map(function (qs) {
-                    return qs.questions.map(function (q2) {
-                        return {
-                            questionId: q2.questionId,
-                            panel: s.formPanels.find(function (p1) {
-                                return s.questionPanels.find(function (p2) {
-                                    return p2.questionSets.find(function (pqs) {
-                                        return pqs.questionSetId === qs.questionSetId;
-                                    });
-                                }).panelId === p1.panelId;
-                            })
-                        };
-                    });
-                }).reduce(function (acc, el) {
-                    return acc.concat(el);
-                }, []);
+        var questionPanel = questionPanels.find(function (qs) {
+          if (nextProps.currentQuestionId === qs.questionId) {
+            return qs.panel;
+          }
+        });
 
-                var questionPanel = questionPanels.find(function (qs) {
-                    if (nextProps.currentQuestionId === qs.questionId) {
-                        return qs.panel;
-                    }
-                });
-
-                if (this.state.currentPanel.panelId !== questionPanel.panel.panelId) {
-                    newState.currentPanel = questionPanel.panel;
-                    newState.currentQuestionId = nextProps.currentQuestionId;
-                    this.props.onFocus(nextProps.currentQuestionId);
-                }
-            }
-
-            this.setState(newState);
+        if (this.state.currentPanel.panelId !== questionPanel.panel.panelId) {
+          newState.currentPanel = questionPanel.panel;
+          newState.currentQuestionId = nextProps.currentQuestionId;
+          this.props.onFocus(nextProps.currentQuestionId);
         }
-    }, {
-        key: 'handleAnswerChange',
-        value: function handleAnswerChange(questionId, questionAnswer) {
-            var questionAnswers = _.chain(this.state.questionAnswers).set(questionId, questionAnswer).value();
+      }
 
-            this.setState({
-                questionAnswers: questionAnswers
-            }, this.props.onUpdate.bind(null, questionAnswers));
+      this.setState(newState);
+    }
+  }, {
+    key: 'handleAnswerChange',
+    value: function handleAnswerChange(questionId, questionAnswer) {
+      var questionAnswers = _.chain(this.state.questionAnswers).set(questionId, questionAnswer).value();
+
+      this.setState({
+        questionAnswers: questionAnswers
+      }, this.props.onUpdate.bind(null, questionAnswers));
+    }
+  }, {
+    key: 'handleSwitchPanel',
+    value: function handleSwitchPanel(panelId) {
+      var panel = _.find(this.props.schema.formPanels, {
+        panelId: panelId
+      });
+
+      if (!panel) {
+        throw new Error('Winterfell: Tried to switch to panel "' + panelId + '", which does not exist.');
+      }
+
+      this.setState({
+        currentPanel: panel,
+        currentQuestionId: undefined
+      }, this.props.onSwitchPanel.bind(null, panel));
+    }
+  }, {
+    key: 'handleBackButtonClick',
+    value: function handleBackButtonClick() {
+      var _this = this;
+
+      var panelIndex = this.state.schema.formPanels.find(function (fp) {
+        return fp.panelId === _this.state.currentPanel.panelId;
+      }).index;
+      var newPanelIndex = panelIndex > 0 ? this.state.schema.formPanels.find(function (fp) {
+        return fp.index === panelIndex - 1;
+      }) : null;
+
+      console.log("this.state.schema.formPanels", JSON.stringify(this.state.schema.formPanels));
+      console.log("panelIndex", JSON.stringify(panelIndex));
+      console.log("newPanelIndex", JSON.stringify(newPanelIndex));
+
+      this.handleSwitchPanel.call(this, newPanelIndex ? newPanelIndex.panelId : 0);
+    }
+  }, {
+    key: 'handleSubmit',
+    value: function handleSubmit(action) {
+      var _this2 = this;
+
+      if (this.props.disableSubmit) {
+        this.props.onSubmit(this.state.questionAnswers, action);
+        return;
+      }
+
+      /*
+       * If we are not disabling the functionality of the form,
+       * we need to set the action provided in the form, then submit.
+       */
+      this.setState({
+        action: action
+      }, function () {
+        if (!_this2.formComponent) {
+          return;
         }
-    }, {
-        key: 'handleSwitchPanel',
-        value: function handleSwitchPanel(panelId) {
-            var panel = _.find(this.props.schema.formPanels, {
-                panelId: panelId
-            });
 
-            if (!panel) {
-                throw new Error('Winterfell: Tried to switch to panel "' + panelId + '", which does not exist.');
-            }
+        _this2.formComponent.submit();
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this3 = this;
 
-            this.setState({
-                currentPanel: panel,
-                currentQuestionId: undefined
-            }, this.props.onSwitchPanel.bind(null, panel));
-        }
-    }, {
-        key: 'handleBackButtonClick',
-        value: function handleBackButtonClick() {
-            var _this = this;
+      var currentPanel = _.find(this.state.schema.questionPanels, function (panel) {
+        return panel.panelId == _this3.state.currentPanel.panelId;
+      });
 
-            var panelIndex = this.state.schema.formPanels.find(function (fp) {
-                return fp.panelId === _this.state.currentPanel.panelId;
-            }).index;
-            var newPanelIndex = panelIndex > 0 ? this.state.schema.formPanels.find(function (fp) {
-                return fp.index === panelIndex - 1;
-            }) : null;
+      var numPanels = this.state.schema.questionPanels.length;
+      var currentPanelIndex = _.indexOf(this.state.schema.questionPanels, currentPanel) + 1;
 
-            console.log("this.state.schema.formPanels", JSON.stringify(this.state.schema.formPanels));
-            console.log("panelIndex", JSON.stringify(panelIndex));
-            console.log("newPanelIndex", JSON.stringify(newPanelIndex));
+      return React.createElement(
+        'form',
+        { method: this.props.method,
+          encType: this.props.encType,
+          action: this.state.action,
+          ref: function (ref) {
+            return _this3.formComponent = ref;
+          },
+          className: this.state.schema.classes.form
+        },
+        React.createElement(
+          'div',
+          { className: this.state.schema.classes.questionPanels },
+          React.createElement(QuestionPanel, { schema: this.state.schema,
+            classes: this.state.schema.classes,
+            panelId: currentPanel.panelId,
+            panelIndex: currentPanel.panelIndex,
+            panelHeader: currentPanel.panelHeader,
+            panelText: currentPanel.panelText,
+            action: currentPanel.action,
+            button: currentPanel.button,
+            backButton: currentPanel.backButton,
+            questionSets: currentPanel.questionSets,
+            progress: currentPanel.progress,
+            numPanels: numPanels,
+            currentPanelIndex: currentPanelIndex,
+            questionAnswers: this.state.questionAnswers,
+            renderError: this.props.renderError,
+            renderRequiredAsterisk: this.props.renderRequiredAsterisk,
+            onAnswerChange: this.handleAnswerChange.bind(this),
+            onFocus: this.props.onFocus,
+            onPanelBack: this.handleBackButtonClick.bind(this),
+            onSwitchPanel: this.handleSwitchPanel.bind(this),
+            onSubmit: this.handleSubmit.bind(this)
+          }),
+          this.props.extraComponent ? this.props.extraComponent : null
+        )
+      );
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.props.onRender();
+    }
+  }]);
 
-            this.handleSwitchPanel.call(this, newPanelIndex ? newPanelIndex.panelId : 0);
-        }
-    }, {
-        key: 'handleSubmit',
-        value: function handleSubmit(action) {
-            var _this2 = this;
-
-            if (this.props.disableSubmit) {
-                this.props.onSubmit(this.state.questionAnswers, action);
-                return;
-            }
-
-            /*
-             * If we are not disabling the functionality of the form,
-             * we need to set the action provided in the form, then submit.
-             */
-            this.setState({
-                action: action
-            }, function () {
-                if (!_this2.formComponent) {
-                    return;
-                }
-
-                _this2.formComponent.submit();
-            });
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            var _this3 = this;
-
-            var currentPanel = _.find(this.state.schema.questionPanels, function (panel) {
-                return panel.panelId == _this3.state.currentPanel.panelId;
-            });
-
-            var numPanels = this.state.schema.questionPanels.length;
-            var currentPanelIndex = _.indexOf(this.state.schema.questionPanels, currentPanel) + 1;
-
-            return React.createElement(
-                'form',
-                { method: this.props.method,
-                    encType: this.props.encType,
-                    action: this.state.action,
-                    ref: function (ref) {
-                        return _this3.formComponent = ref;
-                    },
-                    className: this.state.schema.classes.form
-                },
-                React.createElement(
-                    'div',
-                    { className: this.state.schema.classes.questionPanels },
-                    React.createElement(QuestionPanel, { schema: this.state.schema,
-                        classes: this.state.schema.classes,
-                        panelId: currentPanel.panelId,
-                        panelIndex: currentPanel.panelIndex,
-                        panelHeader: currentPanel.panelHeader,
-                        panelText: currentPanel.panelText,
-                        action: currentPanel.action,
-                        button: currentPanel.button,
-                        backButton: currentPanel.backButton,
-                        questionSets: currentPanel.questionSets,
-                        progress: currentPanel.progress,
-                        numPanels: numPanels,
-                        currentPanelIndex: currentPanelIndex,
-                        questionAnswers: this.state.questionAnswers,
-                        renderError: this.props.renderError,
-                        renderRequiredAsterisk: this.props.renderRequiredAsterisk,
-                        onAnswerChange: this.handleAnswerChange.bind(this),
-                        onFocus: this.props.onFocus,
-                        onPanelBack: this.handleBackButtonClick.bind(this),
-                        onSwitchPanel: this.handleSwitchPanel.bind(this),
-                        onSubmit: this.handleSubmit.bind(this)
-                    })
-                )
-            );
-        }
-    }, {
-        key: 'componentDidMount',
-        value: function componentDidMount() {
-            this.props.onRender();
-        }
-    }]);
-
-    return Winterfell;
+  return Winterfell;
 })(React.Component);
 
 ;
@@ -241,20 +242,20 @@ Winterfell.addValidationMethod = Winterfell.validation.addValidationMethod;
 Winterfell.addValidationMethods = Winterfell.validation.addValidationMethods;
 
 Winterfell.defaultProps = {
-    questionAnswers: {},
-    encType: 'application/x-www-form-urlencoded',
-    method: 'POST',
-    action: '',
-    panelId: undefined,
-    disableSubmit: false,
-    renderError: undefined,
-    renderRequiredAsterisk: undefined,
-    currentQuestionId: undefined,
-    onSubmit: function onSubmit() {},
-    onUpdate: function onUpdate() {},
-    onFocus: function onFocus() {},
-    onSwitchPanel: function onSwitchPanel() {},
-    onRender: function onRender() {}
+  questionAnswers: {},
+  encType: 'application/x-www-form-urlencoded',
+  method: 'POST',
+  action: '',
+  panelId: undefined,
+  disableSubmit: false,
+  renderError: undefined,
+  renderRequiredAsterisk: undefined,
+  currentQuestionId: undefined,
+  onSubmit: function onSubmit() {},
+  onUpdate: function onUpdate() {},
+  onFocus: function onFocus() {},
+  onSwitchPanel: function onSwitchPanel() {},
+  onRender: function onRender() {}
 };
 
 module.exports = Winterfell;
