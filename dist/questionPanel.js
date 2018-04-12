@@ -283,11 +283,11 @@ var QuestionPanel = (function (_React$Component) {
           { className: this.props.classes.buttonBar },
           this.props.currentPanelIndex > 0 && !this.props.backButton.disabled ? React.createElement(Button, { text: this.props.backButton.text || 'Back',
             onClick: this.handleBackButtonClick.bind(this),
-            className: this.props.classes.backButton
+            className: this.props.classes.backButton + ' ' + (this.props.backButton['class'] || '')
           }) : undefined,
           !this.props.button.disabled ? React.createElement(Button, { text: this.props.button.text,
             onClick: this.handleMainButtonClick.bind(this),
-            className: this.props.classes.controlButton
+            className: this.props.classes.controlButton + ' ' + (this.props.button['class'] || '')
           }) : undefined
         ),
         this.props.progress && this.props.progress.position === 'bottom' ? progressBar : undefined
