@@ -257,13 +257,13 @@ class QuestionPanel extends React.Component {
           {questionSets}
         </div >
         {this.props.progress && this.props.progress.position === 'middle' ? progressBar : undefined}
-        <div className={this.props.classes.buttonBar}>
+        <div className={`${this.props.classes.buttonBar} ${this.props.classes.buttonBar || ''}`}>
           {this.props.currentPanelIndex > 0
           && !this.props.backButton.disabled
             ? (
               <Button text={this.props.backButton.text || 'Back'}
                 onClick={this.handleBackButtonClick.bind(this)}
-                className={`${this.props.classes.backButton} ${this.props.backButton.class || ''}`}
+                className={`${this.props.classes.backButton} ${this.props.classes.backButton || ''}`}
               />
             )
             : undefined}
@@ -271,7 +271,7 @@ class QuestionPanel extends React.Component {
             ? (
               <Button text={this.props.button.text}
                 onClick={this.handleMainButtonClick.bind(this)}
-                className={`${this.props.classes.controlButton} ${this.props.button.class || ''}`}
+                className={`${this.props.classes.controlButton} ${this.props.classes.button || ''}`}
               />
             )
             : undefined}

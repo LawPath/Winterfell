@@ -280,14 +280,14 @@ var QuestionPanel = (function (_React$Component) {
         this.props.progress && this.props.progress.position === 'middle' ? progressBar : undefined,
         React.createElement(
           'div',
-          { className: this.props.classes.buttonBar },
+          { className: this.props.classes.buttonBar + ' ' + (this.props.classes.buttonBar || '') },
           this.props.currentPanelIndex > 0 && !this.props.backButton.disabled ? React.createElement(Button, { text: this.props.backButton.text || 'Back',
             onClick: this.handleBackButtonClick.bind(this),
-            className: this.props.classes.backButton + ' ' + (this.props.backButton['class'] || '')
+            className: this.props.classes.backButton + ' ' + (this.props.classes.backButton || '')
           }) : undefined,
           !this.props.button.disabled ? React.createElement(Button, { text: this.props.button.text,
             onClick: this.handleMainButtonClick.bind(this),
-            className: this.props.classes.controlButton + ' ' + (this.props.button['class'] || '')
+            className: this.props.classes.controlButton + ' ' + (this.props.classes.button || '')
           }) : undefined
         ),
         this.props.progress && this.props.progress.position === 'bottom' ? progressBar : undefined
