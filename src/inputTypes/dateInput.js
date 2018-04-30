@@ -8,12 +8,8 @@ export default class DateInput extends React.Component {
   constructor(props) {
     super(props);
 
-    console.log("this.props.value", this.props.value);
-    console.log("this.props.value.type", this.props.value.type);
-    console.log("this.props.value.value", this.props.value.value);
-    console.log("moment(this.props.value.value)", moment(this.props.value.value));
     this.state = {
-      value: this.props.value.type ? this.props.value.value : this.props.value
+      value: this.props.value.type ? moment(this.props.value.value) : this.props.value
     };
 
     this.handleChange = this.handleChange.bind(this);
