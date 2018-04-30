@@ -36,6 +36,9 @@ var DateInput = (function (_React$Component) {
 
     _get(Object.getPrototypeOf(DateInput.prototype), 'constructor', this).call(this, props);
 
+    console.log("this.props.value", this.props.value);
+    console.log("this.props.value.type", this.props.value.type);
+    console.log("this.props.value.value", this.props.value.value);
     this.state = {
       value: this.props.value.type ? this.props.value.value : this.props.value
     };
