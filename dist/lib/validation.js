@@ -1,5 +1,7 @@
 'use strict';
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 var _ = require('lodash').noConflict();
 var Validator = require('validator');
 var StringParser = require('./stringParser');
@@ -143,8 +145,8 @@ var getQuestionPanelInvalidQuestions = function getQuestionPanelInvalidQuestions
    */
   var errors = {};
   questionsToCheck.forEach(function (_ref) {
-    var questionId = _ref.questionId;
-    var validations = _ref.validations;
+    var questionId = _ref.questionId,
+        validations = _ref.validations;
     return [].forEach.bind(validations, function (validation) {
       var valid = validateAnswer(questionAnswers[questionId], validation, questionAnswers);
       if (valid) {
@@ -190,7 +192,7 @@ var addValidationMethod = function addValidationMethod(name, method) {
  * @param  array methods Methods to add. name => func
  */
 var addValidationMethods = function addValidationMethods(methods) {
-  if (typeof methods !== 'object') {
+  if ((typeof methods === 'undefined' ? 'undefined' : _typeof(methods)) !== 'object') {
     throw new Error('Winterfell: First parameter of addValidationMethods ' + 'must be of type object');
   }
 

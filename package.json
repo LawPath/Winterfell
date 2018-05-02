@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rimraf dist",
     "build:examples": "gulp build-examples",
-    "build": "babel src --out-dir dist && webpack",
+    "build": "babel --presets=env,react src --out-dir dist && webpack",
     "prepublish": "npm run clean && npm run build"
   },
   "keywords": [
@@ -35,7 +35,11 @@
     "react-dom": ">= 15.6.1 < 17.0.0-0"
   },
   "dependencies": {
-    "babelify": "^8.0.0",
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.4",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
     "gulp-concat": "^2.6.1",
     "keycodez": "^1.0.0",
     "lodash": "^3.10.1",
@@ -44,9 +48,7 @@
     "validator": "^4.0.5"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.3",
-    "babel-loader": "^7.1.4",
+    "babelify": "^8.0.0",
     "browserify": "^11.0.1",
     "css-loader": "^0.28.11",
     "file-loader": "^1.1.11",
@@ -59,6 +61,6 @@
     "style-loader": "^0.20.3",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
-    "webpack": "^1.12.1"
+    "webpack": "^3.11.0"
   }
 }

@@ -13,7 +13,9 @@ gulp.task('build-examples', function () {
       'examples/app.js'
     ]
   })
-    .transform(babelify)
+    .transform(babelify.configure({
+      presets: ["env", "react"]
+    }))
     .bundle()
     .pipe(source('app.js'))
     .pipe(buffer())

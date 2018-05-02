@@ -1,12 +1,12 @@
 'use strict';
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var React = require('react');
 var ReactDOM = require('react-dom');
@@ -14,15 +14,15 @@ var _ = require('lodash').noConflict();
 
 var QuestionPanel = require('./questionPanel');
 
-var Winterfell = (function (_React$Component) {
+var Winterfell = function (_React$Component) {
   _inherits(Winterfell, _React$Component);
 
   function Winterfell(props) {
     _classCallCheck(this, Winterfell);
 
-    _get(Object.getPrototypeOf(Winterfell.prototype), 'constructor', this).call(this, props);
+    var _this = _possibleConstructorReturn(this, (Winterfell.__proto__ || Object.getPrototypeOf(Winterfell)).call(this, props));
 
-    this.formComponent = null;
+    _this.formComponent = null;
 
     var schema = _.extend({
       classes: {},
@@ -45,13 +45,14 @@ var Winterfell = (function (_React$Component) {
       throw new Error('Winterfell: Could not find initial panel and failed to render.');
     }
 
-    this.state = {
+    _this.state = {
       schema: schema,
       currentPanel: currentPanel,
       action: props.action,
       questionAnswers: props.questionAnswers,
       panelMoved: false
     };
+    return _this;
   }
 
   _createClass(Winterfell, [{
@@ -126,10 +127,10 @@ var Winterfell = (function (_React$Component) {
   }, {
     key: 'handleBackButtonClick',
     value: function handleBackButtonClick() {
-      var _this = this;
+      var _this2 = this;
 
       var panelIndex = this.state.schema.formPanels.find(function (fp) {
-        return fp.panelId === _this.state.currentPanel.panelId;
+        return fp.panelId === _this2.state.currentPanel.panelId;
       }).index;
       var newPanelIndex = panelIndex > 0 ? this.state.schema.formPanels.find(function (fp) {
         return fp.index === panelIndex - 1;
@@ -144,7 +145,7 @@ var Winterfell = (function (_React$Component) {
   }, {
     key: 'handleSubmit',
     value: function handleSubmit(action) {
-      var _this2 = this;
+      var _this3 = this;
 
       if (this.props.disableSubmit) {
         this.props.onSubmit(this.state.questionAnswers, action);
@@ -158,20 +159,20 @@ var Winterfell = (function (_React$Component) {
       this.setState({
         action: action
       }, function () {
-        if (!_this2.formComponent) {
+        if (!_this3.formComponent) {
           return;
         }
 
-        _this2.formComponent.submit();
+        _this3.formComponent.submit();
       });
     }
   }, {
     key: 'render',
     value: function render() {
-      var _this3 = this;
+      var _this4 = this;
 
       var currentPanel = _.find(this.state.schema.questionPanels, function (panel) {
-        return panel.panelId == _this3.state.currentPanel.panelId;
+        return panel.panelId == _this4.state.currentPanel.panelId;
       });
 
       var numPanels = this.state.schema.questionPanels.length;
@@ -182,8 +183,8 @@ var Winterfell = (function (_React$Component) {
         { method: this.props.method,
           encType: this.props.encType,
           action: this.state.action,
-          ref: function (ref) {
-            return _this3.formComponent = ref;
+          ref: function ref(_ref) {
+            return _this4.formComponent = _ref;
           },
           className: this.state.schema.classes.form
         },
@@ -225,7 +226,7 @@ var Winterfell = (function (_React$Component) {
   }]);
 
   return Winterfell;
-})(React.Component);
+}(React.Component);
 
 ;
 
