@@ -24,6 +24,8 @@ var Winterfell = function (_React$Component) {
 
     _this.formComponent = null;
 
+    _this.panelHistory = [];
+
     var schema = _.extend({
       classes: {},
       formPanels: [],
@@ -110,13 +112,17 @@ var Winterfell = function (_React$Component) {
     }
   }, {
     key: 'handleSwitchPanel',
-    value: function handleSwitchPanel(panelId) {
+    value: function handleSwitchPanel(panelId, preventHistory) {
       var panel = _.find(this.props.schema.formPanels, {
         panelId: panelId
       });
 
       if (!panel) {
         throw new Error('Winterfell: Tried to switch to panel "' + panelId + '", which does not exist.');
+      }
+
+      if (!preventHistory) {
+        this.panelHistory.push(panel.panelId);
       }
 
       this.setState({
@@ -127,25 +133,26 @@ var Winterfell = function (_React$Component) {
   }, {
     key: 'handleBackButtonClick',
     value: function handleBackButtonClick() {
-      var _this2 = this;
+      this.panelHistory.pop();
 
-      var panelIndex = this.state.schema.formPanels.find(function (fp) {
-        return fp.panelId === _this2.state.currentPanel.panelId;
-      }).index;
-      var newPanelIndex = panelIndex > 0 ? this.state.schema.formPanels.find(function (fp) {
-        return fp.index === panelIndex - 1;
-      }) : null;
-
-      console.log("this.state.schema.formPanels", JSON.stringify(this.state.schema.formPanels));
-      console.log("panelIndex", JSON.stringify(panelIndex));
-      console.log("newPanelIndex", JSON.stringify(newPanelIndex));
-
-      this.handleSwitchPanel.call(this, newPanelIndex ? newPanelIndex.panelId : 0);
+      this.handleSwitchPanel.call(this, this.panelHistory[this.panelHistory.length - 1], true);
+      // let panelIndex = this.state.schema.formPanels.find(fp =>
+      //   fp.panelId === this.state.currentPanel.panelId).index;
+      // let newPanelIndex = panelIndex > 0 ? this.state.schema.formPanels.find(fp =>
+      //   fp.index === panelIndex - 1) : null;
+      //
+      // console.log("this.state.schema.formPanels", JSON.stringify(this.state.schema.formPanels));
+      // console.log("panelIndex", JSON.stringify(panelIndex));
+      // console.log("newPanelIndex", JSON.stringify(newPanelIndex));
+      //
+      // this.handleSwitchPanel.call(
+      //   this, newPanelIndex ? newPanelIndex.panelId : 0
+      // );
     }
   }, {
     key: 'handleSubmit',
     value: function handleSubmit(action) {
-      var _this3 = this;
+      var _this2 = this;
 
       if (this.props.disableSubmit) {
         this.props.onSubmit(this.state.questionAnswers, action);
@@ -159,20 +166,20 @@ var Winterfell = function (_React$Component) {
       this.setState({
         action: action
       }, function () {
-        if (!_this3.formComponent) {
+        if (!_this2.formComponent) {
           return;
         }
 
-        _this3.formComponent.submit();
+        _this2.formComponent.submit();
       });
     }
   }, {
     key: 'render',
     value: function render() {
-      var _this4 = this;
+      var _this3 = this;
 
       var currentPanel = _.find(this.state.schema.questionPanels, function (panel) {
-        return panel.panelId == _this4.state.currentPanel.panelId;
+        return panel.panelId == _this3.state.currentPanel.panelId;
       });
 
       var numPanels = this.state.schema.questionPanels.length;
@@ -184,7 +191,7 @@ var Winterfell = function (_React$Component) {
           encType: this.props.encType,
           action: this.state.action,
           ref: function ref(_ref) {
-            return _this4.formComponent = _ref;
+            return _this3.formComponent = _ref;
           },
           className: this.state.schema.classes.form
         },

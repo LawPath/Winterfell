@@ -14,7 +14,7 @@ gulp.task('build-examples', function () {
     ]
   })
     .transform(babelify.configure({
-      presets: ["env", "react"]
+      presets: ["es2015", "stage-0", "env", "react"]
     }))
     .bundle()
     .pipe(source('app.js'))

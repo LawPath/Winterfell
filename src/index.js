@@ -11,6 +11,8 @@ class Winterfell extends React.Component {
 
     this.formComponent = null;
 
+    this.panelHistory = [];
+
     var schema = _.extend({
       classes: {},
       formPanels: [],
@@ -100,7 +102,7 @@ class Winterfell extends React.Component {
     }, this.props.onUpdate.bind(null, questionAnswers));
   }
 
-  handleSwitchPanel(panelId) {
+  handleSwitchPanel(panelId, preventHistory) {
     var panel = _.find(this.props.schema.formPanels, {
       panelId: panelId
     });
@@ -110,6 +112,10 @@ class Winterfell extends React.Component {
         + panelId + '", which does not exist.');
     }
 
+    if (!preventHistory) {
+      this.panelHistory.push(panel.panelId);
+    }
+
     this.setState({
       currentPanel: panel,
       currentQuestionId: undefined,
@@ -117,18 +123,23 @@ class Winterfell extends React.Component {
   }
 
   handleBackButtonClick() {
-    let panelIndex = this.state.schema.formPanels.find(fp =>
-      fp.panelId === this.state.currentPanel.panelId).index;
-    let newPanelIndex = panelIndex > 0 ? this.state.schema.formPanels.find(fp =>
-      fp.index === panelIndex - 1) : null;
-
-    console.log("this.state.schema.formPanels", JSON.stringify(this.state.schema.formPanels));
-    console.log("panelIndex", JSON.stringify(panelIndex));
-    console.log("newPanelIndex", JSON.stringify(newPanelIndex));
+    this.panelHistory.pop();
 
     this.handleSwitchPanel.call(
-      this, newPanelIndex ? newPanelIndex.panelId : 0
+      this, this.panelHistory[this.panelHistory.length - 1], true
     );
+    // let panelIndex = this.state.schema.formPanels.find(fp =>
+    //   fp.panelId === this.state.currentPanel.panelId).index;
+    // let newPanelIndex = panelIndex > 0 ? this.state.schema.formPanels.find(fp =>
+    //   fp.index === panelIndex - 1) : null;
+    //
+    // console.log("this.state.schema.formPanels", JSON.stringify(this.state.schema.formPanels));
+    // console.log("panelIndex", JSON.stringify(panelIndex));
+    // console.log("newPanelIndex", JSON.stringify(newPanelIndex));
+    //
+    // this.handleSwitchPanel.call(
+    //   this, newPanelIndex ? newPanelIndex.panelId : 0
+    // );
   }
 
   handleSubmit(action) {
