@@ -240,10 +240,10 @@ AddressInput.defaultProps = {
     postcode: ''
   },
   placeholders: {
-    line1: 'e.g 100 Pitt St',
-    line2: 'e.g Sydney CBD',
-    city: 'e.g Sydney',
-    postcode: 'e.g 2000'
+    line1: 'E.g 100 Pitt St',
+    line2: 'E.g Sydney CBD',
+    city: 'E.g Sydney',
+    postcode: 'E.g 2000'
   },
   states: [{
     text: 'Australian Capital Territory',
