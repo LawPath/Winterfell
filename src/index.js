@@ -84,6 +84,7 @@ class Winterfell extends React.Component {
 
       if (this.state.currentPanel.panelId !== questionPanel.panel.panelId) {
         newState.currentPanel = questionPanel.panel;
+        this.panelHistory.push(questionPanel.panel.panelId);
         newState.currentQuestionId = nextProps.currentQuestionId;
         this.props.onFocus(nextProps.currentQuestionId);
       }

@@ -218,9 +218,6 @@ var QuestionPanel = function (_React$Component) {
             return e.answered;
           }).length;
           var nQuestionsTotal = questionSetsCompleted.length;
-          // console.log("nQuestionsCompleted", nQuestionsCompleted);
-          // console.log("nQuestionsTotal", nQuestionsTotal);
-          // console.log("questionSetsCompleted", questionSetsCompleted);
           completionPercent = Math.floor(10000 / nQuestionsTotal * nQuestionsCompleted) / 100;
         }
       }
