@@ -191,7 +191,7 @@ class QuestionPanel extends React.Component {
 
     if (typeof this.props.progress !== 'undefined') {
       if (!this.props.progress.variation || this.props.progress.variation === 'classic') {
-        completionPercent = Math.floor(10000 / this.props.numPanels * this.props.currentPanelIndex) / 100;
+        completionPercent = Math.floor(100 / this.props.numPanels * this.props.currentPanelIndex);
       } else if (this.props.progress.variation === 'only-completed' && this.props.questionAnswers) {
         const questionSetsCompleted = this.props.schema.questionSets.reduce((acc, qs) =>
           acc.concat(qs.questions.map(q => ({
@@ -200,7 +200,7 @@ class QuestionPanel extends React.Component {
           }))), []);
         let nQuestionsCompleted = questionSetsCompleted.filter(e => e.answered).length;
         let nQuestionsTotal = questionSetsCompleted.length;
-        completionPercent = Math.floor(10000 / nQuestionsTotal * nQuestionsCompleted) / 100;
+        completionPercent = Math.floor(100 / nQuestionsTotal * nQuestionsCompleted);
       }
     }
     var progressBar = undefined;

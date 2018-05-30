@@ -204,7 +204,7 @@ var QuestionPanel = function (_React$Component) {
 
       if (typeof this.props.progress !== 'undefined') {
         if (!this.props.progress.variation || this.props.progress.variation === 'classic') {
-          completionPercent = Math.floor(10000 / this.props.numPanels * this.props.currentPanelIndex) / 100;
+          completionPercent = Math.floor(100 / this.props.numPanels * this.props.currentPanelIndex);
         } else if (this.props.progress.variation === 'only-completed' && this.props.questionAnswers) {
           var questionSetsCompleted = this.props.schema.questionSets.reduce(function (acc, qs) {
             return acc.concat(qs.questions.map(function (q) {
@@ -218,7 +218,7 @@ var QuestionPanel = function (_React$Component) {
             return e.answered;
           }).length;
           var nQuestionsTotal = questionSetsCompleted.length;
-          completionPercent = Math.floor(10000 / nQuestionsTotal * nQuestionsCompleted) / 100;
+          completionPercent = Math.floor(100 / nQuestionsTotal * nQuestionsCompleted);
         }
       }
       var progressBar = undefined;
