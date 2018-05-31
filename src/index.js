@@ -38,6 +38,8 @@ class Winterfell extends React.Component {
       )
       : undefined;
 
+    this.panelHistory.push(currentPanel.panelId);
+
     if (!currentPanel) {
       throw new Error('Winterfell: Could not find initial panel and failed to render.');
     }
@@ -145,7 +147,9 @@ class Winterfell extends React.Component {
   }
 
   handleBackButtonClick() {
-    this.panelHistory.pop();
+    if (this.panelHistory.length > 1) {
+      this.panelHistory.pop();
+    }
 
     this.handleSwitchPanel.call(
       this, this.panelHistory[this.panelHistory.length - 1], true

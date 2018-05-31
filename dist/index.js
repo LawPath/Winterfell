@@ -43,6 +43,8 @@ var Winterfell = function (_React$Component) {
       return panel.panelId == panelId;
     }) : undefined;
 
+    _this.panelHistory.push(currentPanel.panelId);
+
     if (!currentPanel) {
       throw new Error('Winterfell: Could not find initial panel and failed to render.');
     }
@@ -162,7 +164,9 @@ var Winterfell = function (_React$Component) {
   }, {
     key: 'handleBackButtonClick',
     value: function handleBackButtonClick() {
-      this.panelHistory.pop();
+      if (this.panelHistory.length > 1) {
+        this.panelHistory.pop();
+      }
 
       this.handleSwitchPanel.call(this, this.panelHistory[this.panelHistory.length - 1], true);
       // let panelIndex = this.state.schema.formPanels.find(fp =>
