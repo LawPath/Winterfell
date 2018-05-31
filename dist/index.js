@@ -112,8 +112,8 @@ var Winterfell = function (_React$Component) {
           });
 
           questionPanel = questionPanels.find(function (qs) {
-            if (nextProps.currentQuestionId === questionsIdWithConditionals.find(function (e) {
-              return e.conditionalQuestionId === qs.questionId;
+            if (qs.questionId === questionsIdWithConditionals.find(function (e) {
+              return e.conditionalQuestionId === nextProps.currentQuestionId;
             }).questionId) {
               return qs.panel;
             }

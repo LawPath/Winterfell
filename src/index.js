@@ -96,8 +96,8 @@ class Winterfell extends React.Component {
           }));
 
         questionPanel = questionPanels.find(qs => {
-          if (nextProps.currentQuestionId === questionsIdWithConditionals
-              .find(e => e.conditionalQuestionId === qs.questionId).questionId) {
+          if (qs.questionId === questionsIdWithConditionals
+              .find(e => e.conditionalQuestionId === nextProps.currentQuestionId).questionId) {
             return qs.panel;
           }
         });
