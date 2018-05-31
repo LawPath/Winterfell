@@ -82,6 +82,27 @@ class Winterfell extends React.Component {
         }
       });
 
+      if (!questionPanel) {
+        const conditionalQuestions = [];
+        const questionsIdWithConditionals = s.questionSets
+          .filter(f => f.questions.length)
+          .filter(g => g.questions[0].input.options &&
+            g.questions[0].input.options
+              .filter(q2 => q2.conditionalQuestions).length)
+          .map(e => e.questions[0])
+          .map(e => ({
+            questionId: e.questionId,
+            conditionalQuestionId: e.input.options.filter(f => f.conditionalQuestions)[0].conditionalQuestions[0].questionId
+          }));
+
+        questionPanel = questionPanels.find(qs => {
+          if (nextProps.currentQuestionId === questionsIdWithConditionals
+              .find(e => e.conditionalQuestionId === qs.questionId).questionId) {
+            return qs.panel;
+          }
+        });
+      }
+
       if (this.state.currentPanel.panelId !== questionPanel.panel.panelId) {
         newState.currentPanel = questionPanel.panel;
         this.panelHistory.push(questionPanel.panel.panelId);

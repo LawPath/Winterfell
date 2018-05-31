@@ -92,6 +92,34 @@ var Winterfell = function (_React$Component) {
           }
         });
 
+        if (!questionPanel) {
+          var conditionalQuestions = [];
+          var questionsIdWithConditionals = s.questionSets.filter(function (f) {
+            return f.questions.length;
+          }).filter(function (g) {
+            return g.questions[0].input.options && g.questions[0].input.options.filter(function (q2) {
+              return q2.conditionalQuestions;
+            }).length;
+          }).map(function (e) {
+            return e.questions[0];
+          }).map(function (e) {
+            return {
+              questionId: e.questionId,
+              conditionalQuestionId: e.input.options.filter(function (f) {
+                return f.conditionalQuestions;
+              })[0].conditionalQuestions[0].questionId
+            };
+          });
+
+          questionPanel = questionPanels.find(function (qs) {
+            if (nextProps.currentQuestionId === questionsIdWithConditionals.find(function (e) {
+              return e.conditionalQuestionId === qs.questionId;
+            }).questionId) {
+              return qs.panel;
+            }
+          });
+        }
+
         if (this.state.currentPanel.panelId !== questionPanel.panel.panelId) {
           newState.currentPanel = questionPanel.panel;
           this.panelHistory.push(questionPanel.panel.panelId);
