@@ -54,7 +54,7 @@ var RadioOptionsInput = function (_React$Component) {
                 checked: _this2.state.value == opt.value,
                 className: _this2.props.classes.radio,
                 required: _this2.props.required ? 'required' : undefined,
-                onFocus: _this2.props.onFocus.bind(null, _this2.props.id),
+                onClick: _this2.props.onFocus.bind(null, _this2.props.id),
                 onChange: _this2.handleChange.bind(_this2, opt.value),
                 onBlur: _this2.props.onBlur.bind(null, _this2.state.value) }),
               opt.text
@@ -76,7 +76,8 @@ RadioOptionsInput.defaultProps = {
   value: '',
   options: [],
   onChange: function onChange() {},
-  onBlur: function onBlur() {}
+  onBlur: function onBlur() {},
+  onFocus: function onFocus() {}
 };
 
 module.exports = RadioOptionsInput;

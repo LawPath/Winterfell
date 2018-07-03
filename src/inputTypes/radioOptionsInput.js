@@ -32,7 +32,7 @@ class RadioOptionsInput extends React.Component {
                      required={this.props.required
                                  ? 'required'
                                  : undefined}
-                     onFocus={this.props.onFocus.bind(null, this.props.id)}
+                     onClick={this.props.onFocus.bind(null, this.props.id)}
                      onChange={this.handleChange.bind(this, opt.value)}
                      onBlur={this.props.onBlur.bind(null, this.state.value)} />
               {opt.text}
@@ -51,7 +51,8 @@ RadioOptionsInput.defaultProps = {
   value    : '',
   options  : [],
   onChange : () => {},
-  onBlur   : () => {}
+  onBlur   : () => {},
+  onFocus  : () => {}
 };
 
 module.exports = RadioOptionsInput;
