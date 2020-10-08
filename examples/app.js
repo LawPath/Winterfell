@@ -1,8 +1,8 @@
-var React      = window.React = require('react');
-var ReactDOM   = require('react-dom');
+var React = (window.React = require('react'));
+var ReactDOM = require('react-dom');
 var Winterfell = require('../src/index');
 
-var schema      = require('./schema');
+var schema = require('./schema');
 var loginSchema = require('./loginSchema');
 
 var onRender = () => {
@@ -29,33 +29,35 @@ var onSubmit = (questionAnswers, target) => {
   alert('Submitted. Check the console to see the answers!');
 };
 
-window.onload = function() {
+window.onload = function () {
   ReactDOM.render(
-    <Winterfell schema={loginSchema}
-                onRender={onRender}
-                onUpdate={onUpdate}
-                onFocus={onFocus}
-                renderRequiredAsterisk={() => <span>{'*'}</span>} />,
-    document.getElementById('login-form')
+    <Winterfell
+      schema={loginSchema}
+      onRender={onRender}
+      onUpdate={onUpdate}
+      onFocus={onFocus}
+      renderRequiredAsterisk={() => <span>{'*'}</span>}
+    />,
+    document.getElementById('login-form'),
   );
 
   ReactDOM.render(
-    <Winterfell schema={schema}
-                disableSubmit={true}
-                onRender={onRender}
-                onUpdate={onUpdate}
-                onFocus={onFocus}
-                onSwitchPanel={onSwitchPanel}
-                onSubmit={onSubmit} />,
-    document.getElementById('form')
+    <Winterfell
+      schema={schema}
+      disableSubmit={true}
+      onRender={onRender}
+      onUpdate={onUpdate}
+      onFocus={onFocus}
+      onSwitchPanel={onSwitchPanel}
+      onSubmit={onSubmit}
+    />,
+    document.getElementById('form'),
   );
 
   /*
    * JSON View
    */
-  $('#json-view')
-    .JSONView($('#json-view').html());
+  $('#json-view').JSONView($('#json-view').html());
 
-  $('#login-json-view')
-    .JSONView($('#login-json-view').html());
+  $('#login-json-view').JSONView($('#login-json-view').html());
 };

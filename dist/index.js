@@ -9,7 +9,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var React = require('react');
-var ReactDOM = require('react-dom');
 var _ = require('lodash').noConflict();
 
 var QuestionPanel = require('./questionPanel');
@@ -62,7 +61,6 @@ var Winterfell = function (_React$Component) {
   _createClass(Winterfell, [{
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(nextProps) {
-
       var s = nextProps.schema;
       var newState = {
         action: nextProps.action,
@@ -220,7 +218,8 @@ var Winterfell = function (_React$Component) {
 
       return React.createElement(
         'form',
-        { method: this.props.method,
+        {
+          method: this.props.method,
           encType: this.props.encType,
           action: this.state.action,
           ref: function ref(_ref) {
@@ -231,7 +230,8 @@ var Winterfell = function (_React$Component) {
         React.createElement(
           'div',
           { className: this.state.schema.classes.questionPanels },
-          React.createElement(QuestionPanel, { schema: this.state.schema,
+          React.createElement(QuestionPanel, {
+            schema: this.state.schema,
             classes: this.state.schema.classes,
             panelId: currentPanel.panelId,
             panelIndex: currentPanel.panelIndex,
@@ -267,8 +267,6 @@ var Winterfell = function (_React$Component) {
 
   return Winterfell;
 }(React.Component);
-
-;
 
 Winterfell.inputTypes = require('./inputTypes');
 Winterfell.errorMessages = require('./lib/errors');

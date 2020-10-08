@@ -31,9 +31,7 @@ var Button = function (_React$Component) {
     value: function render() {
       return React.createElement(
         'button',
-        { href: '#',
-          className: this.props.className,
-          onClick: this.handleClick.bind(this) },
+        { href: '#', className: this.props.className, onClick: this.handleClick.bind(this) },
         this.props.text
       );
     }
@@ -41,8 +39,6 @@ var Button = function (_React$Component) {
 
   return Button;
 }(React.Component);
-
-;
 
 Button.defaultProps = {
   text: 'Submit',

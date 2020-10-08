@@ -10,16 +10,19 @@ export default class DateInput extends React.Component {
     super(props);
 
     this.state = {
-      value: this.props.value.type ? moment(this.props.value.value) : this.props.value
+      value: this.props.value.type ? moment(this.props.value.value) : this.props.value,
     };
 
     this.handleChange = this.handleChange.bind(this);
   }
 
   handleChange(date) {
-    this.setState({
-      value: date
-    }, this.props.onChange.bind(null, { type: 'date', value: date }));
+    this.setState(
+      {
+        value: date,
+      },
+      this.props.onChange.bind(null, { type: 'date', value: date }),
+    );
   }
 
   render() {
@@ -37,7 +40,8 @@ export default class DateInput extends React.Component {
           onChange={this.handleChange}
           dateFormat="LL"
         />
-      </div>);
+      </div>
+    );
   }
 }
 
@@ -46,10 +50,7 @@ DateInput.defaultProps = {
   name: '',
   id: '',
   value: moment(),
-  onChange: () => {
-  },
-  onBlur: () => {
-  },
-  onFocus: () => {
-  }
+  onChange: () => {},
+  onBlur: () => {},
+  onFocus: () => {},
 };

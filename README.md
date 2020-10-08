@@ -21,12 +21,9 @@ Winterfell uses a JSON schema to render your form. We will go through that later
 
 ```javascript
 var Winterfell = require('winterfell');
-var schema     = require('./schema');
+var schema = require('./schema');
 
-React.render(
-  <Winterfell schema={schema} />,
-  document.getElementById('form')
-);
+React.render(<Winterfell schema={schema} />, document.getElementById('form'));
 ```
 
 ## Features
@@ -140,7 +137,6 @@ The questionSet below has an initial radio button with `yes` and `no` options. W
 
 Each question has the ability to have some `text` associated with it which gets rendered below the questions-label and some `postText` which will be rendered below the questions input.
 
-
 ```json
 {
   "questionSets": [
@@ -173,9 +169,7 @@ Each question has the ability to have some `text` associated with it which gets 
                     "validations": [
                       {
                         "type": "isLength",
-                        "params": [
-                          1
-                        ]
+                        "params": [1]
                       }
                     ]
                   }
@@ -183,9 +177,7 @@ Each question has the ability to have some `text` associated with it which gets 
                 "validations": [
                   {
                     "type": "isLength",
-                    "params": [
-                      1
-                    ]
+                    "params": [1]
                   }
                 ]
               },
@@ -214,9 +206,7 @@ Validation item where the value must be a minimum length of 1.
 ```json
 {
   "type": "isLength",
-  "params": [
-    1
-  ]
+  "params": [1]
 }
 ```
 
@@ -225,10 +215,7 @@ Validation item where the value must be a minimum length of 1 and a maximum of 2
 ```json
 {
   "type": "isLength",
-  "params": [
-    1,
-    20
-  ]
+  "params": [1, 20]
 }
 ```
 
@@ -237,22 +224,17 @@ You can also add a custom error message for the questions validaton item by usin
 ```json
 {
   "type": "isLength",
-  "params": [
-    1
-  ],
+  "params": [1],
   "message": "Please select an option"
 }
 ```
 
 To validate a questions answer against another questions answer, you can wrap curly-braces around a parameter in the `params` property and it will be turned in to a questions answer. For example:
 
-
 ```json
 {
   "type": "equals",
-  "params": [
-    "{password}"
-  ],
+  "params": ["{password}"],
   "message": "Confirm Password must match the Password field"
 }
 ```
@@ -273,39 +255,40 @@ Winterfell allows you to define classes for the rendered form in multiple differ
 
 The table below describes the current set of classes.
 
-Class Name | Description
---- | ---
-form                         | The form element itself
-questionPanels               | The div that wraps around the active `questionPanel`
-questionPanel                | The div that wraps around the active `questionSets` and the button bar
-questionPanelHeaderContainer | The div that wraps around the `questionPanels` header text and text
-questionPanelHeaderText      | The h3 tag that holds the `questionPanel` header text
-questionPanelText            | The p tag that holds the `questionPanel` text
-questionSetHeader            | The h4 tag that holds the `questionSet` header
-questionSetText              | The p tag that holds the `questionSet` text
-questionSetHeaderContainer   | The div that wraps around the header and text of a `questionSet`
-questionSets                 | The div that wraps around the `questionSets` inside of a `questionPanel`
-questionSet                  | The div that wraps around the `questions` inside a `questionSet`
-question                     | The div that wraps around the `question`
-questionText                 | The p tag that holds the `question` text
-questionPostText             | The p tag that holds the `question` post-text
-label                        | Label inside of a `question`
-backButton                   | Panel-back button, shown when on a second panel
-controlButton                | Typically the Next or Submit button, depending on panel
-buttonBar                    | The div wrapped around the buttons described above
-errorMessage                 | Error Message div class - Not used if custom renderError method used
-input                        | Assigned to the inputs for types `textInput`, `textareaInput`, `emailInput` and `passwordInput`
-select                       | Assigned to the `selectInput` select-element
-file                         | Assigned to the `fileInput` file-element
-checkboxInput                | The div that wraps around the `checkboxInput`
-checkbox                     | Assigned to the `checkboxOptionsInput` and `checkboxInput` checkbox-input
-checkboxList                 | Assigned the to UL wrapped around the checkbox items in `checkboxOptionsInput`
-checkboxListItem             | Assigned to the LI inside of the `checkboxList` mentioned above
-checkboxLabel                | Assigned to the label inside of a checkbox option
-radioList                    | Assigned to the UL wrapped around the radio items in `radioOptionsInput`
-radioListItem                | Assigned to the LI inside of the `radioList` mentioned above
-radioLabel                   | Assigned to the label inside of a radio button option
-radio                        | Assigned to the radio button inside of a `radioOptionsInput`
+| Class Name                   | Description                                                                                     |
+| ---------------------------- | ----------------------------------------------------------------------------------------------- |
+| form                         | The form element itself                                                                         |
+| questionPanels               | The div that wraps around the active `questionPanel`                                            |
+| questionPanel                | The div that wraps around the active `questionSets` and the button bar                          |
+| questionPanelHeaderContainer | The div that wraps around the `questionPanels` header text and text                             |
+| questionPanelHeaderText      | The h3 tag that holds the `questionPanel` header text                                           |
+| questionPanelText            | The p tag that holds the `questionPanel` text                                                   |
+| questionSetHeader            | The h4 tag that holds the `questionSet` header                                                  |
+| questionSetText              | The p tag that holds the `questionSet` text                                                     |
+| questionSetHeaderContainer   | The div that wraps around the header and text of a `questionSet`                                |
+| questionSets                 | The div that wraps around the `questionSets` inside of a `questionPanel`                        |
+| questionSet                  | The div that wraps around the `questions` inside a `questionSet`                                |
+| question                     | The div that wraps around the `question`                                                        |
+| questionText                 | The p tag that holds the `question` text                                                        |
+| questionPostText             | The p tag that holds the `question` post-text                                                   |
+| label                        | Label inside of a `question`                                                                    |
+| backButton                   | Panel-back button, shown when on a second panel                                                 |
+| controlButton                | Typically the Next or Submit button, depending on panel                                         |
+| buttonBar                    | The div wrapped around the buttons described above                                              |
+| errorMessage                 | Error Message div class - Not used if custom renderError method used                            |
+| input                        | Assigned to the inputs for types `textInput`, `textareaInput`, `emailInput` and `passwordInput` |
+| select                       | Assigned to the `selectInput` select-element                                                    |
+| file                         | Assigned to the `fileInput` file-element                                                        |
+| checkboxInput                | The div that wraps around the `checkboxInput`                                                   |
+| checkbox                     | Assigned to the `checkboxOptionsInput` and `checkboxInput` checkbox-input                       |
+| checkboxList                 | Assigned the to UL wrapped around the checkbox items in `checkboxOptionsInput`                  |
+| checkboxListItem             | Assigned to the LI inside of the `checkboxList` mentioned above                                 |
+| checkboxLabel                | Assigned to the label inside of a checkbox option                                               |
+| radioList                    | Assigned to the UL wrapped around the radio items in `radioOptionsInput`                        |
+| radioListItem                | Assigned to the LI inside of the `radioList` mentioned above                                    |
+| radioLabel                   | Assigned to the label inside of a radio button option                                           |
+| radio                        | Assigned to the radio button inside of a `radioOptionsInput`                                    |
+
 ## Default & Custom Input Types
 
 The default set of input types that ships with Winterfell are the following:
@@ -324,19 +307,16 @@ The default set of input types that ships with Winterfell are the following:
 You can also define custom input types like so:
 
 ```javascript
-var Winterfell         = require('winterfell');
+var Winterfell = require('winterfell');
 var MyAwesomeInputType = require('./awesomeInputType');
 
-Winterfell
-  .addInputType('myAwesomeInputType', MyAwesomeInputType);
+Winterfell.addInputType('myAwesomeInputType', MyAwesomeInputType);
 
 // OR
 
-Winterfell
-  .addInputTypes({
-    myAwesomeInputType : MyAwesomeInputType
-  });
-
+Winterfell.addInputTypes({
+  myAwesomeInputType: MyAwesomeInputType,
+});
 ```
 
 ## Custom Error Messages
@@ -346,22 +326,20 @@ Error messages can be set strings, or methods that are called to generate an err
 ```javascript
 var Winterfell = require('winterfell');
 
-Winterfell
-  .addErrorMessage('isLength', 'Please enter some text!');
+Winterfell.addErrorMessage('isLength', 'Please enter some text!');
 
-Winterfell
-  .addErrorMessages({
-  	isLength : (validationItem) => {
-  	  /*
-  	   * validationItem = {
-  	   *   type   : 'isLength',
-  	   *   params : [] //Starts with answer
-  	   * }
-  	   */
+Winterfell.addErrorMessages({
+  isLength: (validationItem) => {
+    /*
+     * validationItem = {
+     *   type   : 'isLength',
+     *   params : [] //Starts with answer
+     * }
+     */
 
-  	  return 'Please enter a value';
-  	}
-  });
+    return 'Please enter a value';
+  },
+});
 ```
 
 ## Custom Validation Methods
@@ -371,56 +349,52 @@ Validation methods can be defined and will be chosen over methods defined in the
 ```javascript
 var Winterfell = require('winterfell');
 
-Winterfell
-  .addValidationMethod('isLength', value => {
-  	/*
-  	 * arguments == validation parameters
-  	 */
+Winterfell.addValidationMethod('isLength', (value) => {
+  /*
+   * arguments == validation parameters
+   */
 
-    return true; // Valid
-  });
+  return true; // Valid
+});
 
-Winterfell
-  .addValidationMethods({
-  	isLength : value => {
-  	  /*
-  	   * arguments == validation parameters
-  	   */
+Winterfell.addValidationMethods({
+  isLength: (value) => {
+    /*
+     * arguments == validation parameters
+     */
 
-      return true; // valid
-    }
-  });
+    return true; // valid
+  },
+});
 ```
 
 ## Props & Config
 
 The following table shows the props Winterfell accepts, their types and descriptions. The only prop that is required is `schema`.
 
-Prop Name              | Type     | Description
----                    | ---      | ---
-panelId                | string   | Initial `panelId` to render
-schema                 | object   | `schema` for the form to render
-ref                    | string   | `ref` field for form element
-encType                | string   | `encType` field for the form element
-method                 | string   | `method` field for the form element
-action                 | string   | Default `action` field for the form element
-disableSubmit          | boolean  | Prevent the form from submitting naturally
-questionAnswers        | object   | Existing `questionAnswers`. `questionId` => `answer`
-renderError            | function | Custom validation error render method. Return a React Component Or React Element.
-renderRequiredAsterisk | function | Custom require asterisk rendering method. Return a React Component or React Element.
+| Prop Name              | Type     | Description                                                                          |
+| ---------------------- | -------- | ------------------------------------------------------------------------------------ |
+| panelId                | string   | Initial `panelId` to render                                                          |
+| schema                 | object   | `schema` for the form to render                                                      |
+| ref                    | string   | `ref` field for form element                                                         |
+| encType                | string   | `encType` field for the form element                                                 |
+| method                 | string   | `method` field for the form element                                                  |
+| action                 | string   | Default `action` field for the form element                                          |
+| disableSubmit          | boolean  | Prevent the form from submitting naturally                                           |
+| questionAnswers        | object   | Existing `questionAnswers`. `questionId` => `answer`                                 |
+| renderError            | function | Custom validation error render method. Return a React Component Or React Element.    |
+| renderRequiredAsterisk | function | Custom require asterisk rendering method. Return a React Component or React Element. |
 
 ## Events
 
 The following events can be registered as props of Winterfell.
 
-Event Prop | Description | Arguments
---- | --- | ---
-onRender      | Fired when Winterfell has initially rendered   | N/A
-onUpdate      | Fired when a questions answer has been changed | `questionAnswers`
-onSwitchPanel | Fired when a panel is switched or changed      | `panel`
-onSubmit      | Fired when the form is submitted successfully  | `questionAnswers`, `action`
-
-
+| Event Prop    | Description                                    | Arguments                   |
+| ------------- | ---------------------------------------------- | --------------------------- |
+| onRender      | Fired when Winterfell has initially rendered   | N/A                         |
+| onUpdate      | Fired when a questions answer has been changed | `questionAnswers`           |
+| onSwitchPanel | Fired when a panel is switched or changed      | `panel`                     |
+| onSubmit      | Fired when the form is submitted successfully  | `questionAnswers`, `action` |
 
 ## Final Notes
 

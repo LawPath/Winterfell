@@ -34,7 +34,8 @@ var TextareaInput = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return React.createElement('textarea', { type: 'text',
+      return React.createElement('textarea', {
+        type: 'text',
         name: this.props.name,
         id: this.props.id,
         'aria-labelledby': this.props.labelId,
@@ -44,14 +45,13 @@ var TextareaInput = function (_React$Component) {
         required: this.props.required ? 'required' : undefined,
         onChange: this.handleChange.bind(this),
         onFocus: this.props.onFocus.bind(null, this.props.id),
-        onBlur: this.props.onBlur.bind(null, this.state.value) });
+        onBlur: this.props.onBlur.bind(null, this.state.value)
+      });
     }
   }]);
 
   return TextareaInput;
 }(React.Component);
-
-;
 
 TextareaInput.defaultProps = {
   classes: {},

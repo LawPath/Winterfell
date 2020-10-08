@@ -34,7 +34,8 @@ var FileInput = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return React.createElement('input', { type: 'file',
+      return React.createElement('input', {
+        type: 'file',
         name: this.props.name,
         id: this.props.id,
         'aria-labelledby': this.props.labelId,
@@ -42,14 +43,13 @@ var FileInput = function (_React$Component) {
         required: this.props.required ? 'required' : undefined,
         onChange: this.handleChange.bind(this),
         onFocus: this.props.onFocus.bind(null, this.props.id),
-        onBlur: this.props.onBlur.bind(null, this.state.value) });
+        onBlur: this.props.onBlur.bind(null, this.state.value)
+      });
     }
   }]);
 
   return FileInput;
 }(React.Component);
-
-;
 
 FileInput.defaultProps = {
   classes: {},

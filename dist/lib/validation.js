@@ -7,7 +7,6 @@ var Validator = require('validator');
 var StringParser = require('./stringParser');
 
 var extraValidators = {
-
   /*
    * isAccepted Validation Mehod
    */
@@ -27,7 +26,6 @@ var extraValidators = {
       return options.indexOf(item) > -1;
     });
   }
-
 };
 
 /**

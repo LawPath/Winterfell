@@ -1,41 +1,42 @@
 var React = require('react');
 
 class SelectInput extends React.Component {
-
   constructor(props) {
     super(props);
 
     this.state = {
-      value : this.props.value
+      value: this.props.value,
     };
   }
 
   handleChange(e) {
-    this.setState({
-      value : e.target.value
-    }, this.props.onChange.bind(null, e.target.value));
+    this.setState(
+      {
+        value: e.target.value,
+      },
+      this.props.onChange.bind(null, e.target.value),
+    );
   }
 
   render() {
-    var options = this.props.options.map(opt =>
-      <option key={opt.value}
-              value={opt.value}>
+    var options = this.props.options.map((opt) => (
+      <option key={opt.value} value={opt.value}>
         {opt.text}
       </option>
-    );
+    ));
 
     return (
-      <select name={this.props.name}
-              id={this.props.id}
-              className={this.props.classes.select}
-              value={this.state.value}
-              ref="select"
-              required={this.props.required
-                          ? 'required'
-                          : undefined}
-              onChange={this.handleChange.bind(this)}
-              onFocus={this.props.onFocus.bind(null, this.props.id)}
-              onBlur={this.props.onBlur.bind(null, this.state.value)}>
+      <select
+        name={this.props.name}
+        id={this.props.id}
+        className={this.props.classes.select}
+        value={this.state.value}
+        ref="select"
+        required={this.props.required ? 'required' : undefined}
+        onChange={this.handleChange.bind(this)}
+        onFocus={this.props.onFocus.bind(null, this.props.id)}
+        onBlur={this.props.onBlur.bind(null, this.state.value)}
+      >
         {options}
       </select>
     );
@@ -47,22 +48,21 @@ class SelectInput extends React.Component {
      * make sure we set it.
      */
     this.handleChange({
-      target : {
-        value : this.refs.select.value
-      }
+      target: {
+        value: this.refs.select.value,
+      },
     });
   }
-
-};
+}
 
 SelectInput.defaultProps = {
-  classes     : {},
-  name        : '',
-  id          : '',
-  value       : '',
-  options     : [],
-  onChange    : () => {},
-  onBlur      : () => {}
+  classes: {},
+  name: '',
+  id: '',
+  value: '',
+  options: [],
+  onChange: () => {},
+  onBlur: () => {},
 };
 
 module.exports = SelectInput;

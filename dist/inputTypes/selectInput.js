@@ -37,15 +37,15 @@ var SelectInput = function (_React$Component) {
       var options = this.props.options.map(function (opt) {
         return React.createElement(
           'option',
-          { key: opt.value,
-            value: opt.value },
+          { key: opt.value, value: opt.value },
           opt.text
         );
       });
 
       return React.createElement(
         'select',
-        { name: this.props.name,
+        {
+          name: this.props.name,
           id: this.props.id,
           className: this.props.classes.select,
           value: this.state.value,
@@ -53,7 +53,8 @@ var SelectInput = function (_React$Component) {
           required: this.props.required ? 'required' : undefined,
           onChange: this.handleChange.bind(this),
           onFocus: this.props.onFocus.bind(null, this.props.id),
-          onBlur: this.props.onBlur.bind(null, this.state.value) },
+          onBlur: this.props.onBlur.bind(null, this.state.value)
+        },
         options
       );
     }
@@ -74,8 +75,6 @@ var SelectInput = function (_React$Component) {
 
   return SelectInput;
 }(React.Component);
-
-;
 
 SelectInput.defaultProps = {
   classes: {},

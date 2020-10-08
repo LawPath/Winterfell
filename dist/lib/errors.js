@@ -3,7 +3,6 @@
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var errorMessages = {
-
   /*
    * Fallback Error Message
    */
@@ -14,7 +13,6 @@ var errorMessages = {
    */
   isLength: function isLength(validationItem) {
     switch (validationItem.params.length) {
-
       case 1:
         return 'Please enter a value with at least ' + validationItem.params[0] + ' character' + (validationItem.params[0] != 1 ? 's' : '');
         break;
@@ -26,7 +24,6 @@ var errorMessages = {
       default:
         return errorMessages.default;
         break;
-
     }
 
     return errorMessage;

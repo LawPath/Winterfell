@@ -28,7 +28,8 @@ var QuestionSet = function (_React$Component) {
       var _this2 = this;
 
       var questions = this.props.questions.map(function (question) {
-        return React.createElement(Question, { key: question.questionId,
+        return React.createElement(Question, {
+          key: question.questionId,
           questionSetId: _this2.props.id,
           questionId: question.questionId,
           question: question.question,
@@ -46,7 +47,8 @@ var QuestionSet = function (_React$Component) {
           onAnswerChange: _this2.props.onAnswerChange,
           onQuestionBlur: _this2.props.onQuestionBlur,
           onFocus: _this2.props.onFocus,
-          onKeyDown: _this2.props.onKeyDown });
+          onKeyDown: _this2.props.onKeyDown
+        });
       });
 
       return React.createElement(
@@ -73,8 +75,6 @@ var QuestionSet = function (_React$Component) {
 
   return QuestionSet;
 }(React.Component);
-
-;
 
 QuestionSet.defaultProps = {
   id: undefined,

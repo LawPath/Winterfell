@@ -34,7 +34,8 @@ var PasswordInput = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return React.createElement('input', { type: 'password',
+      return React.createElement('input', {
+        type: 'password',
         name: this.props.name,
         id: this.props.id,
         'aria-labelledby': this.props.labelId,
@@ -45,14 +46,13 @@ var PasswordInput = function (_React$Component) {
         onChange: this.handleChange.bind(this),
         onFocus: this.props.onFocus.bind(null, this.props.id),
         onBlur: this.props.onBlur.bind(null, this.state.value),
-        onKeyDown: this.props.onKeyDown });
+        onKeyDown: this.props.onKeyDown
+      });
     }
   }]);
 
   return PasswordInput;
 }(React.Component);
-
-;
 
 PasswordInput.defaultProps = {
   classes: {},

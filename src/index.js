@@ -1,11 +1,9 @@
 var React = require('react');
-var ReactDOM = require('react-dom');
 var _ = require('lodash').noConflict();
 
 var QuestionPanel = require('./questionPanel');
 
 class Winterfell extends React.Component {
-
   constructor(props) {
     super(props);
 
@@ -13,30 +11,31 @@ class Winterfell extends React.Component {
 
     this.panelHistory = [];
 
-    var schema = _.extend({
-      classes: {},
-      formPanels: [],
-      questionPanels: [],
-      questionSets: [],
-    }, props.schema);
+    var schema = _.extend(
+      {
+        classes: {},
+        formPanels: [],
+        questionPanels: [],
+        questionSets: [],
+      },
+      props.schema,
+    );
 
-    schema.formPanels = schema.formPanels
-      .sort((a, b) => a.index - b.index);
+    schema.formPanels = schema.formPanels.sort((a, b) => a.index - b.index);
 
-    var panelId = (typeof props.panelId !== 'undefined'
-      ? props.panelId
-      : schema.formPanels.length > 0
+    var panelId =
+      typeof props.panelId !== 'undefined'
+        ? props.panelId
+        : schema.formPanels.length > 0
         ? schema.formPanels[0].panelId
-        : undefined);
+        : undefined;
 
-    var currentPanel = typeof schema !== 'undefined'
-    && typeof schema.formPanels !== 'undefined'
-    && typeof panelId !== 'undefined'
-      ? _.find(
-        schema.formPanels,
-        panel => panel.panelId == panelId
-      )
-      : undefined;
+    var currentPanel =
+      typeof schema !== 'undefined' &&
+      typeof schema.formPanels !== 'undefined' &&
+      typeof panelId !== 'undefined'
+        ? _.find(schema.formPanels, (panel) => panel.panelId == panelId)
+        : undefined;
 
     this.panelHistory.push(currentPanel.panelId);
 
@@ -49,36 +48,36 @@ class Winterfell extends React.Component {
       currentPanel: currentPanel,
       action: props.action,
       questionAnswers: props.questionAnswers,
-      panelMoved: false
+      panelMoved: false,
     };
   }
 
   componentWillReceiveProps(nextProps) {
-
     let s = nextProps.schema;
     let newState = {
       action: nextProps.action,
       schema: s,
-      questionAnswers: nextProps.questionAnswers
+      questionAnswers: nextProps.questionAnswers,
     };
 
     if (nextProps.currentQuestionId) {
-      let questionPanels = s.questionSets.map(qs =>
-        qs.questions.map(q2 => {
-          return {
-            questionId: q2.questionId,
-            panel: s.formPanels.find(p1 =>
-              s.questionPanels.find(p2 =>
-                p2.questionSets.find(pqs =>
-                  pqs.questionSetId === qs.questionSetId
-                )
-              ).panelId === p1.panelId
-            )
-          };
-        })
-      ).reduce((acc, el) => acc.concat(el), []);
+      let questionPanels = s.questionSets
+        .map((qs) =>
+          qs.questions.map((q2) => {
+            return {
+              questionId: q2.questionId,
+              panel: s.formPanels.find(
+                (p1) =>
+                  s.questionPanels.find((p2) =>
+                    p2.questionSets.find((pqs) => pqs.questionSetId === qs.questionSetId),
+                  ).panelId === p1.panelId,
+              ),
+            };
+          }),
+        )
+        .reduce((acc, el) => acc.concat(el), []);
 
-      let questionPanel = questionPanels.find(qs => {
+      let questionPanel = questionPanels.find((qs) => {
         if (nextProps.currentQuestionId === qs.questionId) {
           return qs.panel;
         }
@@ -87,19 +86,26 @@ class Winterfell extends React.Component {
       if (!questionPanel) {
         const conditionalQuestions = [];
         const questionsIdWithConditionals = s.questionSets
-          .filter(f => f.questions.length)
-          .filter(g => g.questions[0].input.options &&
-            g.questions[0].input.options
-              .filter(q2 => q2.conditionalQuestions).length)
-          .map(e => e.questions[0])
-          .map(e => ({
+          .filter((f) => f.questions.length)
+          .filter(
+            (g) =>
+              g.questions[0].input.options &&
+              g.questions[0].input.options.filter((q2) => q2.conditionalQuestions).length,
+          )
+          .map((e) => e.questions[0])
+          .map((e) => ({
             questionId: e.questionId,
-            conditionalQuestionId: e.input.options.filter(f => f.conditionalQuestions)[0].conditionalQuestions[0].questionId
+            conditionalQuestionId: e.input.options.filter((f) => f.conditionalQuestions)[0]
+              .conditionalQuestions[0].questionId,
           }));
 
-        questionPanel = questionPanels.find(qs => {
-          if (qs.questionId === questionsIdWithConditionals
-              .find(e => e.conditionalQuestionId === nextProps.currentQuestionId).questionId) {
+        questionPanel = questionPanels.find((qs) => {
+          if (
+            qs.questionId ===
+            questionsIdWithConditionals.find(
+              (e) => e.conditionalQuestionId === nextProps.currentQuestionId,
+            ).questionId
+          ) {
             return qs.panel;
           }
         });
@@ -121,29 +127,36 @@ class Winterfell extends React.Component {
       .set(questionId, questionAnswer)
       .value();
 
-    this.setState({
-      questionAnswers: questionAnswers,
-    }, this.props.onUpdate.bind(null, questionAnswers));
+    this.setState(
+      {
+        questionAnswers: questionAnswers,
+      },
+      this.props.onUpdate.bind(null, questionAnswers),
+    );
   }
 
   handleSwitchPanel(panelId, preventHistory) {
     var panel = _.find(this.props.schema.formPanels, {
-      panelId: panelId
+      panelId: panelId,
     });
 
     if (!panel) {
-      throw new Error('Winterfell: Tried to switch to panel "'
-        + panelId + '", which does not exist.');
+      throw new Error(
+        'Winterfell: Tried to switch to panel "' + panelId + '", which does not exist.',
+      );
     }
 
     if (!preventHistory) {
       this.panelHistory.push(panel.panelId);
     }
 
-    this.setState({
-      currentPanel: panel,
-      currentQuestionId: undefined,
-    }, this.props.onSwitchPanel.bind(null, panel));
+    this.setState(
+      {
+        currentPanel: panel,
+        currentQuestionId: undefined,
+      },
+      this.props.onSwitchPanel.bind(null, panel),
+    );
   }
 
   handleBackButtonClick() {
@@ -151,9 +164,7 @@ class Winterfell extends React.Component {
       this.panelHistory.pop();
     }
 
-    this.handleSwitchPanel.call(
-      this, this.panelHistory[this.panelHistory.length - 1], true
-    );
+    this.handleSwitchPanel.call(this, this.panelHistory[this.panelHistory.length - 1], true);
     // let panelIndex = this.state.schema.formPanels.find(fp =>
     //   fp.panelId === this.state.currentPanel.panelId).index;
     // let newPanelIndex = panelIndex > 0 ? this.state.schema.formPanels.find(fp =>
@@ -178,35 +189,40 @@ class Winterfell extends React.Component {
      * If we are not disabling the functionality of the form,
      * we need to set the action provided in the form, then submit.
      */
-    this.setState({
-      action: action
-    }, () => {
-      if (!this.formComponent) {
-        return;
-      }
+    this.setState(
+      {
+        action: action,
+      },
+      () => {
+        if (!this.formComponent) {
+          return;
+        }
 
-      this.formComponent.submit();
-    });
+        this.formComponent.submit();
+      },
+    );
   }
 
   render() {
     var currentPanel = _.find(
       this.state.schema.questionPanels,
-      panel => panel.panelId == this.state.currentPanel.panelId
+      (panel) => panel.panelId == this.state.currentPanel.panelId,
     );
 
     var numPanels = this.state.schema.questionPanels.length;
     var currentPanelIndex = _.indexOf(this.state.schema.questionPanels, currentPanel) + 1;
 
     return (
-      <form method={this.props.method}
+      <form
+        method={this.props.method}
         encType={this.props.encType}
         action={this.state.action}
-        ref={ref => this.formComponent = ref}
+        ref={(ref) => (this.formComponent = ref)}
         className={this.state.schema.classes.form}
       >
         <div className={this.state.schema.classes.questionPanels}>
-          <QuestionPanel schema={this.state.schema}
+          <QuestionPanel
+            schema={this.state.schema}
             classes={this.state.schema.classes}
             panelId={currentPanel.panelId}
             panelIndex={currentPanel.panelIndex}
@@ -230,16 +246,15 @@ class Winterfell extends React.Component {
             onSubmit={this.handleSubmit.bind(this)}
           />
           {this.props.extraComponent ? this.props.extraComponent : null}
-        </div >
-      </form >
+        </div>
+      </form>
     );
   }
 
   componentDidMount() {
     this.props.onRender();
   }
-
-};
+}
 
 Winterfell.inputTypes = require('./inputTypes');
 Winterfell.errorMessages = require('./lib/errors');
@@ -264,16 +279,11 @@ Winterfell.defaultProps = {
   renderError: undefined,
   renderRequiredAsterisk: undefined,
   currentQuestionId: undefined,
-  onSubmit: () => {
-  },
-  onUpdate: () => {
-  },
-  onFocus: () => {
-  },
-  onSwitchPanel: () => {
-  },
-  onRender: () => {
-  }
+  onSubmit: () => {},
+  onUpdate: () => {},
+  onFocus: () => {},
+  onSwitchPanel: () => {},
+  onRender: () => {},
 };
 
 module.exports = Winterfell;

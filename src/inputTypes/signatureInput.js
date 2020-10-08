@@ -5,17 +5,20 @@ export default class SignatureInput extends React.Component {
     super(props);
 
     this.state = {
-      value: this.props.value.type ? this.props.value.value : this.props.value
+      value: this.props.value.type ? this.props.value.value : this.props.value,
     };
   }
 
   handleChange(e) {
-    this.setState({
-      value: e.target.value
-    }, this.props.onChange.bind(null, {
-      type: 'signature',
-      value: e.target.value
-    }));
+    this.setState(
+      {
+        value: e.target.value,
+      },
+      this.props.onChange.bind(null, {
+        type: 'signature',
+        value: e.target.value,
+      }),
+    );
   }
 
   render() {
@@ -28,9 +31,7 @@ export default class SignatureInput extends React.Component {
         className={this.props.classes.signature}
         placeholder={this.props.placeholder}
         value={this.state.value}
-        required={this.props.required
-          ? 'required'
-          : undefined}
+        required={this.props.required ? 'required' : undefined}
         onChange={this.handleChange.bind(this)}
         onFocus={this.props.onFocus.bind(null, this.props.id)}
         onBlur={this.props.onBlur.bind(null, this.state.value)}
@@ -46,12 +47,8 @@ SignatureInput.defaultProps = {
   id: '',
   value: '',
   placeholder: '',
-  onChange: () => {
-  },
-  onBlur: () => {
-  },
-  onKeyDown: () => {
-  },
-  onFocus: () => {
-  }
+  onChange: () => {},
+  onBlur: () => {},
+  onKeyDown: () => {},
+  onFocus: () => {},
 };

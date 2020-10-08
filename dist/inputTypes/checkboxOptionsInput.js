@@ -54,13 +54,12 @@ var CheckboxOptionsInput = function (_React$Component) {
         this.props.options.map(function (opt) {
           return React.createElement(
             'li',
-            { key: opt.value,
-              className: _this2.props.classes.checkboxListItem },
+            { key: opt.value, className: _this2.props.classes.checkboxListItem },
             React.createElement(
               'label',
-              { className: _this2.props.classes.checkboxLabel,
-                id: _this2.props.labelId },
-              React.createElement('input', { type: 'checkbox',
+              { className: _this2.props.classes.checkboxLabel, id: _this2.props.labelId },
+              React.createElement('input', {
+                type: 'checkbox',
                 name: _this2.props.name,
                 'aria-labelledby': _this2.props.labelId,
                 value: opt.value,
@@ -69,7 +68,8 @@ var CheckboxOptionsInput = function (_React$Component) {
                 required: _this2.props.required ? 'required' : undefined,
                 onChange: _this2.handleChange.bind(_this2, opt.value),
                 onFocus: _this2.props.onFocus.bind(null, _this2.props.id),
-                onBlur: _this2.props.onBlur.bind(null, _this2.state.value) }),
+                onBlur: _this2.props.onBlur.bind(null, _this2.state.value)
+              }),
               opt.text
             )
           );
@@ -80,8 +80,6 @@ var CheckboxOptionsInput = function (_React$Component) {
 
   return CheckboxOptionsInput;
 }(React.Component);
-
-;
 
 CheckboxOptionsInput.defaultProps = {
   classes: {},

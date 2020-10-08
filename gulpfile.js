@@ -9,13 +9,13 @@ var path = require('path');
 gulp.task('build-examples', function () {
   return browserify({
     debug: process.env.NODE_ENV != 'production',
-    entries: [
-      'examples/app.js'
-    ]
+    entries: ['examples/app.js'],
   })
-    .transform(babelify.configure({
-      presets: ["es2015", "stage-0", "env", "react"]
-    }))
+    .transform(
+      babelify.configure({
+        presets: ['es2015', 'stage-0', 'env', 'react'],
+      }),
+    )
     .bundle()
     .pipe(source('app.js'))
     .pipe(buffer())
@@ -24,11 +24,7 @@ gulp.task('build-examples', function () {
 });
 
 gulp.task('watch-examples', function () {
-  return gulp.watch([
-    'src/**/*.js',
-    'examples/**/*.js',
-    '!examples/build/app.js'
-  ], {}, function () {
+  return gulp.watch(['src/**/*.js', 'examples/**/*.js', '!examples/build/app.js'], {}, function () {
     return gulp.start('build-examples');
   });
 });

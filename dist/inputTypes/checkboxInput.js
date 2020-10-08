@@ -54,9 +54,9 @@ var CheckboxInput = function (_React$Component) {
         { className: this.props.classes.checkboxInput },
         React.createElement(
           'label',
-          { className: this.props.classes.checkboxLabel,
-            id: this.props.labelId },
-          React.createElement('input', { type: 'checkbox',
+          { className: this.props.classes.checkboxLabel, id: this.props.labelId },
+          React.createElement('input', {
+            type: 'checkbox',
             name: this.props.name,
             'aria-labelledby': this.props.labelId,
             className: this.props.classes.checkbox,
@@ -65,7 +65,8 @@ var CheckboxInput = function (_React$Component) {
             required: this.props.required ? 'required' : undefined,
             onChange: this.handleChange.bind(this),
             onFocus: this.props.onFocus.bind(null, this.props.id),
-            onBlur: this.props.onBlur.bind(null, this.state.checked ? this.props.value : undefined) }),
+            onBlur: this.props.onBlur.bind(null, this.state.checked ? this.props.value : undefined)
+          }),
           this.props.text
         )
       );
@@ -74,8 +75,6 @@ var CheckboxInput = function (_React$Component) {
 
   return CheckboxInput;
 }(React.Component);
-
-;
 
 CheckboxInput.defaultProps = {
   text: '',

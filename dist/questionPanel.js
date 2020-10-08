@@ -125,7 +125,6 @@ var QuestionPanel = function (_React$Component) {
        * the action decided upon.
        */
       switch (action.action) {
-
         case 'GOTO':
           this.props.onSwitchPanel(action.target);
           break;
@@ -182,7 +181,8 @@ var QuestionPanel = function (_React$Component) {
           return undefined;
         }
 
-        return React.createElement(QuestionSet, { key: questionSet.questionSetId,
+        return React.createElement(QuestionSet, {
+          key: questionSet.questionSetId,
           id: questionSet.questionSetId,
           name: questionSet.name,
           questionSetHeader: questionSet.questionSetHeader,
@@ -240,7 +240,8 @@ var QuestionPanel = function (_React$Component) {
           React.createElement(
             'div',
             { className: this.props.classes.progressBarIncomplete },
-            React.createElement('div', { className: this.props.classes.progressBarComplete,
+            React.createElement('div', {
+              className: this.props.classes.progressBarComplete,
               style: { width: completionPercent + '%' }
             }),
             this.props.progress.legendPosition === 'bar' ? React.createElement(
@@ -278,12 +279,16 @@ var QuestionPanel = function (_React$Component) {
         this.props.progress && this.props.progress.position === 'middle' ? progressBar : undefined,
         React.createElement(
           'div',
-          { className: this.props.classes.buttonBar + ' ' + (this.props.extraClasses.buttonBar || '') },
-          this.props.currentPanelIndex > 0 && !this.props.backButton.disabled ? React.createElement(Button, { text: this.props.backButton.text || 'Back',
+          {
+            className: this.props.classes.buttonBar + ' ' + (this.props.extraClasses.buttonBar || '')
+          },
+          this.props.currentPanelIndex > 0 && !this.props.backButton.disabled ? React.createElement(Button, {
+            text: this.props.backButton.text || 'Back',
             onClick: this.handleBackButtonClick.bind(this),
             className: this.props.classes.backButton + ' ' + (this.props.extraClasses.backButton || '')
           }) : undefined,
-          !this.props.button.disabled ? React.createElement(Button, { text: this.props.button.text,
+          !this.props.button.disabled ? React.createElement(Button, {
+            text: this.props.button.text,
             onClick: this.handleMainButtonClick.bind(this),
             className: this.props.classes.controlButton + ' ' + (this.props.extraClasses.button || '')
           }) : undefined
@@ -295,8 +300,6 @@ var QuestionPanel = function (_React$Component) {
 
   return QuestionPanel;
 }(React.Component);
-
-;
 
 QuestionPanel.defaultProps = {
   validationErrors: {},

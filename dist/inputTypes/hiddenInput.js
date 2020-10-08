@@ -27,16 +27,12 @@ var HiddenInput = function (_React$Component) {
   _createClass(HiddenInput, [{
     key: 'render',
     value: function render() {
-      return React.createElement('input', { type: 'hidden',
-        name: this.props.name,
-        value: this.state.value });
+      return React.createElement('input', { type: 'hidden', name: this.props.name, value: this.state.value });
     }
   }]);
 
   return HiddenInput;
 }(React.Component);
-
-;
 
 HiddenInput.defaultProps = {
   name: '',

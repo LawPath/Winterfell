@@ -1,50 +1,51 @@
 var React = require('react');
 
 class TextareaInput extends React.Component {
-
   constructor(props) {
     super(props);
 
     this.state = {
-      value : this.props.value
+      value: this.props.value,
     };
   }
 
   handleChange(e) {
-    this.setState({
-      value : e.target.value
-    }, this.props.onChange.bind(null, e.target.value));
+    this.setState(
+      {
+        value: e.target.value,
+      },
+      this.props.onChange.bind(null, e.target.value),
+    );
   }
 
   render() {
     return (
-      <textarea type="text"
-                name={this.props.name}
-                id={this.props.id}
-                aria-labelledby={this.props.labelId}
-                className={this.props.classes.input}
-                placeholder={this.props.placeholder}
-                value={this.state.value}
-                required={this.props.required
-                            ? 'required'
-                            : undefined}
-                onChange={this.handleChange.bind(this)}
-                onFocus={this.props.onFocus.bind(null, this.props.id)}
-                onBlur={this.props.onBlur.bind(null, this.state.value)} />
+      <textarea
+        type="text"
+        name={this.props.name}
+        id={this.props.id}
+        aria-labelledby={this.props.labelId}
+        className={this.props.classes.input}
+        placeholder={this.props.placeholder}
+        value={this.state.value}
+        required={this.props.required ? 'required' : undefined}
+        onChange={this.handleChange.bind(this)}
+        onFocus={this.props.onFocus.bind(null, this.props.id)}
+        onBlur={this.props.onBlur.bind(null, this.state.value)}
+      />
     );
   }
-
-};
+}
 
 TextareaInput.defaultProps = {
-  classes     : {},
-  name        : '',
-  id          : '',
-  value       : '',
-  placeholder : '',
-  onChange    : () => {},
-  onBlur      : () => {},
-  onFocus     : () => {}
+  classes: {},
+  name: '',
+  id: '',
+  value: '',
+  placeholder: '',
+  onChange: () => {},
+  onBlur: () => {},
+  onFocus: () => {},
 };
 
 module.exports = TextareaInput;

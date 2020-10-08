@@ -42,13 +42,12 @@ var RadioOptionsInput = function (_React$Component) {
         this.props.options.map(function (opt) {
           return React.createElement(
             'li',
-            { key: opt.value,
-              className: _this2.props.classes.radioListItem },
+            { key: opt.value, className: _this2.props.classes.radioListItem },
             React.createElement(
               'label',
-              { className: _this2.props.classes.radioLabel,
-                id: _this2.props.labelId },
-              React.createElement('input', { type: 'radio',
+              { className: _this2.props.classes.radioLabel, id: _this2.props.labelId },
+              React.createElement('input', {
+                type: 'radio',
                 name: _this2.props.name,
                 'aria-labelledby': _this2.props.labelId,
                 checked: _this2.state.value == opt.value,
@@ -56,7 +55,8 @@ var RadioOptionsInput = function (_React$Component) {
                 required: _this2.props.required ? 'required' : undefined,
                 onClick: _this2.props.onFocus.bind(null, _this2.props.id),
                 onChange: _this2.handleChange.bind(_this2, opt.value),
-                onBlur: _this2.props.onBlur.bind(null, _this2.state.value) }),
+                onBlur: _this2.props.onBlur.bind(null, _this2.state.value)
+              }),
               opt.text
             )
           );
@@ -67,8 +67,6 @@ var RadioOptionsInput = function (_React$Component) {
 
   return RadioOptionsInput;
 }(React.Component);
-
-;
 
 RadioOptionsInput.defaultProps = {
   classes: {},

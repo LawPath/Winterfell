@@ -63,7 +63,8 @@ var Question = function (_React$Component) {
           return typeof option.conditionalQuestions !== 'undefined' && option.conditionalQuestions.length > 0;
         }).forEach(function (option) {
           return [].forEach.bind(option.conditionalQuestions, function (conditionalQuestion) {
-            conditionalItems.push(React.createElement(Question, { key: conditionalQuestion.questionId,
+            conditionalItems.push(React.createElement(Question, {
+              key: conditionalQuestion.questionId,
               questionSetId: _this2.props.questionSetId,
               questionId: conditionalQuestion.questionId,
               question: conditionalQuestion.question,
@@ -80,7 +81,8 @@ var Question = function (_React$Component) {
               onAnswerChange: _this2.props.onAnswerChange,
               onQuestionBlur: _this2.props.onQuestionBlur,
               onFocus: _this2.props.onFocus,
-              onKeyDown: _this2.props.onKeyDown }));
+              onKeyDown: _this2.props.onKeyDown
+            }));
           })();
         });
       }
@@ -95,8 +97,10 @@ var Question = function (_React$Component) {
       var validationErrors = typeof this.props.validationErrors[this.props.questionId] !== 'undefined' ? this.props.validationErrors[this.props.questionId].map(function (error) {
         return typeof _this2.props.renderError === 'function' ? _this2.props.renderError(error, _this2.props.questionId) : React.createElement(
           'div',
-          { key: _this2.props.questionId + 'Error' + error.type,
-            className: _this2.props.classes.errorMessage },
+          {
+            key: _this2.props.questionId + 'Error' + error.type,
+            className: _this2.props.classes.errorMessage
+          },
           error.message
         );
       }) : [];
@@ -108,9 +112,7 @@ var Question = function (_React$Component) {
         { className: this.props.classes.question },
         !!this.props.question ? React.createElement(
           'label',
-          { className: this.props.classes.label,
-            id: labelId,
-            htmlFor: this.props.questionId },
+          { className: this.props.classes.label, id: labelId, htmlFor: this.props.questionId },
           this.props.question,
           typeof this.props.renderRequiredAsterisk !== 'undefined' && this.props.input.required ? this.props.renderRequiredAsterisk() : undefined
         ) : undefined,
@@ -120,7 +122,8 @@ var Question = function (_React$Component) {
           this.props.text
         ) : undefined,
         validationErrors,
-        React.createElement(Input, _extends({ name: this.props.questionId,
+        React.createElement(Input, _extends({
+          name: this.props.questionId,
           id: this.props.questionId,
           labelId: labelId,
           value: value,
@@ -155,8 +158,6 @@ var Question = function (_React$Component) {
 
   return Question;
 }(React.Component);
-
-;
 
 Question.defaultProps = {
   questionSetId: undefined,

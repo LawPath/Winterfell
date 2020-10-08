@@ -50,7 +50,11 @@ var AddressInput = function (_React$Component) {
       });
       var state = {
         value: {
-          line1: line1, line2: line2, city: city, state: theState, postcode: postcode
+          line1: line1,
+          line2: line2,
+          city: city,
+          state: theState,
+          postcode: postcode
         }
       };
       this.setState(state, this.props.onChange.bind(null, { type: 'address', value: state.value }));
@@ -74,7 +78,11 @@ var AddressInput = function (_React$Component) {
       }
       var ns = {
         value: {
-          line1: line1, line2: line2, city: city, state: theState, postcode: postcode
+          line1: line1,
+          line2: line2,
+          city: city,
+          state: theState,
+          postcode: postcode
         }
       };
       ns.value[field] = e.target.value;

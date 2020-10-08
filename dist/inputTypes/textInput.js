@@ -34,7 +34,8 @@ var TextInput = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return React.createElement('input', { type: 'text',
+      return React.createElement('input', {
+        type: 'text',
         name: this.props.name,
         id: this.props.id,
         'aria-labelledby': this.props.labelId,
@@ -45,14 +46,13 @@ var TextInput = function (_React$Component) {
         onChange: this.handleChange.bind(this),
         onFocus: this.props.onFocus.bind(null, this.props.id),
         onBlur: this.props.onBlur.bind(null, this.state.value),
-        onKeyDown: this.props.onKeyDown });
+        onKeyDown: this.props.onKeyDown
+      });
     }
   }]);
 
   return TextInput;
 }(React.Component);
-
-;
 
 TextInput.defaultProps = {
   classes: {},
