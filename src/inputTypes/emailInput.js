@@ -1,6 +1,6 @@
-var React = require('react');
+import React, { Component } from 'react';
 
-class EmailInput extends React.Component {
+export default class EmailInput extends Component {
   constructor(props) {
     super(props);
 
@@ -49,5 +49,3 @@ EmailInput.defaultProps = {
   onKeyDown: () => {},
   onFocus: () => {},
 };
-
-module.exports = EmailInput;

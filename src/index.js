@@ -1,9 +1,13 @@
-var React = require('react');
-var _ = require('lodash').noConflict();
+import React, { Component } from 'react';
+import _ from 'lodash';
 
-var QuestionPanel = require('./questionPanel');
+import inputTypes from './inputTypes';
+import errorMessages from './lib/errors';
+import validation from './lib/validation';
+import postQuestionComponents from './custom/postQuestionComponents';
+import QuestionPanel from './questionPanel';
 
-class Winterfell extends React.Component {
+class Winterfell extends Component {
   constructor(props) {
     super(props);
 
@@ -122,17 +126,14 @@ class Winterfell extends React.Component {
     this.setState(newState);
   }
 
-  handleAnswerChange(questionId, questionAnswer) {
+  handleAnswerChange(questionId, questionAnswer, questionLabel) {
     var questionAnswers = _.chain(this.state.questionAnswers)
-      .set(questionId, questionAnswer)
+      .set(questionId, { value: questionAnswer, label: questionLabel })
       .value();
-
-    this.setState(
-      {
-        questionAnswers: questionAnswers,
-      },
-      this.props.onUpdate.bind(null, questionAnswers),
-    );
+    this.setState({
+      questionAnswers: questionAnswers,
+    });
+    this.props.onUpdate.bind(null, questionAnswers);
   }
 
   handleSwitchPanel(panelId, preventHistory) {
@@ -244,6 +245,7 @@ class Winterfell extends React.Component {
             onPanelBack={this.handleBackButtonClick.bind(this)}
             onSwitchPanel={this.handleSwitchPanel.bind(this)}
             onSubmit={this.handleSubmit.bind(this)}
+            onPostQuestionComponent={this.props.onPostQuestionComponent}
           />
           {this.props.extraComponent ? this.props.extraComponent : null}
         </div>
@@ -256,12 +258,16 @@ class Winterfell extends React.Component {
   }
 }
 
-Winterfell.inputTypes = require('./inputTypes');
-Winterfell.errorMessages = require('./lib/errors');
-Winterfell.validation = require('./lib/validation');
+Winterfell.inputTypes = inputTypes;
+Winterfell.errorMessages = errorMessages;
+Winterfell.validation = validation;
+
+Winterfell.postQuestionComponents = postQuestionComponents;
 
 Winterfell.addInputType = Winterfell.inputTypes.addInputType;
 Winterfell.addInputTypes = Winterfell.inputTypes.addInputTypes;
+
+Winterfell.addPostQuestionComponent = Winterfell.postQuestionComponents.addPostQuestionComponent;
 
 Winterfell.addErrorMessage = Winterfell.errorMessages.addErrorMessage;
 Winterfell.addErrorMessages = Winterfell.errorMessages.addErrorMessages;
@@ -284,6 +290,6 @@ Winterfell.defaultProps = {
   onFocus: () => {},
   onSwitchPanel: () => {},
   onRender: () => {},
+  onPostQuestionComponent: {},
 };
-
-module.exports = Winterfell;
+export default Winterfell;

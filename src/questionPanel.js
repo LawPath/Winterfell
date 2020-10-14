@@ -1,14 +1,12 @@
-var React = require('react');
-var _ = require('lodash').noConflict();
-var KeyCodez = require('keycodez');
+import React from 'react';
+import _ from 'lodash';
+import KeyCodez from 'keycodez';
+import Validation from './lib/validation';
+import ErrorMessages from './lib/errors';
+import Button from './button';
+import QuestionSet from './questionSet';
 
-var Validation = require('./lib/validation');
-var ErrorMessages = require('./lib/errors');
-
-var Button = require('./button');
-var QuestionSet = require('./questionSet');
-
-class QuestionPanel extends React.Component {
+export default class QuestionPanel extends React.Component {
   constructor(props) {
     super(props);
 
@@ -28,7 +26,7 @@ class QuestionPanel extends React.Component {
      */
     var questionValidationErrors = [];
     validations.forEach((validation) => {
-      if (Validation.validateAnswer(questionAnswer, validation, this.props.questionAnswers)) {
+      if (Validation.validateAnswer(questionAnswer.value, validation, this.props.questionAnswers)) {
         return;
       }
 
@@ -93,8 +91,8 @@ class QuestionPanel extends React.Component {
      * Check our conditions and act upon them, or the default.
      */
     conditions.forEach((condition) => {
-      var answer = this.props.questionAnswers[condition.questionId];
-
+      const answerObject = this.props.questionAnswers[condition.questionId];
+      const { value: answer } = answerObject;
       action =
         answer == condition.value
           ? {
@@ -123,8 +121,8 @@ class QuestionPanel extends React.Component {
     this.props.onPanelBack();
   }
 
-  handleAnswerChange(questionId, questionAnswer, validations, validateOn) {
-    this.props.onAnswerChange(questionId, questionAnswer);
+  handleAnswerChange(questionId, questionAnswer, questionLabel, validations, validateOn) {
+    this.props.onAnswerChange(questionId, questionAnswer, questionLabel);
 
     this.setState({
       validationErrors: _.chain(this.state.validationErrors).set(questionId, []).value(),
@@ -149,8 +147,8 @@ class QuestionPanel extends React.Component {
   }
 
   render() {
-    var questionSets = this.props.questionSets.map((questionSetMeta) => {
-      var questionSet = _.find(this.props.schema.questionSets, {
+    const questionSets = this.props.questionSets.map((questionSetMeta) => {
+      const questionSet = _.find(this.props.schema.questionSets, {
         questionSetId: questionSetMeta.questionSetId,
       });
 
@@ -175,6 +173,7 @@ class QuestionPanel extends React.Component {
           onQuestionBlur={this.handleQuestionBlur.bind(this)}
           onFocus={this.props.onFocus}
           onKeyDown={this.handleInputKeyDown.bind(this)}
+          onPostQuestionComponent={this.props.onPostQuestionComponent}
         />
       );
     });
@@ -304,6 +303,5 @@ QuestionPanel.defaultProps = {
   onSwitchPanel: () => {},
   onPanelBack: () => {},
   onFocus: () => {},
+  onPostQuestionComponent: {},
 };
-
-module.exports = QuestionPanel;

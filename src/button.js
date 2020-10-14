@@ -1,6 +1,6 @@
-var React = require('react');
+import React, { Component } from 'react';
 
-class Button extends React.Component {
+export default class Button extends Component {
   handleClick(e) {
     e.preventDefault();
 
@@ -21,5 +21,3 @@ Button.defaultProps = {
   className: undefined,
   onClick: () => {},
 };
-
-module.exports = Button;

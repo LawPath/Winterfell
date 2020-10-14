@@ -1,8 +1,8 @@
-var _ = require('lodash').noConflict();
-var Validator = require('validator');
-var StringParser = require('./stringParser');
+import _ from 'lodash';
+import Validator from 'validator';
+import StringParser from './stringParser';
 
-var extraValidators = {
+const extraValidators = {
   /*
    * isAccepted Validation Mehod
    */
@@ -31,7 +31,7 @@ var extraValidators = {
  * @param  object  validationItem Rule set for validator
  * @return boolean                Valid?
  */
-var validateAnswer = (value, validationItem, questionAnswers) => {
+export const validateAnswer = (value, validationItem, questionAnswers) => {
   var validationMethod =
     typeof extraValidators[validationItem.type] !== 'undefined'
       ? extraValidators[validationItem.type]
@@ -83,7 +83,7 @@ var validateAnswer = (value, validationItem, questionAnswers) => {
  * @param  array  activeQuestions
  * @return array                  All active questions
  */
-var getActiveQuestions = (questions, questionAnswers, activeQuestions) => {
+export const getActiveQuestions = (questions, questionAnswers, activeQuestions) => {
   activeQuestions = activeQuestions || [];
 
   questions.forEach((question) => {
@@ -95,12 +95,13 @@ var getActiveQuestions = (questions, questionAnswers, activeQuestions) => {
     if (typeof question.input.options === 'undefined' || question.input.options.length === 0) {
       return;
     }
-
     question.input.options.forEach((option) => {
+      const answer = questionAnswers[question.questionId];
+      if (!answer) return;
       if (
         typeof option.conditionalQuestions === 'undefined' ||
         option.conditionalQuestions.length == 0 ||
-        questionAnswers[question.questionId] != option.value
+        answer.value != option.value
       ) {
         return;
       }
@@ -123,7 +124,7 @@ var getActiveQuestions = (questions, questionAnswers, activeQuestions) => {
  * @param  object questionAnswers Current answers for questions
  * @return array                  All active questions
  */
-var getActiveQuestionsFromQuestionSets = (questionSets, questionAnswers) => {
+export const getActiveQuestionsFromQuestionSets = (questionSets, questionAnswers) => {
   var questionsToCheck = [];
 
   questionSets.forEach((questionSet) =>
@@ -143,7 +144,7 @@ var getActiveQuestionsFromQuestionSets = (questionSets, questionAnswers) => {
  * @param  object questionAnswers  Current answers for questions
  * @return object                  Set of questions and their invalidations
  */
-var getQuestionPanelInvalidQuestions = (questionSets, questionAnswers) => {
+export const getQuestionPanelInvalidQuestions = (questionSets, questionAnswers) => {
   var questionsToCheck = getActiveQuestionsFromQuestionSets(questionSets, questionAnswers).filter(
     (question) => {
       return question.validations instanceof Array && question.validations.length > 0;
@@ -187,7 +188,7 @@ var getQuestionPanelInvalidQuestions = (questionSets, questionAnswers) => {
  * @param  string   name   Name of validation method
  * @param  function method Validation method
  */
-var addValidationMethod = (name, method) => {
+export const addValidationMethod = (name, method) => {
   if (typeof name !== 'string') {
     throw new Error(
       'Winterfell: First parameter of addValidationMethod ' + 'must be of type string',
@@ -208,7 +209,7 @@ var addValidationMethod = (name, method) => {
  *
  * @param  array methods Methods to add. name => func
  */
-var addValidationMethods = (methods) => {
+export const addValidationMethods = (methods) => {
   if (typeof methods !== 'object') {
     throw new Error(
       'Winterfell: First parameter of addValidationMethods ' + 'must be of type object',
@@ -220,11 +221,11 @@ var addValidationMethods = (methods) => {
   }
 };
 
-module.exports = {
-  validateAnswer: validateAnswer,
-  getActiveQuestions: getActiveQuestions,
-  getActiveQuestionsFromQuestionSets: getActiveQuestionsFromQuestionSets,
-  getQuestionPanelInvalidQuestions: getQuestionPanelInvalidQuestions,
-  addValidationMethod: addValidationMethod,
-  addValidationMethods: addValidationMethods,
+export default {
+  addValidationMethods,
+  addValidationMethod,
+  getQuestionPanelInvalidQuestions,
+  getActiveQuestionsFromQuestionSets,
+  getActiveQuestions,
+  validateAnswer,
 };

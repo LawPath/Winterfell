@@ -1,4 +1,4 @@
-var errorMessages = {
+const errorMessages = {
   /*
    * Fallback Error Message
    */
@@ -16,7 +16,6 @@ var errorMessages = {
           ' character' +
           (validationItem.params[0] != 1 ? 's' : '')
         );
-        break;
 
       case 2:
         return (
@@ -26,14 +25,10 @@ var errorMessages = {
           validationItem.params[1] +
           ' characters long'
         );
-        break;
 
       default:
         return errorMessages.default;
-        break;
     }
-
-    return errorMessage;
   },
 
   /*
@@ -188,7 +183,7 @@ errorMessages.addErrorMessages = (messages) => {
  * @return string                 Error message to display
  */
 errorMessages.getErrorMessage = (validationItem) => {
-  var errorMessage =
+  const errorMessage =
     typeof validationItem.message !== 'undefined'
       ? validationItem.message
       : typeof errorMessages[validationItem.type] !== 'undefined'
@@ -204,8 +199,8 @@ errorMessages.getErrorMessage = (validationItem) => {
  * @param  string          type    Error message type
  * @param  stirng|function message essage or function to get message
  */
-var setErrorMessage = (type, message) => {
+const setErrorMessage = (type, message) => {
   errorMessages[type] = message;
 };
 
-module.exports = errorMessages;
+export default errorMessages;

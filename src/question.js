@@ -1,11 +1,18 @@
-var React = require('react');
-var _ = require('lodash').noConflict();
+import React, { Component } from 'react';
+import _ from 'lodash';
 
-var InputTypes = require('./inputTypes');
+import InputTypes from './inputTypes';
+import PostQuestionComponents from './custom/postQuestionComponents';
 
-class Question extends React.Component {
+export default class Question extends Component {
   handleInputChange(questionId, value) {
-    this.props.onAnswerChange(questionId, value, this.props.validations, this.props.validateOn);
+    this.props.onAnswerChange(
+      questionId,
+      value,
+      this.props.label,
+      this.props.validations,
+      this.props.validateOn,
+    );
   }
 
   handleInputBlur(questionId, value) {
@@ -13,7 +20,11 @@ class Question extends React.Component {
   }
 
   render() {
-    var Input = InputTypes[this.props.input.type];
+    const Input = InputTypes[this.props.input.type];
+    const PostQuestionComponent =
+      this.props.postQuestionComponent && this.props.postQuestionComponent.name
+        ? PostQuestionComponents[this.props.postQuestionComponent.name]
+        : null;
     if (!Input) {
       throw new Error(
         'Winterfell: Input Type "' +
@@ -31,7 +42,7 @@ class Question extends React.Component {
      * then render this component with the props for the conditional
      * question.
      */
-    var conditionalItems = [];
+    const conditionalItems = [];
     if (typeof this.props.input.options !== 'undefined') {
       this.props.input.options
         .filter((option) => {
@@ -67,6 +78,7 @@ class Question extends React.Component {
                 onQuestionBlur={this.props.onQuestionBlur}
                 onFocus={this.props.onFocus}
                 onKeyDown={this.props.onKeyDown}
+                onPostQuestionComponent={this.props.onPostQuestionComponent}
               />,
             );
           })(),
@@ -102,7 +114,6 @@ class Question extends React.Component {
         : [];
 
     let labelId = `${this.props.questionId}-label`;
-
     return (
       <div className={this.props.classes.question}>
         {!!this.props.question ? (
@@ -137,6 +148,13 @@ class Question extends React.Component {
           <p className={this.props.classes.questionPostText}>{this.props.postText}</p>
         ) : undefined}
         {conditionalItems}
+        {this.props.postQuestionComponent && this.props.postQuestionComponent.name ? (
+          <PostQuestionComponent
+            questionId={this.props.questionId}
+            {...this.props.postQuestionComponent}
+            {...this.props.onPostQuestionComponent}
+          />
+        ) : undefined}
       </div>
     );
   }
@@ -162,6 +180,8 @@ Question.defaultProps = {
   validations: [],
   text: undefined,
   postText: undefined,
+  postQuestionComponent: {},
+  onPostQuestionComponent: {},
   value: undefined,
   input: {
     default: undefined,
@@ -169,6 +189,7 @@ Question.defaultProps = {
     limit: undefined,
     placeholder: undefined,
   },
+  label: undefined,
   classes: {},
   questionAnswers: {},
   validationErrors: {},
@@ -179,5 +200,3 @@ Question.defaultProps = {
   renderError: undefined,
   renderRequiredAsterisk: undefined,
 };
-
-module.exports = Question;

@@ -1,9 +1,8 @@
 import React from 'react';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
-import PropTypes from 'prop-types';
 
-import 'react-datepicker/dist/react-datepicker.css';
+// import 'react-datepicker/dist/react-datepicker.css';
 
 export default class DateInput extends React.Component {
   constructor(props) {
@@ -30,9 +29,9 @@ export default class DateInput extends React.Component {
     return (
       <div>
         <DatePicker
-          name={`${this.props.name}`}
-          id={`${this.props.id}`}
-          aria-labelledby={`${this.props.labelId}`}
+          name={this.props.name}
+          id={this.props.id}
+          aria-labelledby={this.props.labelId}
           className={this.props.classes.input}
           selected={this.state.value}
           onSelect={this.props.onBlur}

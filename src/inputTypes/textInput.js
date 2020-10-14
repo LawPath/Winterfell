@@ -1,6 +1,6 @@
-var React = require('react');
+import React, { Component } from 'react';
 
-class TextInput extends React.Component {
+export default class TextInput extends Component {
   constructor(props) {
     super(props);
 
@@ -49,5 +49,3 @@ TextInput.defaultProps = {
   onKeyDown: () => {},
   onFocus: () => {},
 };
-
-module.exports = TextInput;

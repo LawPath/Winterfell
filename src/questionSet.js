@@ -1,11 +1,12 @@
-var React = require('react');
-var _ = require('lodash').noConflict();
+import React, { Component } from 'react';
+import _ from 'lodash';
 
-var Question = require('./question');
+import Question from './question';
 
-class QuestionSet extends React.Component {
+export default class QuestionSet extends Component {
   render() {
     var questions = this.props.questions.map((question) => {
+      const answer = this.props.questionAnswers[question.questionId];
       return (
         <Question
           key={question.questionId}
@@ -16,7 +17,9 @@ class QuestionSet extends React.Component {
           validations={question.validations}
           text={question.text}
           postText={question.postText}
-          value={this.props.questionAnswers[question.questionId]}
+          label={question.label}
+          postQuestionComponent={question.postQuestionComponent}
+          value={answer ? answer.value : ''}
           input={question.input}
           classes={this.props.classes}
           renderError={this.props.renderError}
@@ -27,6 +30,7 @@ class QuestionSet extends React.Component {
           onQuestionBlur={this.props.onQuestionBlur}
           onFocus={this.props.onFocus}
           onKeyDown={this.props.onKeyDown}
+          onPostQuestionComponent={this.props.onPostQuestionComponent}
         />
       );
     });
@@ -67,6 +71,5 @@ QuestionSet.defaultProps = {
   onQuestionBlur: () => {},
   onKeyDown: () => {},
   onFocus: () => {},
+  onPostQuestionComponent: {},
 };
-
-module.exports = QuestionSet;

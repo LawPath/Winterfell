@@ -1,19 +1,32 @@
-var React = require('react');
+import React from 'react';
+import checkboxInput from './checkboxInput';
+import checkboxOptionsInput from './checkboxOptionsInput';
+import emailInput from './emailInput';
+import fileInput from './fileInput';
+import hiddenInput from './hiddenInput';
+import passwordInput from './passwordInput';
+import radioOptionsInput from './radioOptionsInput';
+import selectInput from './selectInput';
+import textareaInput from './textareaInput';
+import textInput from './textInput';
+import addressInput from './addressInput';
+import dateInput from './dateInput';
+import signatureInput from './signatureInput';
 
-var inputTypes = {
-  checkboxInput: require('./checkboxInput'),
-  checkboxOptionsInput: require('./checkboxOptionsInput'),
-  emailInput: require('./emailInput'),
-  fileInput: require('./fileInput'),
-  hiddenInput: require('./hiddenInput'),
-  passwordInput: require('./passwordInput'),
-  radioOptionsInput: require('./radioOptionsInput'),
-  selectInput: require('./selectInput'),
-  textareaInput: require('./textareaInput'),
-  textInput: require('./textInput'),
-  addressInput: require('./addressInput'),
-  dateInput: require('./dateInput'),
-  signatureInput: require('./signatureInput'),
+const inputTypes = {
+  checkboxInput: checkboxInput,
+  checkboxOptionsInput: checkboxOptionsInput,
+  emailInput: emailInput,
+  fileInput: fileInput,
+  hiddenInput: hiddenInput,
+  passwordInput: passwordInput,
+  radioOptionsInput: radioOptionsInput,
+  selectInput: selectInput,
+  textareaInput: textareaInput,
+  textInput: textInput,
+  addressInput: addressInput,
+  dateInput: dateInput,
+  signatureInput: signatureInput,
 };
 
 /**
@@ -54,4 +67,4 @@ inputTypes.addInputTypes = (types) => {
   }
 };
 
-module.exports = inputTypes;
+export default inputTypes;
