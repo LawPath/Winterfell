@@ -1,31 +1,59 @@
-'use strict';
+"use strict";
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+var _lodash = _interopRequireDefault(require("lodash"));
+
+var _keycodez = _interopRequireDefault(require("keycodez"));
+
+var _validation = _interopRequireDefault(require("./lib/validation"));
+
+var _errors = _interopRequireDefault(require("./lib/errors"));
+
+var _button = _interopRequireDefault(require("./button"));
+
+var _questionSet = _interopRequireDefault(require("./questionSet"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var React = require('react');
-var _ = require('lodash').noConflict();
-var KeyCodez = require('keycodez');
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
-var Validation = require('./lib/validation');
-var ErrorMessages = require('./lib/errors');
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
-var Button = require('./button');
-var QuestionSet = require('./questionSet');
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
-var QuestionPanel = function (_React$Component) {
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+var QuestionPanel = /*#__PURE__*/function (_React$Component) {
   _inherits(QuestionPanel, _React$Component);
 
+  var _super = _createSuper(QuestionPanel);
+
   function QuestionPanel(props) {
+    var _this;
+
     _classCallCheck(this, QuestionPanel);
 
-    var _this = _possibleConstructorReturn(this, (QuestionPanel.__proto__ || Object.getPrototypeOf(QuestionPanel)).call(this, props));
-
+    _this = _super.call(this, props);
     _this.state = {
       validationErrors: _this.props.validationErrors
     };
@@ -33,70 +61,74 @@ var QuestionPanel = function (_React$Component) {
   }
 
   _createClass(QuestionPanel, [{
-    key: 'handleAnswerValidate',
+    key: "handleAnswerValidate",
     value: function handleAnswerValidate(questionId, questionAnswer, validations) {
       var _this2 = this;
 
       if (typeof validations === 'undefined' || validations.length === 0) {
         return;
       }
-
       /*
        * Run the question through its validations and
        * show any error messages if invalid.
        */
+
+
       var questionValidationErrors = [];
       validations.forEach(function (validation) {
-        if (Validation.validateAnswer(questionAnswer, validation, _this2.props.questionAnswers)) {
+        if (_validation["default"].validateAnswer(questionAnswer.value, validation, _this2.props.questionAnswers)) {
           return;
         }
 
         questionValidationErrors.push({
           type: validation.type,
-          message: ErrorMessages.getErrorMessage(validation)
+          message: _errors["default"].getErrorMessage(validation)
         });
       });
 
-      var validationErrors = _.chain(this.state.validationErrors).set(questionId, questionValidationErrors).value();
+      var validationErrors = _lodash["default"].chain(this.state.validationErrors).set(questionId, questionValidationErrors).value();
 
       this.setState({
         validationErrors: validationErrors
       });
     }
   }, {
-    key: 'handleMainButtonClick',
+    key: "handleMainButtonClick",
     value: function handleMainButtonClick() {
       var _this3 = this;
 
-      var action = this.props.action.default;
+      var action = this.props.action["default"];
       var conditions = this.props.action.conditions || [];
-
       /*
        * We need to get all the question sets for this panel.
        * Collate a list of the question set IDs required
        * and run through the schema to grab the question sets.
        */
+
       var questionSetIds = this.props.questionSets.map(function (qS) {
         return qS.questionSetId;
       });
-      var questionSets = _.chain(this.props.schema.questionSets).filter(function (qS) {
+
+      var questionSets = _lodash["default"].chain(this.props.schema.questionSets).filter(function (qS) {
         return questionSetIds.indexOf(qS.questionSetId) > -1;
       }).value();
-
       /*
        * Get any incorrect fields that need error messages.
        */
-      var invalidQuestions = Validation.getQuestionPanelInvalidQuestions(questionSets, this.props.questionAnswers);
 
+
+      var invalidQuestions = _validation["default"].getQuestionPanelInvalidQuestions(questionSets, this.props.questionAnswers);
       /*
        * If the panel isn't valid...
        */
+
+
       if (Object.keys(invalidQuestions).length > 0) {
-        var validationErrors = _.mapValues(invalidQuestions, function (validations) {
+        var validationErrors = _lodash["default"].mapValues(invalidQuestions, function (validations) {
           return validations.map(function (validation) {
             return {
               type: validation.type,
-              message: ErrorMessages.getErrorMessage(validation)
+              message: _errors["default"].getErrorMessage(validation)
             };
           });
         });
@@ -106,24 +138,25 @@ var QuestionPanel = function (_React$Component) {
         });
         return;
       }
-
       /*
        * Panel is valid. So what do we do next?
        * Check our conditions and act upon them, or the default.
        */
-      conditions.forEach(function (condition) {
-        var answer = _this3.props.questionAnswers[condition.questionId];
 
+
+      conditions.forEach(function (condition) {
+        var answerObject = _this3.props.questionAnswers[condition.questionId];
+        var answer = answerObject.value;
         action = answer == condition.value ? {
           action: condition.action,
           target: condition.target
         } : action;
       });
-
       /*
        * Decide which action to take depending on
        * the action decided upon.
        */
+
       switch (action.action) {
         case 'GOTO':
           this.props.onSwitchPanel(action.target);
@@ -135,17 +168,16 @@ var QuestionPanel = function (_React$Component) {
       }
     }
   }, {
-    key: 'handleBackButtonClick',
+    key: "handleBackButtonClick",
     value: function handleBackButtonClick() {
       this.props.onPanelBack();
     }
   }, {
-    key: 'handleAnswerChange',
-    value: function handleAnswerChange(questionId, questionAnswer, validations, validateOn) {
-      this.props.onAnswerChange(questionId, questionAnswer);
-
+    key: "handleAnswerChange",
+    value: function handleAnswerChange(questionId, questionAnswer, questionLabel, validations, validateOn) {
+      this.props.onAnswerChange(questionId, questionAnswer, questionLabel);
       this.setState({
-        validationErrors: _.chain(this.state.validationErrors).set(questionId, []).value()
+        validationErrors: _lodash["default"].chain(this.state.validationErrors).set(questionId, []).value()
       });
 
       if (validateOn === 'change') {
@@ -153,27 +185,27 @@ var QuestionPanel = function (_React$Component) {
       }
     }
   }, {
-    key: 'handleQuestionBlur',
+    key: "handleQuestionBlur",
     value: function handleQuestionBlur(questionId, questionAnswer, validations, validateOn) {
       if (validateOn === 'blur') {
         this.handleAnswerValidate(questionId, questionAnswer, validations);
       }
     }
   }, {
-    key: 'handleInputKeyDown',
+    key: "handleInputKeyDown",
     value: function handleInputKeyDown(e) {
-      if (KeyCodez[e.keyCode] === 'enter') {
+      if (_keycodez["default"][e.keyCode] === 'enter') {
         e.preventDefault();
         this.handleMainButtonClick.call(this);
       }
     }
   }, {
-    key: 'render',
+    key: "render",
     value: function render() {
       var _this4 = this;
 
       var questionSets = this.props.questionSets.map(function (questionSetMeta) {
-        var questionSet = _.find(_this4.props.schema.questionSets, {
+        var questionSet = _lodash["default"].find(_this4.props.schema.questionSets, {
           questionSetId: questionSetMeta.questionSetId
         });
 
@@ -181,7 +213,7 @@ var QuestionPanel = function (_React$Component) {
           return undefined;
         }
 
-        return React.createElement(QuestionSet, {
+        return /*#__PURE__*/_react["default"].createElement(_questionSet["default"], {
           key: questionSet.questionSetId,
           id: questionSet.questionSetId,
           name: questionSet.name,
@@ -196,10 +228,10 @@ var QuestionPanel = function (_React$Component) {
           onAnswerChange: _this4.handleAnswerChange.bind(_this4),
           onQuestionBlur: _this4.handleQuestionBlur.bind(_this4),
           onFocus: _this4.props.onFocus,
-          onKeyDown: _this4.handleInputKeyDown.bind(_this4)
+          onKeyDown: _this4.handleInputKeyDown.bind(_this4),
+          onPostQuestionComponent: _this4.props.onPostQuestionComponent
         });
       });
-
       var completionPercent = 0;
 
       if (typeof this.props.progress !== 'undefined') {
@@ -221,86 +253,56 @@ var QuestionPanel = function (_React$Component) {
           completionPercent = Math.floor(100 / nQuestionsTotal * nQuestionsCompleted);
         }
       }
+
       var progressBar = undefined;
+
       if (typeof this.props.progress !== 'undefined' && this.props.progress.showBar) {
-        progressBar = React.createElement(
-          'div',
-          { className: this.props.classes.progressBar },
-          React.createElement(
-            'div',
-            { className: this.props.classes.progressBarTitle },
-            this.props.progress.text,
-            this.props.progress.legendPosition === 'inline' ? completionPercent + '%' : ''
-          ),
-          this.props.progress.legendPosition === 'top' ? React.createElement(
-            'div',
-            { className: this.props.classes.progressBarLegend },
-            this.props.progress.showPercent ? completionPercent + '%' : ''
-          ) : null,
-          React.createElement(
-            'div',
-            { className: this.props.classes.progressBarIncomplete },
-            React.createElement('div', {
-              className: this.props.classes.progressBarComplete,
-              style: { width: completionPercent + '%' }
-            }),
-            this.props.progress.legendPosition === 'bar' ? React.createElement(
-              'div',
-              { className: this.props.classes.progressBarLegend },
-              this.props.progress.showPercent ? completionPercent + '%' : ''
-            ) : null
-          )
-        );
+        progressBar = /*#__PURE__*/_react["default"].createElement("div", {
+          className: this.props.classes.progressBar
+        }, /*#__PURE__*/_react["default"].createElement("div", {
+          className: this.props.classes.progressBarTitle
+        }, this.props.progress.text, this.props.progress.legendPosition === 'inline' ? "".concat(completionPercent, "%") : ''), this.props.progress.legendPosition === 'top' ? /*#__PURE__*/_react["default"].createElement("div", {
+          className: this.props.classes.progressBarLegend
+        }, this.props.progress.showPercent ? "".concat(completionPercent, "%") : '') : null, /*#__PURE__*/_react["default"].createElement("div", {
+          className: this.props.classes.progressBarIncomplete
+        }, /*#__PURE__*/_react["default"].createElement("div", {
+          className: this.props.classes.progressBarComplete,
+          style: {
+            width: "".concat(completionPercent, "%")
+          }
+        }), this.props.progress.legendPosition === 'bar' ? /*#__PURE__*/_react["default"].createElement("div", {
+          className: this.props.classes.progressBarLegend
+        }, this.props.progress.showPercent ? "".concat(completionPercent, "%") : '') : null));
       }
 
-      return React.createElement(
-        'div',
-        { className: this.props.classes.questionPanel },
-        this.props.progress && this.props.progress.position === 'top' ? progressBar : undefined,
-        typeof this.props.panelHeader !== 'undefined' || typeof this.props.panelText !== 'undefined' ? React.createElement(
-          'div',
-          { className: this.props.classes.questionPanelHeaderContainer },
-          typeof this.props.panelHeader !== 'undefined' ? React.createElement(
-            'h3',
-            { className: this.props.classes.questionPanelHeaderText },
-            this.props.panelHeader
-          ) : undefined,
-          typeof this.props.panelText !== 'undefined' ? React.createElement(
-            'p',
-            { className: this.props.classes.questionPanelText },
-            this.props.panelText
-          ) : undefined
-        ) : undefined,
-        React.createElement(
-          'div',
-          { className: this.props.classes.questionSets },
-          questionSets
-        ),
-        this.props.progress && this.props.progress.position === 'middle' ? progressBar : undefined,
-        React.createElement(
-          'div',
-          {
-            className: this.props.classes.buttonBar + ' ' + (this.props.extraClasses.buttonBar || '')
-          },
-          this.props.currentPanelIndex > 0 && !this.props.backButton.disabled ? React.createElement(Button, {
-            text: this.props.backButton.text || 'Back',
-            onClick: this.handleBackButtonClick.bind(this),
-            className: this.props.classes.backButton + ' ' + (this.props.extraClasses.backButton || '')
-          }) : undefined,
-          !this.props.button.disabled ? React.createElement(Button, {
-            text: this.props.button.text,
-            onClick: this.handleMainButtonClick.bind(this),
-            className: this.props.classes.controlButton + ' ' + (this.props.extraClasses.button || '')
-          }) : undefined
-        ),
-        this.props.progress && this.props.progress.position === 'bottom' ? progressBar : undefined
-      );
+      return /*#__PURE__*/_react["default"].createElement("div", {
+        className: this.props.classes.questionPanel
+      }, this.props.progress && this.props.progress.position === 'top' ? progressBar : undefined, typeof this.props.panelHeader !== 'undefined' || typeof this.props.panelText !== 'undefined' ? /*#__PURE__*/_react["default"].createElement("div", {
+        className: this.props.classes.questionPanelHeaderContainer
+      }, typeof this.props.panelHeader !== 'undefined' ? /*#__PURE__*/_react["default"].createElement("h3", {
+        className: this.props.classes.questionPanelHeaderText
+      }, this.props.panelHeader) : undefined, typeof this.props.panelText !== 'undefined' ? /*#__PURE__*/_react["default"].createElement("p", {
+        className: this.props.classes.questionPanelText
+      }, this.props.panelText) : undefined) : undefined, /*#__PURE__*/_react["default"].createElement("div", {
+        className: this.props.classes.questionSets
+      }, questionSets), this.props.progress && this.props.progress.position === 'middle' ? progressBar : undefined, /*#__PURE__*/_react["default"].createElement("div", {
+        className: "".concat(this.props.classes.buttonBar, " ").concat(this.props.extraClasses.buttonBar || '')
+      }, this.props.currentPanelIndex > 0 && !this.props.backButton.disabled ? /*#__PURE__*/_react["default"].createElement(_button["default"], {
+        text: this.props.backButton.text || 'Back',
+        onClick: this.handleBackButtonClick.bind(this),
+        className: "".concat(this.props.classes.backButton, " ").concat(this.props.extraClasses.backButton || '')
+      }) : undefined, !this.props.button.disabled ? /*#__PURE__*/_react["default"].createElement(_button["default"], {
+        text: this.props.button.text,
+        onClick: this.handleMainButtonClick.bind(this),
+        className: "".concat(this.props.classes.controlButton, " ").concat(this.props.extraClasses.button || '')
+      }) : undefined), this.props.progress && this.props.progress.position === 'bottom' ? progressBar : undefined);
     }
   }]);
 
   return QuestionPanel;
-}(React.Component);
+}(_react["default"].Component);
 
+exports["default"] = QuestionPanel;
 QuestionPanel.defaultProps = {
   validationErrors: {},
   schema: {},
@@ -314,7 +316,7 @@ QuestionPanel.defaultProps = {
   numPanels: undefined,
   currentPanelIndex: undefined,
   action: {
-    default: {},
+    "default": {},
     conditions: []
   },
   button: {
@@ -330,7 +332,6 @@ QuestionPanel.defaultProps = {
   onAnswerChange: function onAnswerChange() {},
   onSwitchPanel: function onSwitchPanel() {},
   onPanelBack: function onPanelBack() {},
-  onFocus: function onFocus() {}
+  onFocus: function onFocus() {},
+  onPostQuestionComponent: {}
 };
-
-module.exports = QuestionPanel;

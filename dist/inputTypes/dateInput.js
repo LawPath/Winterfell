@@ -1,98 +1,100 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports["default"] = void 0;
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _react = _interopRequireDefault(require("react"));
 
-var _react = require('react');
+var _reactDatepicker = _interopRequireDefault(require("react-datepicker"));
 
-var _react2 = _interopRequireDefault(_react);
+var _moment = _interopRequireDefault(require("moment"));
 
-var _reactDatepicker = require('react-datepicker');
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-var _reactDatepicker2 = _interopRequireDefault(_reactDatepicker);
-
-var _moment = require('moment');
-
-var _moment2 = _interopRequireDefault(_moment);
-
-var _propTypes = require('prop-types');
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
-require('react-datepicker/dist/react-datepicker.css');
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var DateInput = function (_React$Component) {
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+// import 'react-datepicker/dist/react-datepicker.css';
+var DateInput = /*#__PURE__*/function (_React$Component) {
   _inherits(DateInput, _React$Component);
 
+  var _super = _createSuper(DateInput);
+
   function DateInput(props) {
+    var _this;
+
     _classCallCheck(this, DateInput);
 
-    var _this = _possibleConstructorReturn(this, (DateInput.__proto__ || Object.getPrototypeOf(DateInput)).call(this, props));
-
+    _this = _super.call(this, props);
     _this.state = {
-      value: _this.props.value.type ? (0, _moment2.default)(_this.props.value.value) : _this.props.value
+      value: _this.props.value.type ? (0, _moment["default"])(_this.props.value.value) : _this.props.value
     };
-
-    _this.handleChange = _this.handleChange.bind(_this);
+    _this.handleChange = _this.handleChange.bind(_assertThisInitialized(_this));
     return _this;
   }
 
   _createClass(DateInput, [{
-    key: 'handleChange',
+    key: "handleChange",
     value: function handleChange(date) {
       this.setState({
         value: date
-      }, this.props.onChange.bind(null, { type: 'date', value: date }));
+      }, this.props.onChange.bind(null, {
+        type: 'date',
+        value: date
+      }));
     }
   }, {
-    key: 'render',
+    key: "render",
     value: function render() {
       var _this2 = this;
 
       var _onFocus = this.props.onFocus;
-
-      return _react2.default.createElement(
-        'div',
-        null,
-        _react2.default.createElement(_reactDatepicker2.default, {
-          name: '' + this.props.name,
-          id: '' + this.props.id,
-          'aria-labelledby': '' + this.props.labelId,
-          className: this.props.classes.input,
-          selected: this.state.value,
-          onSelect: this.props.onBlur,
-          onFocus: function onFocus() {
-            return _onFocus(_this2.props.id);
-          },
-          onChange: this.handleChange,
-          dateFormat: 'LL'
-        })
-      );
+      return /*#__PURE__*/_react["default"].createElement("div", null, /*#__PURE__*/_react["default"].createElement(_reactDatepicker["default"], {
+        name: this.props.name,
+        id: this.props.id,
+        "aria-labelledby": this.props.labelId,
+        className: this.props.classes.input,
+        selected: this.state.value,
+        onSelect: this.props.onBlur,
+        onFocus: function onFocus() {
+          return _onFocus(_this2.props.id);
+        },
+        onChange: this.handleChange,
+        dateFormat: "LL"
+      }));
     }
   }]);
 
   return DateInput;
-}(_react2.default.Component);
+}(_react["default"].Component);
 
-exports.default = DateInput;
-
-
+exports["default"] = DateInput;
 DateInput.defaultProps = {
   classes: {},
   name: '',
   id: '',
-  value: (0, _moment2.default)(),
+  value: (0, _moment["default"])(),
   onChange: function onChange() {},
   onBlur: function onBlur() {},
   onFocus: function onFocus() {}

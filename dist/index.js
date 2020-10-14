@@ -1,31 +1,67 @@
-'use strict';
+"use strict";
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _lodash = _interopRequireDefault(require("lodash"));
+
+var _inputTypes = _interopRequireDefault(require("./inputTypes"));
+
+var _errors = _interopRequireDefault(require("./lib/errors"));
+
+var _validation = _interopRequireDefault(require("./lib/validation"));
+
+var _postQuestionComponents = _interopRequireDefault(require("./custom/postQuestionComponents"));
+
+var _questionPanel = _interopRequireDefault(require("./questionPanel"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var React = require('react');
-var _ = require('lodash').noConflict();
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
-var QuestionPanel = require('./questionPanel');
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
-var Winterfell = function (_React$Component) {
-  _inherits(Winterfell, _React$Component);
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+var Winterfell = /*#__PURE__*/function (_Component) {
+  _inherits(Winterfell, _Component);
+
+  var _super = _createSuper(Winterfell);
 
   function Winterfell(props) {
+    var _this;
+
     _classCallCheck(this, Winterfell);
 
-    var _this = _possibleConstructorReturn(this, (Winterfell.__proto__ || Object.getPrototypeOf(Winterfell)).call(this, props));
-
+    _this = _super.call(this, props);
     _this.formComponent = null;
-
     _this.panelHistory = [];
 
-    var schema = _.extend({
+    var schema = _lodash["default"].extend({
       classes: {},
       formPanels: [],
       questionPanels: [],
@@ -35,10 +71,8 @@ var Winterfell = function (_React$Component) {
     schema.formPanels = schema.formPanels.sort(function (a, b) {
       return a.index - b.index;
     });
-
     var panelId = typeof props.panelId !== 'undefined' ? props.panelId : schema.formPanels.length > 0 ? schema.formPanels[0].panelId : undefined;
-
-    var currentPanel = typeof schema !== 'undefined' && typeof schema.formPanels !== 'undefined' && typeof panelId !== 'undefined' ? _.find(schema.formPanels, function (panel) {
+    var currentPanel = typeof schema !== 'undefined' && typeof schema.formPanels !== 'undefined' && typeof panelId !== 'undefined' ? _lodash["default"].find(schema.formPanels, function (panel) {
       return panel.panelId == panelId;
     }) : undefined;
 
@@ -59,7 +93,7 @@ var Winterfell = function (_React$Component) {
   }
 
   _createClass(Winterfell, [{
-    key: 'componentWillReceiveProps',
+    key: "componentWillReceiveProps",
     value: function componentWillReceiveProps(nextProps) {
       var s = nextProps.schema;
       var newState = {
@@ -85,7 +119,6 @@ var Winterfell = function (_React$Component) {
         }).reduce(function (acc, el) {
           return acc.concat(el);
         }, []);
-
         var questionPanel = questionPanels.find(function (qs) {
           if (nextProps.currentQuestionId === qs.questionId) {
             return qs.panel;
@@ -110,7 +143,6 @@ var Winterfell = function (_React$Component) {
               })[0].conditionalQuestions[0].questionId
             };
           });
-
           questionPanel = questionPanels.find(function (qs) {
             if (qs.questionId === questionsIdWithConditionals.find(function (e) {
               return e.conditionalQuestionId === nextProps.currentQuestionId;
@@ -131,18 +163,23 @@ var Winterfell = function (_React$Component) {
       this.setState(newState);
     }
   }, {
-    key: 'handleAnswerChange',
-    value: function handleAnswerChange(questionId, questionAnswer) {
-      var questionAnswers = _.chain(this.state.questionAnswers).set(questionId, questionAnswer).value();
+    key: "handleAnswerChange",
+    value: function handleAnswerChange(questionId, questionAnswer, questionLabel) {
+      var questionAnswers = _lodash["default"].chain(this.state.questionAnswers).set(questionId, {
+        value: questionAnswer,
+        label: questionLabel
+      }).value();
 
       this.setState({
         questionAnswers: questionAnswers
-      }, this.props.onUpdate.bind(null, questionAnswers));
+      }); // this.props.onUpdate.bind(null, questionAnswers);
+
+      this.props.onUpdate(questionAnswers);
     }
   }, {
-    key: 'handleSwitchPanel',
+    key: "handleSwitchPanel",
     value: function handleSwitchPanel(panelId, preventHistory) {
-      var panel = _.find(this.props.schema.formPanels, {
+      var panel = _lodash["default"].find(this.props.schema.formPanels, {
         panelId: panelId
       });
 
@@ -160,14 +197,13 @@ var Winterfell = function (_React$Component) {
       }, this.props.onSwitchPanel.bind(null, panel));
     }
   }, {
-    key: 'handleBackButtonClick',
+    key: "handleBackButtonClick",
     value: function handleBackButtonClick() {
       if (this.panelHistory.length > 1) {
         this.panelHistory.pop();
       }
 
-      this.handleSwitchPanel.call(this, this.panelHistory[this.panelHistory.length - 1], true);
-      // let panelIndex = this.state.schema.formPanels.find(fp =>
+      this.handleSwitchPanel.call(this, this.panelHistory[this.panelHistory.length - 1], true); // let panelIndex = this.state.schema.formPanels.find(fp =>
       //   fp.panelId === this.state.currentPanel.panelId).index;
       // let newPanelIndex = panelIndex > 0 ? this.state.schema.formPanels.find(fp =>
       //   fp.index === panelIndex - 1) : null;
@@ -181,7 +217,7 @@ var Winterfell = function (_React$Component) {
       // );
     }
   }, {
-    key: 'handleSubmit',
+    key: "handleSubmit",
     value: function handleSubmit(action) {
       var _this2 = this;
 
@@ -189,11 +225,12 @@ var Winterfell = function (_React$Component) {
         this.props.onSubmit(this.state.questionAnswers, action);
         return;
       }
-
       /*
        * If we are not disabling the functionality of the form,
        * we need to set the action provided in the form, then submit.
        */
+
+
       this.setState({
         action: action
       }, function () {
@@ -205,82 +242,73 @@ var Winterfell = function (_React$Component) {
       });
     }
   }, {
-    key: 'render',
+    key: "render",
     value: function render() {
       var _this3 = this;
 
-      var currentPanel = _.find(this.state.schema.questionPanels, function (panel) {
+      var currentPanel = _lodash["default"].find(this.state.schema.questionPanels, function (panel) {
         return panel.panelId == _this3.state.currentPanel.panelId;
       });
 
       var numPanels = this.state.schema.questionPanels.length;
-      var currentPanelIndex = _.indexOf(this.state.schema.questionPanels, currentPanel) + 1;
-
-      return React.createElement(
-        'form',
-        {
-          method: this.props.method,
-          encType: this.props.encType,
-          action: this.state.action,
-          ref: function ref(_ref) {
-            return _this3.formComponent = _ref;
-          },
-          className: this.state.schema.classes.form
+      var currentPanelIndex = _lodash["default"].indexOf(this.state.schema.questionPanels, currentPanel) + 1;
+      return /*#__PURE__*/_react["default"].createElement("form", {
+        method: this.props.method,
+        encType: this.props.encType,
+        action: this.state.action,
+        ref: function ref(_ref) {
+          return _this3.formComponent = _ref;
         },
-        React.createElement(
-          'div',
-          { className: this.state.schema.classes.questionPanels },
-          React.createElement(QuestionPanel, {
-            schema: this.state.schema,
-            classes: this.state.schema.classes,
-            panelId: currentPanel.panelId,
-            panelIndex: currentPanel.panelIndex,
-            panelHeader: currentPanel.panelHeader,
-            panelText: currentPanel.panelText,
-            action: currentPanel.action,
-            button: currentPanel.button,
-            backButton: currentPanel.backButton,
-            extraClasses: currentPanel.classes,
-            questionSets: currentPanel.questionSets,
-            progress: currentPanel.progress,
-            numPanels: numPanels,
-            currentPanelIndex: currentPanelIndex,
-            questionAnswers: this.state.questionAnswers,
-            renderError: this.props.renderError,
-            renderRequiredAsterisk: this.props.renderRequiredAsterisk,
-            onAnswerChange: this.handleAnswerChange.bind(this),
-            onFocus: this.props.onFocus,
-            onPanelBack: this.handleBackButtonClick.bind(this),
-            onSwitchPanel: this.handleSwitchPanel.bind(this),
-            onSubmit: this.handleSubmit.bind(this)
-          }),
-          this.props.extraComponent ? this.props.extraComponent : null
-        )
-      );
+        className: this.state.schema.classes.form
+      }, /*#__PURE__*/_react["default"].createElement("div", {
+        className: this.state.schema.classes.questionPanels
+      }, /*#__PURE__*/_react["default"].createElement(_questionPanel["default"], {
+        schema: this.state.schema,
+        classes: this.state.schema.classes,
+        panelId: currentPanel.panelId,
+        panelIndex: currentPanel.panelIndex,
+        panelHeader: currentPanel.panelHeader,
+        panelText: currentPanel.panelText,
+        action: currentPanel.action,
+        button: currentPanel.button,
+        backButton: currentPanel.backButton,
+        extraClasses: currentPanel.classes,
+        questionSets: currentPanel.questionSets,
+        progress: currentPanel.progress,
+        numPanels: numPanels,
+        currentPanelIndex: currentPanelIndex,
+        questionAnswers: this.state.questionAnswers,
+        renderError: this.props.renderError,
+        renderRequiredAsterisk: this.props.renderRequiredAsterisk,
+        onAnswerChange: this.handleAnswerChange.bind(this),
+        onFocus: this.props.onFocus,
+        onPanelBack: this.handleBackButtonClick.bind(this),
+        onSwitchPanel: this.handleSwitchPanel.bind(this),
+        onSubmit: this.handleSubmit.bind(this),
+        onPostQuestionComponent: this.props.onPostQuestionComponent
+      }), this.props.extraComponent ? this.props.extraComponent : null));
     }
   }, {
-    key: 'componentDidMount',
+    key: "componentDidMount",
     value: function componentDidMount() {
       this.props.onRender();
     }
   }]);
 
   return Winterfell;
-}(React.Component);
+}(_react.Component);
 
-Winterfell.inputTypes = require('./inputTypes');
-Winterfell.errorMessages = require('./lib/errors');
-Winterfell.validation = require('./lib/validation');
-
+Winterfell.inputTypes = _inputTypes["default"];
+Winterfell.errorMessages = _errors["default"];
+Winterfell.validation = _validation["default"];
+Winterfell.postQuestionComponents = _postQuestionComponents["default"];
 Winterfell.addInputType = Winterfell.inputTypes.addInputType;
 Winterfell.addInputTypes = Winterfell.inputTypes.addInputTypes;
-
+Winterfell.addPostQuestionComponent = Winterfell.postQuestionComponents.addPostQuestionComponent;
 Winterfell.addErrorMessage = Winterfell.errorMessages.addErrorMessage;
 Winterfell.addErrorMessages = Winterfell.errorMessages.addErrorMessages;
-
 Winterfell.addValidationMethod = Winterfell.validation.addValidationMethod;
 Winterfell.addValidationMethods = Winterfell.validation.addValidationMethods;
-
 Winterfell.defaultProps = {
   questionAnswers: {},
   encType: 'application/x-www-form-urlencoded',
@@ -295,7 +323,8 @@ Winterfell.defaultProps = {
   onUpdate: function onUpdate() {},
   onFocus: function onFocus() {},
   onSwitchPanel: function onSwitchPanel() {},
-  onRender: function onRender() {}
+  onRender: function onRender() {},
+  onPostQuestionComponent: {}
 };
-
-module.exports = Winterfell;
+var _default = Winterfell;
+exports["default"] = _default;
