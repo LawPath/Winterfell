@@ -68,7 +68,7 @@ var QuestionSet = /*#__PURE__*/function (_Component) {
           postText: question.postText,
           label: question.label,
           postQuestionComponent: question.postQuestionComponent,
-          value: answer ? answer.value : '',
+          value: answer ? answer.value : undefined,
           input: question.input,
           classes: _this.props.classes,
           renderError: _this.props.renderError,

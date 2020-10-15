@@ -1,41 +1,43 @@
-import React, { Component } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
-export default class TextareaInput extends Component {
-  constructor(props) {
-    super(props);
+const TextareaInput = ({
+  name,
+  id,
+  value,
+  labelId,
+  classes,
+  placeholder,
+  required,
+  onChange,
+  onFocus,
+  onBlur,
+}) => {
+  const [inputValue, setInputValue] = useState(value);
+  useEffect(() => {
+    setInputValue(value);
+  }, [value]);
 
-    this.state = {
-      value: this.props.value,
-    };
-  }
+  const handleChange = (e) => {
+    setInputValue(e.target.value);
+    onChange(e.target.value);
+  };
 
-  handleChange(e) {
-    this.setState(
-      {
-        value: e.target.value,
-      },
-      this.props.onChange.bind(null, e.target.value),
-    );
-  }
-
-  render() {
-    return (
-      <textarea
-        type="text"
-        name={this.props.name}
-        id={this.props.id}
-        aria-labelledby={this.props.labelId}
-        className={this.props.classes.input}
-        placeholder={this.props.placeholder}
-        value={this.state.value}
-        required={this.props.required ? 'required' : undefined}
-        onChange={this.handleChange.bind(this)}
-        onFocus={this.props.onFocus.bind(null, this.props.id)}
-        onBlur={this.props.onBlur.bind(null, this.state.value)}
-      />
-    );
-  }
-}
+  return (
+    <textarea
+      type="text"
+      name={name}
+      id={id}
+      aria-labelledby={labelId}
+      className={classes.input}
+      placeholder={placeholder}
+      value={inputValue}
+      required={required ? 'required' : undefined}
+      onChange={handleChange}
+      onFocus={() => onFocus(id)}
+      onBlur={() => onBlur(inputValue)}
+    />
+  );
+};
 
 TextareaInput.defaultProps = {
   classes: {},
@@ -47,3 +49,4 @@ TextareaInput.defaultProps = {
   onBlur: () => {},
   onFocus: () => {},
 };
+export default TextareaInput;

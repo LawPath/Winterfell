@@ -19,7 +19,7 @@ export default class QuestionSet extends Component {
           postText={question.postText}
           label={question.label}
           postQuestionComponent={question.postQuestionComponent}
-          value={answer ? answer.value : ''}
+          value={answer ? answer.value : undefined}
           input={question.input}
           classes={this.props.classes}
           renderError={this.props.renderError}

@@ -104,7 +104,6 @@ var getActiveQuestions = function getActiveQuestions(questions, questionAnswers,
       return;
     }
 
-    console.log('This is how it work ');
     question.input.options.forEach(function (option) {
       var answer = questionAnswers[question.questionId];
       if (!answer) return;

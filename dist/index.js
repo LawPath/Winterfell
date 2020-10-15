@@ -47,6 +47,8 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 var Winterfell = /*#__PURE__*/function (_Component) {
   _inherits(Winterfell, _Component);
 
@@ -58,6 +60,84 @@ var Winterfell = /*#__PURE__*/function (_Component) {
     _classCallCheck(this, Winterfell);
 
     _this = _super.call(this, props);
+
+    _defineProperty(_assertThisInitialized(_this), "handleAnswerChange", function (questionId, questionAnswer, questionLabel) {
+      var questionAnswers = _lodash["default"].chain(_this.state.questionAnswers).set(questionId, {
+        value: questionAnswer,
+        label: questionLabel
+      }).value();
+
+      _this.setState({
+        questionAnswers: questionAnswers
+      });
+
+      console.log('This is the data: ', questionAnswers, _this.state.questionAnswers, questionId, questionAnswer, questionLabel);
+
+      _this.props.onUpdate(questionAnswers);
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "handleSwitchPanel", function (panelId, preventHistory) {
+      var panel = _lodash["default"].find(_this.props.schema.formPanels, {
+        panelId: panelId
+      });
+
+      if (!panel) {
+        throw new Error('Winterfell: Tried to switch to panel "' + panelId + '", which does not exist.');
+      }
+
+      if (!preventHistory) {
+        _this.panelHistory.push(panel.panelId);
+      }
+
+      _this.setState({
+        currentPanel: panel,
+        currentQuestionId: undefined
+      }, _this.props.onSwitchPanel.bind(null, panel));
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "handleBackButtonClick", function () {
+      if (_this.panelHistory.length > 1) {
+        _this.panelHistory.pop();
+      }
+
+      _this.handleSwitchPanel.call(_assertThisInitialized(_this), _this.panelHistory[_this.panelHistory.length - 1], true); // let panelIndex = this.state.schema.formPanels.find(fp =>
+      //   fp.panelId === this.state.currentPanel.panelId).index;
+      // let newPanelIndex = panelIndex > 0 ? this.state.schema.formPanels.find(fp =>
+      //   fp.index === panelIndex - 1) : null;
+      //
+      // console.log("this.state.schema.formPanels", JSON.stringify(this.state.schema.formPanels));
+      // console.log("panelIndex", JSON.stringify(panelIndex));
+      // console.log("newPanelIndex", JSON.stringify(newPanelIndex));
+      //
+      // this.handleSwitchPanel.call(
+      //   this, newPanelIndex ? newPanelIndex.panelId : 0
+      // );
+
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "handleSubmit", function (action) {
+      if (_this.props.disableSubmit) {
+        _this.props.onSubmit(_this.state.questionAnswers, action);
+
+        return;
+      }
+      /*
+       * If we are not disabling the functionality of the form,
+       * we need to set the action provided in the form, then submit.
+       */
+
+
+      _this.setState({
+        action: action
+      }, function () {
+        if (!_this.formComponent) {
+          return;
+        }
+
+        _this.formComponent.submit();
+      });
+    });
+
     _this.formComponent = null;
     _this.panelHistory = [];
 
@@ -71,9 +151,11 @@ var Winterfell = /*#__PURE__*/function (_Component) {
     schema.formPanels = schema.formPanels.sort(function (a, b) {
       return a.index - b.index;
     });
-    var panelId = typeof props.panelId !== 'undefined' ? props.panelId : schema.formPanels.length > 0 ? schema.formPanels[0].panelId : undefined;
-    var currentPanel = typeof schema !== 'undefined' && typeof schema.formPanels !== 'undefined' && typeof panelId !== 'undefined' ? _lodash["default"].find(schema.formPanels, function (panel) {
-      return panel.panelId == panelId;
+
+    var _panelId = typeof props.panelId !== 'undefined' ? props.panelId : schema.formPanels.length > 0 ? schema.formPanels[0].panelId : undefined;
+
+    var currentPanel = typeof schema !== 'undefined' && typeof schema.formPanels !== 'undefined' && typeof _panelId !== 'undefined' ? _lodash["default"].find(schema.formPanels, function (panel) {
+      return panel.panelId == _panelId;
     }) : undefined;
 
     _this.panelHistory.push(currentPanel.panelId);
@@ -93,6 +175,11 @@ var Winterfell = /*#__PURE__*/function (_Component) {
   }
 
   _createClass(Winterfell, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.props.onRender();
+    }
+  }, {
     key: "componentWillReceiveProps",
     value: function componentWillReceiveProps(nextProps) {
       var s = nextProps.schema;
@@ -163,91 +250,12 @@ var Winterfell = /*#__PURE__*/function (_Component) {
       this.setState(newState);
     }
   }, {
-    key: "handleAnswerChange",
-    value: function handleAnswerChange(questionId, questionAnswer, questionLabel) {
-      var questionAnswers = _lodash["default"].chain(this.state.questionAnswers).set(questionId, {
-        value: questionAnswer,
-        label: questionLabel
-      }).value();
-
-      this.setState({
-        questionAnswers: questionAnswers
-      }); // this.props.onUpdate.bind(null, questionAnswers);
-
-      this.props.onUpdate(questionAnswers);
-    }
-  }, {
-    key: "handleSwitchPanel",
-    value: function handleSwitchPanel(panelId, preventHistory) {
-      var panel = _lodash["default"].find(this.props.schema.formPanels, {
-        panelId: panelId
-      });
-
-      if (!panel) {
-        throw new Error('Winterfell: Tried to switch to panel "' + panelId + '", which does not exist.');
-      }
-
-      if (!preventHistory) {
-        this.panelHistory.push(panel.panelId);
-      }
-
-      this.setState({
-        currentPanel: panel,
-        currentQuestionId: undefined
-      }, this.props.onSwitchPanel.bind(null, panel));
-    }
-  }, {
-    key: "handleBackButtonClick",
-    value: function handleBackButtonClick() {
-      if (this.panelHistory.length > 1) {
-        this.panelHistory.pop();
-      }
-
-      this.handleSwitchPanel.call(this, this.panelHistory[this.panelHistory.length - 1], true); // let panelIndex = this.state.schema.formPanels.find(fp =>
-      //   fp.panelId === this.state.currentPanel.panelId).index;
-      // let newPanelIndex = panelIndex > 0 ? this.state.schema.formPanels.find(fp =>
-      //   fp.index === panelIndex - 1) : null;
-      //
-      // console.log("this.state.schema.formPanels", JSON.stringify(this.state.schema.formPanels));
-      // console.log("panelIndex", JSON.stringify(panelIndex));
-      // console.log("newPanelIndex", JSON.stringify(newPanelIndex));
-      //
-      // this.handleSwitchPanel.call(
-      //   this, newPanelIndex ? newPanelIndex.panelId : 0
-      // );
-    }
-  }, {
-    key: "handleSubmit",
-    value: function handleSubmit(action) {
-      var _this2 = this;
-
-      if (this.props.disableSubmit) {
-        this.props.onSubmit(this.state.questionAnswers, action);
-        return;
-      }
-      /*
-       * If we are not disabling the functionality of the form,
-       * we need to set the action provided in the form, then submit.
-       */
-
-
-      this.setState({
-        action: action
-      }, function () {
-        if (!_this2.formComponent) {
-          return;
-        }
-
-        _this2.formComponent.submit();
-      });
-    }
-  }, {
     key: "render",
     value: function render() {
-      var _this3 = this;
+      var _this2 = this;
 
       var currentPanel = _lodash["default"].find(this.state.schema.questionPanels, function (panel) {
-        return panel.panelId == _this3.state.currentPanel.panelId;
+        return panel.panelId == _this2.state.currentPanel.panelId;
       });
 
       var numPanels = this.state.schema.questionPanels.length;
@@ -257,7 +265,7 @@ var Winterfell = /*#__PURE__*/function (_Component) {
         encType: this.props.encType,
         action: this.state.action,
         ref: function ref(_ref) {
-          return _this3.formComponent = _ref;
+          return _this2.formComponent = _ref;
         },
         className: this.state.schema.classes.form
       }, /*#__PURE__*/_react["default"].createElement("div", {
@@ -287,11 +295,6 @@ var Winterfell = /*#__PURE__*/function (_Component) {
         onSubmit: this.handleSubmit.bind(this),
         onPostQuestionComponent: this.props.onPostQuestionComponent
       }), this.props.extraComponent ? this.props.extraComponent : null));
-    }
-  }, {
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      this.props.onRender();
     }
   }]);
 

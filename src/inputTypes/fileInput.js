@@ -1,39 +1,30 @@
-import React, { Component } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
-export class FileInput extends Component {
-  constructor(props) {
-    super(props);
+const FileInput = ({ name, id, labelId, classes, required, onFocus, onBlur }) => {
+  const [inputValue, setInputValue] = useState(value);
+  useEffect(() => {
+    setInputValue(value);
+  }, [value]);
 
-    this.state = {
-      value: this.props.value,
-    };
-  }
+  const handleChange = (e) => {
+    setInputValue(e.target.value);
+    onChange(e.target.value);
+  };
 
-  handleChange(e) {
-    this.setState(
-      {
-        value: e.target.value,
-      },
-      this.props.onChange.bind(null, e.target.value),
-    );
-  }
-
-  render() {
-    return (
-      <input
-        type="file"
-        name={this.props.name}
-        id={this.props.id}
-        aria-labelledby={this.props.labelId}
-        className={this.props.classes.file}
-        required={this.props.required ? 'required' : undefined}
-        onChange={this.handleChange.bind(this)}
-        onFocus={this.props.onFocus.bind(null, this.props.id)}
-        onBlur={this.props.onBlur.bind(null, this.state.value)}
-      />
-    );
-  }
-}
+  return (
+    <input
+      type="file"
+      name={name}
+      id={id}
+      aria-labelledby={labelId}
+      className={classes.file}
+      required={required ? 'required' : undefined}
+      onChange={handleChange}
+      onFocus={() => onFocus(id)}
+      onBlur={() => onBlur(inputValue)}
+    />
+  );
+};
 
 FileInput.defaultProps = {
   classes: {},

@@ -1,32 +1,32 @@
 import React from 'react';
-import checkboxInput from './checkboxInput';
-import checkboxOptionsInput from './checkboxOptionsInput';
-import emailInput from './emailInput';
-import fileInput from './fileInput';
-import hiddenInput from './hiddenInput';
-import passwordInput from './passwordInput';
-import radioOptionsInput from './radioOptionsInput';
-import selectInput from './selectInput';
-import textareaInput from './textareaInput';
-import textInput from './textInput';
-import addressInput from './addressInput';
-import dateInput from './dateInput';
-import signatureInput from './signatureInput';
+import CheckboxInput from './checkboxInput';
+import CheckboxOptionsInput from './checkboxOptionsInput';
+import EmailInput from './emailInput';
+import FileInput from './fileInput';
+import HiddenInput from './hiddenInput';
+import PasswordInput from './passwordInput';
+import RadioOptionsInput from './radioOptionsInput';
+import SelectInput from './selectInput';
+import TextareaInput from './textareaInput';
+import TextInput from './textInput';
+import AddressInput from './addressInput';
+import DateInput from './dateInput';
+import SignatureInput from './signatureInput';
 
 const inputTypes = {
-  checkboxInput: checkboxInput,
-  checkboxOptionsInput: checkboxOptionsInput,
-  emailInput: emailInput,
-  fileInput: fileInput,
-  hiddenInput: hiddenInput,
-  passwordInput: passwordInput,
-  radioOptionsInput: radioOptionsInput,
-  selectInput: selectInput,
-  textareaInput: textareaInput,
-  textInput: textInput,
-  addressInput: addressInput,
-  dateInput: dateInput,
-  signatureInput: signatureInput,
+  checkboxInput: CheckboxInput,
+  checkboxOptionsInput: CheckboxOptionsInput,
+  emailInput: EmailInput,
+  fileInput: FileInput,
+  hiddenInput: HiddenInput,
+  passwordInput: PasswordInput,
+  radioOptionsInput: RadioOptionsInput,
+  selectInput: SelectInput,
+  textareaInput: TextareaInput,
+  textInput: TextInput,
+  addressInput: AddressInput,
+  dateInput: DateInput,
+  signatureInput: SignatureInput,
 };
 
 /**

@@ -1,57 +1,54 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
-class CheckboxInput extends React.Component {
-  constructor(props) {
-    super(props);
+const CheckboxInput = ({
+  id,
+  value,
+  text,
+  classes,
+  labelId,
+  name,
+  required,
+  onFocus,
+  onBlur,
+  onChange,
+  defaultChecked,
+}) => {
+  const [checked, setChecked] = useState(defaultChecked);
 
-    this.state = {
-      checked: props.defaultChecked,
-    };
-  }
+  useEffect(() => {
+    handleChange();
+  }, [value]);
 
-  handleChange(e) {
+  const handleChange = (e) => {
     if (e) {
-      this.setState(
-        {
-          checked: !this.state.checked,
-        },
-        () => {
-          this.props.onChange(this.state.checked ? this.props.value : undefined);
-        },
-      );
+      const result = !checked;
+      setChecked(result);
+      onChange(result ? value : undefined);
     } else {
-      this.props.onChange(this.state.checked ? this.props.value : undefined);
+      onChange(checked ? value : undefined);
     }
-  }
+  };
 
-  componentDidMount() {
-    if (this.state.checked) {
-      this.handleChange();
-    }
-  }
-
-  render() {
-    return (
-      <div className={this.props.classes.checkboxInput}>
-        <label className={this.props.classes.checkboxLabel} id={this.props.labelId}>
-          <input
-            type="checkbox"
-            name={this.props.name}
-            aria-labelledby={this.props.labelId}
-            className={this.props.classes.checkbox}
-            defaultChecked={this.state.checked}
-            value={this.props.value}
-            required={this.props.required ? 'required' : undefined}
-            onChange={this.handleChange.bind(this)}
-            onFocus={this.props.onFocus.bind(null, this.props.id)}
-            onBlur={this.props.onBlur.bind(null, this.state.checked ? this.props.value : undefined)}
-          />
-          {this.props.text}
-        </label>
-      </div>
-    );
-  }
-}
+  return (
+    <div className={classes.checkboxInput}>
+      <label className={classes.checkboxLabel} id={labelId}>
+        <input
+          type="checkbox"
+          name={name}
+          aria-labelledby={labelId}
+          className={classes.checkbox}
+          defaultChecked={checked}
+          value={value}
+          required={required ? 'required' : undefined}
+          onChange={handleChange}
+          onFocus={() => onFocus(id)}
+          onBlur={() => onBlur(checked ? value : undefined)}
+        />
+        {text}
+      </label>
+    </div>
+  );
+};
 
 CheckboxInput.defaultProps = {
   text: '',

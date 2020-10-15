@@ -1,59 +1,50 @@
-import React, { Component } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
-export default class SelectInput extends Component {
-  constructor(props) {
-    super(props);
+const SelectInput = ({
+  name,
+  id,
+  classes,
+  value,
+  required,
+  onChange,
+  onFocus,
+  onBlur,
+  options,
+}) => {
+  const selectRef = useRef(null);
+  const [inputValue, setInputValue] = useState(value);
 
-    this.state = {
-      value: this.props.value,
-    };
-  }
+  useEffect(() => {
+    setInputValue(value);
+  }, [value]);
 
-  handleChange(e) {
-    this.setState(
-      {
-        value: e.target.value,
-      },
-      this.props.onChange.bind(null, e.target.value),
-    );
-  }
+  const handleChange = (e) => {
+    setInputValue(e.target.value);
+    onChange(e.target.value);
+  };
 
-  render() {
-    var options = this.props.options.map((opt) => (
-      <option key={opt.value} value={opt.value}>
-        {opt.text}
-      </option>
-    ));
+  const selectOptions = options.map((opt) => (
+    <option key={opt.value} value={opt.value}>
+      {opt.text}
+    </option>
+  ));
 
-    return (
-      <select
-        name={this.props.name}
-        id={this.props.id}
-        className={this.props.classes.select}
-        value={this.state.value}
-        ref="select"
-        required={this.props.required ? 'required' : undefined}
-        onChange={this.handleChange.bind(this)}
-        onFocus={this.props.onFocus.bind(null, this.props.id)}
-        onBlur={this.props.onBlur.bind(null, this.state.value)}
-      >
-        {options}
-      </select>
-    );
-  }
-
-  componentDidMount() {
-    /*
-     * Selects automatically pick the first item, so
-     * make sure we set it.
-     */
-    this.handleChange({
-      target: {
-        value: this.refs.select.value,
-      },
-    });
-  }
-}
+  return (
+    <select
+      ref={selectRef}
+      name={name}
+      id={id}
+      className={classes.select}
+      value={inputValue}
+      required={required ? 'required' : undefined}
+      onChange={handleChange}
+      onFocus={() => onFocus.bind(id)}
+      onBlur={() => onBlur.bind(inputValue)}
+    >
+      {selectOptions}
+    </select>
+  );
+};
 
 SelectInput.defaultProps = {
   classes: {},
@@ -64,3 +55,5 @@ SelectInput.defaultProps = {
   onChange: () => {},
   onBlur: () => {},
 };
+
+export default SelectInput;

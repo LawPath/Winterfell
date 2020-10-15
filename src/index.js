@@ -15,7 +15,7 @@ class Winterfell extends Component {
 
     this.panelHistory = [];
 
-    var schema = _.extend(
+    const schema = _.extend(
       {
         classes: {},
         formPanels: [],
@@ -27,14 +27,14 @@ class Winterfell extends Component {
 
     schema.formPanels = schema.formPanels.sort((a, b) => a.index - b.index);
 
-    var panelId =
+    const panelId =
       typeof props.panelId !== 'undefined'
         ? props.panelId
         : schema.formPanels.length > 0
         ? schema.formPanels[0].panelId
         : undefined;
 
-    var currentPanel =
+    const currentPanel =
       typeof schema !== 'undefined' &&
       typeof schema.formPanels !== 'undefined' &&
       typeof panelId !== 'undefined'
@@ -54,6 +54,10 @@ class Winterfell extends Component {
       questionAnswers: props.questionAnswers,
       panelMoved: false,
     };
+  }
+
+  componentDidMount() {
+    this.props.onRender();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -126,18 +130,18 @@ class Winterfell extends Component {
     this.setState(newState);
   }
 
-  handleAnswerChange(questionId, questionAnswer, questionLabel) {
-    var questionAnswers = _.chain(this.state.questionAnswers)
+  handleAnswerChange = (questionId, questionAnswer, questionLabel) => {
+    const questionAnswers = _.chain(this.state.questionAnswers)
       .set(questionId, { value: questionAnswer, label: questionLabel })
       .value();
     this.setState({
       questionAnswers: questionAnswers,
     });
-    this.props.onUpdate.bind(null, questionAnswers);
-  }
+    this.props.onUpdate(questionAnswers);
+  };
 
-  handleSwitchPanel(panelId, preventHistory) {
-    var panel = _.find(this.props.schema.formPanels, {
+  handleSwitchPanel = (panelId, preventHistory) => {
+    const panel = _.find(this.props.schema.formPanels, {
       panelId: panelId,
     });
 
@@ -158,9 +162,9 @@ class Winterfell extends Component {
       },
       this.props.onSwitchPanel.bind(null, panel),
     );
-  }
+  };
 
-  handleBackButtonClick() {
+  handleBackButtonClick = () => {
     if (this.panelHistory.length > 1) {
       this.panelHistory.pop();
     }
@@ -178,9 +182,9 @@ class Winterfell extends Component {
     // this.handleSwitchPanel.call(
     //   this, newPanelIndex ? newPanelIndex.panelId : 0
     // );
-  }
+  };
 
-  handleSubmit(action) {
+  handleSubmit = (action) => {
     if (this.props.disableSubmit) {
       this.props.onSubmit(this.state.questionAnswers, action);
       return;
@@ -202,7 +206,7 @@ class Winterfell extends Component {
         this.formComponent.submit();
       },
     );
-  }
+  };
 
   render() {
     var currentPanel = _.find(
@@ -251,10 +255,6 @@ class Winterfell extends Component {
         </div>
       </form>
     );
-  }
-
-  componentDidMount() {
-    this.props.onRender();
   }
 }
 

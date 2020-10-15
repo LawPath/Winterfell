@@ -5,7 +5,18 @@ import InputTypes from './inputTypes';
 import PostQuestionComponents from './custom/postQuestionComponents';
 
 export default class Question extends Component {
-  handleInputChange(questionId, value) {
+  componentDidMount() {
+    const { input, questionAnswers, questionId } = this.props;
+    if (
+      typeof input.default === 'undefined' ||
+      (input.type === 'checkboxInput' && typeof questionAnswers[questionId] === 'undefined')
+    ) {
+      return;
+    }
+    this.handleInputChange(questionId, input.default);
+  }
+
+  handleInputChange = (questionId, value) => {
     this.props.onAnswerChange(
       questionId,
       value,
@@ -13,11 +24,11 @@ export default class Question extends Component {
       this.props.validations,
       this.props.validateOn,
     );
-  }
+  };
 
-  handleInputBlur(questionId, value) {
+  handleInputBlur = (questionId, value) => {
     this.props.onQuestionBlur(questionId, value, this.props.validations, this.props.validateOn);
-  }
+  };
 
   render() {
     const Input = InputTypes[this.props.input.type];
@@ -58,6 +69,7 @@ export default class Question extends Component {
         })
         .forEach((option) =>
           [].forEach.bind(option.conditionalQuestions, (conditionalQuestion) => {
+            const answer = this.props.questionAnswers[conditionalQuestion.questionId];
             conditionalItems.push(
               <Question
                 key={conditionalQuestion.questionId}
@@ -68,7 +80,7 @@ export default class Question extends Component {
                 postText={conditionalQuestion.postText}
                 validateOn={conditionalQuestion.validateOn}
                 validations={conditionalQuestion.validations}
-                value={this.props.questionAnswers[conditionalQuestion.questionId]}
+                value={answer ? answer.value : undefined}
                 input={conditionalQuestion.input}
                 classes={this.props.classes}
                 renderError={this.props.renderError}
@@ -87,17 +99,16 @@ export default class Question extends Component {
 
     // Get the current value. If none is set, then use
     // the default if given.
-    var value =
+    const value =
       typeof this.props.value !== 'undefined'
         ? this.props.value
         : typeof this.props.input.default !== 'undefined'
         ? this.props.input.default
         : undefined;
-
     // Retrieve the validation errors for the
     // current question and map them in to
     // error-message blocks.
-    var validationErrors =
+    const validationErrors =
       typeof this.props.validationErrors[this.props.questionId] !== 'undefined'
         ? this.props.validationErrors[this.props.questionId].map((error) => {
             return typeof this.props.renderError === 'function' ? (
@@ -151,24 +162,13 @@ export default class Question extends Component {
         {this.props.postQuestionComponent && this.props.postQuestionComponent.name ? (
           <PostQuestionComponent
             questionId={this.props.questionId}
+            onChange={this.handleInputChange.bind(this, this.props.questionId)}
             {...this.props.postQuestionComponent}
             {...this.props.onPostQuestionComponent}
           />
         ) : undefined}
       </div>
     );
-  }
-
-  componentDidMount() {
-    if (
-      typeof this.props.input.default === 'undefined' ||
-      (this.props.input.type === 'checkboxInput' &&
-        typeof this.props.questionAnswers[this.props.questionId] === 'undefined')
-    ) {
-      return;
-    }
-
-    this.handleInputChange.call(this, this.props.questionId, this.props.input.default);
   }
 }
 

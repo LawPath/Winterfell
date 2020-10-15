@@ -1,59 +1,59 @@
-import React, { Component } from 'react';
-
+import React, { useEffect, useState } from 'react';
 import cloneArray from '../lib/cloneArray';
 
-class CheckboxOptionsInput extends Component {
-  constructor(props) {
-    super(props);
+const CheckboxOptionsInput = ({
+  classes,
+  options,
+  labelId,
+  name,
+  required,
+  onFocus,
+  id,
+  onBlur,
+  value,
 
-    this.state = {
-      value: this.props.value.length > 0 ? cloneArray(this.props.value) : [],
-    };
-  }
+  onChange,
+}) => {
+  const [inputValue, setInputValue] = useState(value.length > 0 ? cloneArray(value) : []);
+  useEffect(() => {
+    setInputValue(value);
+  }, [value]);
 
-  handleChange(newVal, e) {
-    var currentValue = this.state.value;
-
+  const handleChange = (e, newVal) => {
+    var currentValue = value;
     if (e.target.checked) {
       currentValue.push(newVal);
     } else {
       currentValue = currentValue.filter((v) => v != newVal);
     }
+    setInputValue(currentValue);
+    onChange(currentValue);
+  };
 
-    this.setState(
-      {
-        value: currentValue,
-      },
-      this.props.onChange.bind(null, currentValue),
-    );
-  }
-
-  render() {
-    return (
-      <ul className={this.props.classes.checkboxList}>
-        {this.props.options.map((opt) => (
-          <li key={opt.value} className={this.props.classes.checkboxListItem}>
-            <label className={this.props.classes.checkboxLabel} id={this.props.labelId}>
-              <input
-                type="checkbox"
-                name={this.props.name}
-                aria-labelledby={this.props.labelId}
-                value={opt.value}
-                checked={this.state.value.indexOf(opt.value) > -1}
-                className={this.props.classes.checkbox}
-                required={this.props.required ? 'required' : undefined}
-                onChange={this.handleChange.bind(this, opt.value)}
-                onFocus={this.props.onFocus.bind(null, this.props.id)}
-                onBlur={this.props.onBlur.bind(null, this.state.value)}
-              />
-              {opt.text}
-            </label>
-          </li>
-        ))}
-      </ul>
-    );
-  }
-}
+  return (
+    <ul className={classes.checkboxList}>
+      {options.map((opt) => (
+        <li key={opt.value} className={classes.checkboxListItem}>
+          <label className={classes.checkboxLabel} id={labelId}>
+            <input
+              type="checkbox"
+              name={name}
+              aria-labelledby={labelId}
+              value={opt.value}
+              checked={inputValue.indexOf(opt.value) > -1}
+              className={classes.checkbox}
+              required={required ? 'required' : undefined}
+              onChange={(event) => handleChange(event, opt.value)}
+              onFocus={() => onFocus(id)}
+              onBlur={() => onBlur(inputValue)}
+            />
+            {opt.text}
+          </label>
+        </li>
+      ))}
+    </ul>
+  );
+};
 
 CheckboxOptionsInput.defaultProps = {
   classes: {},

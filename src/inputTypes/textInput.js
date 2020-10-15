@@ -1,42 +1,46 @@
-import React, { Component } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
-export default class TextInput extends Component {
-  constructor(props) {
-    super(props);
+const TextInput = ({
+  name,
+  id,
+  value,
+  required,
+  classes,
+  placeholder,
+  labelId,
+  onChange,
+  onFocus,
+  onBlur,
+  onKeyDown,
+}) => {
+  const [inputValue, setInputValue] = useState(value);
 
-    this.state = {
-      value: this.props.value,
-    };
-  }
+  useEffect(() => {
+    setInputValue(value);
+  }, [value]);
 
-  handleChange(e) {
-    this.setState(
-      {
-        value: e.target.value,
-      },
-      this.props.onChange.bind(null, e.target.value),
-    );
-  }
+  const handleChange = (e) => {
+    setInputValue(e.target.value);
+    onChange(e.target.value);
+  };
 
-  render() {
-    return (
-      <input
-        type="text"
-        name={this.props.name}
-        id={this.props.id}
-        aria-labelledby={this.props.labelId}
-        className={this.props.classes.input}
-        placeholder={this.props.placeholder}
-        value={this.state.value}
-        required={this.props.required ? 'required' : undefined}
-        onChange={this.handleChange.bind(this)}
-        onFocus={this.props.onFocus.bind(null, this.props.id)}
-        onBlur={this.props.onBlur.bind(null, this.state.value)}
-        onKeyDown={this.props.onKeyDown}
-      />
-    );
-  }
-}
+  return (
+    <input
+      type="text"
+      name={name}
+      id={id}
+      aria-labelledby={labelId}
+      className={classes.input}
+      placeholder={placeholder}
+      value={inputValue}
+      required={required ? 'required' : undefined}
+      onChange={handleChange}
+      onFocus={() => onFocus(id)}
+      onBlur={() => onBlur(value)}
+      onKeyDown={onKeyDown}
+    />
+  );
+};
 
 TextInput.defaultProps = {
   classes: {},
@@ -49,3 +53,5 @@ TextInput.defaultProps = {
   onKeyDown: () => {},
   onFocus: () => {},
 };
+
+export default TextInput;

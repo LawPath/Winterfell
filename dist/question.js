@@ -43,31 +43,53 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 var Question = /*#__PURE__*/function (_Component) {
   _inherits(Question, _Component);
 
   var _super = _createSuper(Question);
 
   function Question() {
+    var _this;
+
     _classCallCheck(this, Question);
 
-    return _super.apply(this, arguments);
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = _super.call.apply(_super, [this].concat(args));
+
+    _defineProperty(_assertThisInitialized(_this), "handleInputChange", function (questionId, value) {
+      _this.props.onAnswerChange(questionId, value, _this.props.label, _this.props.validations, _this.props.validateOn);
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "handleInputBlur", function (questionId, value) {
+      _this.props.onQuestionBlur(questionId, value, _this.props.validations, _this.props.validateOn);
+    });
+
+    return _this;
   }
 
   _createClass(Question, [{
-    key: "handleInputChange",
-    value: function handleInputChange(questionId, value) {
-      this.props.onAnswerChange(questionId, value, this.props.label, this.props.validations, this.props.validateOn);
-    }
-  }, {
-    key: "handleInputBlur",
-    value: function handleInputBlur(questionId, value) {
-      this.props.onQuestionBlur(questionId, value, this.props.validations, this.props.validateOn);
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this$props = this.props,
+          input = _this$props.input,
+          questionAnswers = _this$props.questionAnswers,
+          questionId = _this$props.questionId;
+
+      if (typeof input["default"] === 'undefined' || input.type === 'checkboxInput' && typeof questionAnswers[questionId] === 'undefined') {
+        return;
+      }
+
+      this.handleInputChange(questionId, input["default"]);
     }
   }, {
     key: "render",
     value: function render() {
-      var _this = this;
+      var _this2 = this;
 
       var Input = _inputTypes["default"][this.props.input.type];
       var PostQuestionComponent = this.props.postQuestionComponent && this.props.postQuestionComponent.name ? _postQuestionComponents["default"][this.props.postQuestionComponent.name] : null;
@@ -90,31 +112,32 @@ var Question = /*#__PURE__*/function (_Component) {
 
       if (typeof this.props.input.options !== 'undefined') {
         this.props.input.options.filter(function (option) {
-          return _this.props.value instanceof Array ? _this.props.value.indexOf(option.value) > -1 : _this.props.value == option.value;
+          return _this2.props.value instanceof Array ? _this2.props.value.indexOf(option.value) > -1 : _this2.props.value == option.value;
         }).filter(function (option) {
           return typeof option.conditionalQuestions !== 'undefined' && option.conditionalQuestions.length > 0;
         }).forEach(function (option) {
           return [].forEach.bind(option.conditionalQuestions, function (conditionalQuestion) {
+            var answer = _this2.props.questionAnswers[conditionalQuestion.questionId];
             conditionalItems.push( /*#__PURE__*/_react["default"].createElement(Question, {
               key: conditionalQuestion.questionId,
-              questionSetId: _this.props.questionSetId,
+              questionSetId: _this2.props.questionSetId,
               questionId: conditionalQuestion.questionId,
               question: conditionalQuestion.question,
               text: conditionalQuestion.text,
               postText: conditionalQuestion.postText,
               validateOn: conditionalQuestion.validateOn,
               validations: conditionalQuestion.validations,
-              value: _this.props.questionAnswers[conditionalQuestion.questionId],
+              value: answer ? answer.value : undefined,
               input: conditionalQuestion.input,
-              classes: _this.props.classes,
-              renderError: _this.props.renderError,
-              questionAnswers: _this.props.questionAnswers,
-              validationErrors: _this.props.validationErrors,
-              onAnswerChange: _this.props.onAnswerChange,
-              onQuestionBlur: _this.props.onQuestionBlur,
-              onFocus: _this.props.onFocus,
-              onKeyDown: _this.props.onKeyDown,
-              onPostQuestionComponent: _this.props.onPostQuestionComponent
+              classes: _this2.props.classes,
+              renderError: _this2.props.renderError,
+              questionAnswers: _this2.props.questionAnswers,
+              validationErrors: _this2.props.validationErrors,
+              onAnswerChange: _this2.props.onAnswerChange,
+              onQuestionBlur: _this2.props.onQuestionBlur,
+              onFocus: _this2.props.onFocus,
+              onKeyDown: _this2.props.onKeyDown,
+              onPostQuestionComponent: _this2.props.onPostQuestionComponent
             }));
           })();
         });
@@ -127,9 +150,9 @@ var Question = /*#__PURE__*/function (_Component) {
       // error-message blocks.
 
       var validationErrors = typeof this.props.validationErrors[this.props.questionId] !== 'undefined' ? this.props.validationErrors[this.props.questionId].map(function (error) {
-        return typeof _this.props.renderError === 'function' ? _this.props.renderError(error, _this.props.questionId) : /*#__PURE__*/_react["default"].createElement("div", {
-          key: _this.props.questionId + 'Error' + error.type,
-          className: _this.props.classes.errorMessage
+        return typeof _this2.props.renderError === 'function' ? _this2.props.renderError(error, _this2.props.questionId) : /*#__PURE__*/_react["default"].createElement("div", {
+          key: _this2.props.questionId + 'Error' + error.type,
+          className: _this2.props.classes.errorMessage
         }, error.message);
       }) : [];
       var labelId = "".concat(this.props.questionId, "-label");
@@ -158,17 +181,9 @@ var Question = /*#__PURE__*/function (_Component) {
       }, _typeof(this.props.input.props) === 'object' ? this.props.input.props : {})), !!this.props.postText ? /*#__PURE__*/_react["default"].createElement("p", {
         className: this.props.classes.questionPostText
       }, this.props.postText) : undefined, conditionalItems, this.props.postQuestionComponent && this.props.postQuestionComponent.name ? /*#__PURE__*/_react["default"].createElement(PostQuestionComponent, _extends({
-        questionId: this.props.questionId
+        questionId: this.props.questionId,
+        onChange: this.handleInputChange.bind(this, this.props.questionId)
       }, this.props.postQuestionComponent, this.props.onPostQuestionComponent)) : undefined);
-    }
-  }, {
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      if (typeof this.props.input["default"] === 'undefined' || this.props.input.type === 'checkboxInput' && typeof this.props.questionAnswers[this.props.questionId] === 'undefined') {
-        return;
-      }
-
-      this.handleInputChange.call(this, this.props.questionId, this.props.input["default"]);
     }
   }]);
 

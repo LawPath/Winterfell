@@ -1,5 +1,7 @@
 "use strict";
 
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -15,94 +17,84 @@ function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return 
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+var CheckboxOptionsInput = function CheckboxOptionsInput(_ref) {
+  var classes = _ref.classes,
+      options = _ref.options,
+      labelId = _ref.labelId,
+      name = _ref.name,
+      required = _ref.required,
+      _onFocus = _ref.onFocus,
+      id = _ref.id,
+      _onBlur = _ref.onBlur,
+      value = _ref.value,
+      onChange = _ref.onChange;
 
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+  var _useState = (0, _react.useState)(value.length > 0 ? (0, _cloneArray["default"])(value) : []),
+      _useState2 = _slicedToArray(_useState, 2),
+      inputValue = _useState2[0],
+      setInputValue = _useState2[1];
 
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+  (0, _react.useEffect)(function () {
+    console.log('This is data: ', value);
+    setInputValue(value);
+  }, [value]);
 
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+  var handleChange = function handleChange(e, newVal) {
+    var currentValue = value;
 
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+    if (e.target.checked) {
+      currentValue.push(newVal);
+    } else {
+      currentValue = currentValue.filter(function (v) {
+        return v != newVal;
+      });
+    }
 
-var CheckboxOptionsInput = /*#__PURE__*/function (_Component) {
-  _inherits(CheckboxOptionsInput, _Component);
+    setInputValue(currentValue);
+    onChange(currentValue);
+  };
 
-  var _super = _createSuper(CheckboxOptionsInput);
-
-  function CheckboxOptionsInput(props) {
-    var _this;
-
-    _classCallCheck(this, CheckboxOptionsInput);
-
-    _this = _super.call(this, props);
-    _this.state = {
-      value: _this.props.value.length > 0 ? (0, _cloneArray["default"])(_this.props.value) : []
-    };
-    return _this;
-  }
-
-  _createClass(CheckboxOptionsInput, [{
-    key: "handleChange",
-    value: function handleChange(newVal, e) {
-      var currentValue = this.state.value;
-
-      if (e.target.checked) {
-        currentValue.push(newVal);
-      } else {
-        currentValue = currentValue.filter(function (v) {
-          return v != newVal;
-        });
+  return /*#__PURE__*/_react["default"].createElement("ul", {
+    className: classes.checkboxList
+  }, options.map(function (opt) {
+    return /*#__PURE__*/_react["default"].createElement("li", {
+      key: opt.value,
+      className: classes.checkboxListItem
+    }, /*#__PURE__*/_react["default"].createElement("label", {
+      className: classes.checkboxLabel,
+      id: labelId
+    }, /*#__PURE__*/_react["default"].createElement("input", {
+      type: "checkbox",
+      name: name,
+      "aria-labelledby": labelId,
+      value: opt.value,
+      checked: inputValue.indexOf(opt.value) > -1,
+      className: classes.checkbox,
+      required: required ? 'required' : undefined,
+      onChange: function onChange(event) {
+        return handleChange(event, opt.value);
+      },
+      onFocus: function onFocus() {
+        return _onFocus(id);
+      },
+      onBlur: function onBlur() {
+        return _onBlur(inputValue);
       }
-
-      this.setState({
-        value: currentValue
-      }, this.props.onChange.bind(null, currentValue));
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this2 = this;
-
-      return /*#__PURE__*/_react["default"].createElement("ul", {
-        className: this.props.classes.checkboxList
-      }, this.props.options.map(function (opt) {
-        return /*#__PURE__*/_react["default"].createElement("li", {
-          key: opt.value,
-          className: _this2.props.classes.checkboxListItem
-        }, /*#__PURE__*/_react["default"].createElement("label", {
-          className: _this2.props.classes.checkboxLabel,
-          id: _this2.props.labelId
-        }, /*#__PURE__*/_react["default"].createElement("input", {
-          type: "checkbox",
-          name: _this2.props.name,
-          "aria-labelledby": _this2.props.labelId,
-          value: opt.value,
-          checked: _this2.state.value.indexOf(opt.value) > -1,
-          className: _this2.props.classes.checkbox,
-          required: _this2.props.required ? 'required' : undefined,
-          onChange: _this2.handleChange.bind(_this2, opt.value),
-          onFocus: _this2.props.onFocus.bind(null, _this2.props.id),
-          onBlur: _this2.props.onBlur.bind(null, _this2.state.value)
-        }), opt.text));
-      }));
-    }
-  }]);
-
-  return CheckboxOptionsInput;
-}(_react.Component);
+    }), opt.text));
+  }));
+};
 
 CheckboxOptionsInput.defaultProps = {
   classes: {},

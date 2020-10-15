@@ -1,21 +1,47 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
-export default class AddressInput extends React.Component {
-  constructor(props) {
-    super(props);
+const STATES = [
+  {
+    text: 'Australian Capital Territory',
+    value: 'ACT',
+  },
+  {
+    text: 'New South Wales',
+    value: 'NSW',
+  },
+  {
+    text: 'Northern Territory',
+    value: 'NT',
+  },
+  {
+    text: 'Queensland',
+    value: 'QLD',
+  },
+  {
+    text: 'South Australia',
+    value: 'SA',
+  },
+  {
+    text: 'Tasmania',
+    value: 'TAS',
+  },
+  {
+    text: 'Victoria',
+    value: 'VIC',
+  },
+  {
+    text: 'Western Australia',
+    value: 'WA',
+  },
+];
 
-    this.state = {
-      value: this.props.value.type ? this.props.value.value : this.props.value,
-    };
+const AddressInput = ({ states, name, id, classes, required, placeholders, onFocus, labelId }) => {
+  const [inputValue, setInputValue] = useState(value.type ? value.value : value);
 
-    this.handleChangeField = this.handleChangeField.bind(this);
-    this.handleSelectState = this.handleSelectState.bind(this);
-  }
-
-  handleSelectState(e) {
+  const handleSelectState = (e) => {
     const index = e.nativeEvent.target.selectedIndex;
-    const { line1, line2, city, postcode } = this.state.value;
-    const theState = this.props.states.find((ss) => ss.value === e.nativeEvent.target[index].value);
+    const { line1, line2, city, postcode } = inputValue;
+    const theState = states.find((ss) => ss.value === e.nativeEvent.target[index].value);
     const state = {
       value: {
         line1,
@@ -25,16 +51,17 @@ export default class AddressInput extends React.Component {
         postcode,
       },
     };
-    this.setState(state, this.props.onChange.bind(null, { type: 'address', value: state.value }));
-  }
+    setInputValue(state);
+    onChange({ type: 'address', value: state.value });
+  };
 
-  handleChangeField(field, e) {
-    const { line1, line2, city, postcode } = this.state.value;
-    let theState = this.props.states.find((ss) => ss.value === this.state.value.state.value);
+  const handleChangeField = (field, e) => {
+    const { line1, line2, city, postcode } = inputValue;
+    let theState = states.find((ss) => ss.value === inputValue.state.value);
     if (!theState) {
-      theState = this.props.states[0];
+      theState = states[0];
     }
-    const ns = {
+    const newState = {
       value: {
         line1,
         line2,
@@ -43,12 +70,13 @@ export default class AddressInput extends React.Component {
         postcode,
       },
     };
-    ns.value[field] = e.target.value;
-    this.setState(ns, this.props.onChange.bind(null, { type: 'address', value: ns.value }));
-  }
+    newState.value[field] = e.target.value;
+    setInputValue(newState);
+    onChange({ type: 'address', value: newState.value });
+  };
 
-  renderSelect() {
-    const options = this.props.states.map((opt) => (
+  const renderSelect = () => {
+    const options = states.map((opt) => (
       <option key={opt.value} value={opt.value}>
         {opt.text}
       </option>
@@ -56,89 +84,83 @@ export default class AddressInput extends React.Component {
 
     return (
       <select
-        name={`${this.props.name}-state`}
-        id={`${this.props.id}-state`}
-        className={this.props.classes.select}
-        value={this.state.value.state ? this.state.value.state.value : ''}
-        required={this.props.required ? 'required' : undefined}
-        onChange={(e) => this.handleSelectState(e)}
-        onFocus={() => this.props.onFocus(this.props.id)}
+        name={`${name}-state`}
+        id={`${id}-state`}
+        className={classes.select}
+        value={inputValue.state ? inputValue.state.value : ''}
+        required={required ? 'required' : undefined}
+        onChange={(e) => handleSelectState(e)}
+        onFocus={() => onFocus(id)}
       >
         {options}
       </select>
     );
-  }
+  };
 
-  render() {
-    const { onFocus, placeholders } = this.props;
-    const sel = this.renderSelect();
-    const address = (
+  return (
+    <div>
       <div>
-        <div>
+        <input
+          type="text"
+          name={`${name}-line1`}
+          id={`${id}-line1`}
+          aria-labelledby={`${labelId}-line1`}
+          className={classes.input}
+          placeholder={placeholders.line1}
+          value={inputValue.line1}
+          required={required ? 'required' : undefined}
+          onChange={(e) => handleChangeField('line1', e)}
+          onFocus={() => onFocus(id)}
+        />
+      </div>
+      <div>
+        <input
+          type="text"
+          name={`${name}-line2`}
+          id={`${id}-line2`}
+          aria-labelledby={`${labelId}-line2`}
+          className={classes.input}
+          placeholder={placeholders.line2}
+          value={inputValue.line2}
+          required={required ? 'required' : undefined}
+          onChange={(e) => handleChangeField('line2', e)}
+          onFocus={() => onFocus(id)}
+        />
+      </div>
+      <div className="city-line">
+        <div className="beginning">
           <input
             type="text"
-            name={`${this.props.name}-line1`}
-            id={`${this.props.id}-line1`}
-            aria-labelledby={`${this.props.labelId}-line1`}
-            className={this.props.classes.input}
-            placeholder={placeholders.line1}
-            value={this.state.value.line1}
-            required={this.props.required ? 'required' : undefined}
-            onChange={(e) => this.handleChangeField('line1', e)}
-            onFocus={() => onFocus(this.props.id)}
+            name={`${name}-city`}
+            id={`${id}-city`}
+            aria-labelledby={`${labelId}-city`}
+            className={classes.input}
+            placeholder={placeholders.city}
+            value={inputValue.city}
+            required={required ? 'required' : undefined}
+            onChange={(e) => handleChangeField('city', e)}
+            onFocus={() => onFocus(id)}
           />
         </div>
-        <div>
+        <div className="middle">{renderSelect()}</div>
+        <div className="ending">
           <input
             type="text"
-            name={`${this.props.name}-line2`}
-            id={`${this.props.id}-line2`}
-            aria-labelledby={`${this.props.labelId}-line2`}
-            className={this.props.classes.input}
-            placeholder={placeholders.line2}
-            value={this.state.value.line2}
-            required={this.props.required ? 'required' : undefined}
-            onChange={(e) => this.handleChangeField('line2', e)}
-            onFocus={() => onFocus(this.props.id)}
+            name={`${name}-postcode`}
+            id={`${id}-postcode`}
+            aria-labelledby={`${labelId}-postcode`}
+            className={classes.input}
+            placeholder={placeholders.postcode}
+            value={inputValue.postcode}
+            required={required ? 'required' : undefined}
+            onChange={(e) => handleChangeField('postcode', e)}
+            onFocus={() => onFocus(id)}
           />
-        </div>
-        <div className="city-line">
-          <div className="beginning">
-            <input
-              type="text"
-              name={`${this.props.name}-city`}
-              id={`${this.props.id}-city`}
-              aria-labelledby={`${this.props.labelId}-city`}
-              className={this.props.classes.input}
-              placeholder={placeholders.city}
-              value={this.state.value.city}
-              required={this.props.required ? 'required' : undefined}
-              onChange={(e) => this.handleChangeField('city', e)}
-              onFocus={() => onFocus(this.props.id)}
-            />
-          </div>
-          <div className="middle">{sel}</div>
-          <div className="ending">
-            <input
-              type="text"
-              name={`${this.props.name}-postcode`}
-              id={`${this.props.id}-postcode`}
-              aria-labelledby={`${this.props.labelId}-postcode`}
-              className={this.props.classes.input}
-              placeholder={placeholders.postcode}
-              value={this.state.value.postcode}
-              required={this.props.required ? 'required' : undefined}
-              onChange={(e) => this.handleChangeField('postcode', e)}
-              onFocus={() => onFocus(this.props.id)}
-            />
-          </div>
         </div>
       </div>
-    );
-
-    return address;
-  }
-}
+    </div>
+  );
+};
 
 AddressInput.defaultProps = {
   classes: {},
@@ -149,8 +171,8 @@ AddressInput.defaultProps = {
     line2: '',
     city: '',
     state: {
-      text: 'Australian Capital Territory',
-      value: 'ACT',
+      text: 'New South Wales',
+      value: 'NSW',
     },
     postcode: '',
   },
@@ -160,40 +182,9 @@ AddressInput.defaultProps = {
     city: 'E.g Sydney',
     postcode: 'E.g 2000',
   },
-  states: [
-    {
-      text: 'Australian Capital Territory',
-      value: 'ACT',
-    },
-    {
-      text: 'New South Wales',
-      value: 'NSW',
-    },
-    {
-      text: 'Northern Territory',
-      value: 'NT',
-    },
-    {
-      text: 'Queensland',
-      value: 'QLD',
-    },
-    {
-      text: 'South Australia',
-      value: 'SA',
-    },
-    {
-      text: 'Tasmania',
-      value: 'TAS',
-    },
-    {
-      text: 'Victoria',
-      value: 'VIC',
-    },
-    {
-      text: 'Western Australia',
-      value: 'WA',
-    },
-  ],
+  states: STATES,
   onChange: () => {},
   onFocus: () => {},
 };
+
+export default AddressInput;

@@ -1,48 +1,36 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 
 // import 'react-datepicker/dist/react-datepicker.css';
 
-export default class DateInput extends React.Component {
-  constructor(props) {
-    super(props);
+const DateInput = ({ name, labelId, classes, onBlur, id, onFocus }) => {
+  const [inputValue, setInputValue] = useState(value.type ? moment(value.value) : value);
+  useEffect(() => {
+    setInputValue(value);
+  }, [value]);
 
-    this.state = {
-      value: this.props.value.type ? moment(this.props.value.value) : this.props.value,
-    };
+  const handleChange = (e) => {
+    setInputValue(e.target.value);
+    onChange({ type: 'date', value: date });
+  };
 
-    this.handleChange = this.handleChange.bind(this);
-  }
-
-  handleChange(date) {
-    this.setState(
-      {
-        value: date,
-      },
-      this.props.onChange.bind(null, { type: 'date', value: date }),
-    );
-  }
-
-  render() {
-    const { onFocus } = this.props;
-    return (
-      <div>
-        <DatePicker
-          name={this.props.name}
-          id={this.props.id}
-          aria-labelledby={this.props.labelId}
-          className={this.props.classes.input}
-          selected={this.state.value}
-          onSelect={this.props.onBlur}
-          onFocus={() => onFocus(this.props.id)}
-          onChange={this.handleChange}
-          dateFormat="LL"
-        />
-      </div>
-    );
-  }
-}
+  return (
+    <div>
+      <DatePicker
+        name={name}
+        id={id}
+        aria-labelledby={labelId}
+        className={classes.input}
+        selected={inputValue}
+        onChange={handleChange}
+        onSelect={onBlur}
+        onFocus={() => onFocus(id)}
+        dateFormat="LL"
+      />
+    </div>
+  );
+};
 
 DateInput.defaultProps = {
   classes: {},
@@ -53,3 +41,5 @@ DateInput.defaultProps = {
   onBlur: () => {},
   onFocus: () => {},
 };
+
+export default DateInput;

@@ -1,19 +1,22 @@
-import React, { Component } from 'react';
-export default class HiddenInput extends Component {
-  constructor(props) {
-    super(props);
+import React, { useEffect, useState } from 'react';
 
-    this.state = {
-      value: this.props.value,
-    };
-  }
+const HiddenInput = ({ name, value }) => {
+  const [inputValue, setInputValue] = useState(value);
 
-  render() {
-    return <input type="hidden" name={this.props.name} value={this.state.value} />;
-  }
-}
+  useEffect(() => {
+    setInputValue(value);
+  }, [value]);
+
+  const handleChange = (e) => {
+    setInputValue(e.target.value);
+    onChange(e.target.value);
+  };
+
+  return <input type="hidden" onChange={handleChange} name={name} value={inputValue} />;
+};
 
 HiddenInput.defaultProps = {
   name: '',
   value: '',
 };
+export default HiddenInput;
