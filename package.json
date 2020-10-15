@@ -6,8 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rimraf dist",
-    "build:examples": "gulp build-examples",
-    "build": "babel src --out-dir dist && webpack",
+    "build": "babel src --out-dir dist",
     "prepublish": "npm run clean && npm run build"
   },
   "keywords": [
@@ -44,7 +43,8 @@
   "devDependencies": {
     "@babel/cli": "^7.10.5",
     "@babel/core": "^7.11.1",
-    "@babel/plugin-transform-runtime": "^7.11.0",
+    "@babel/plugin-proposal-class-properties": "^7.10.4",
+    "@babel/plugin-transform-runtime": "^7.11.5",
     "@babel/preset-env": "^7.11.0",
     "@babel/preset-react": "^7.10.4",
     "babel-loader": "^8.1.0",

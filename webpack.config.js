@@ -9,14 +9,7 @@ module.exports = {
   },
   module: {
     rules: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader',
-        options: {
-          plugins: ['@babel/plugin-proposal-class-properties', '@babel/plugin-transform-runtime'],
-        },
-      },
+    
       {
         test: /\.s?css$/,
         use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
