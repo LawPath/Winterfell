@@ -9,6 +9,10 @@ exports["default"] = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
+var _reactSwitch = _interopRequireDefault(require("react-switch"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -25,69 +29,56 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-var CheckboxInput = function CheckboxInput(_ref) {
-  var id = _ref.id,
-      value = _ref.value,
-      text = _ref.text,
-      classes = _ref.classes,
-      labelId = _ref.labelId,
-      name = _ref.name,
-      required = _ref.required,
-      _onFocus = _ref.onFocus,
-      _onBlur = _ref.onBlur,
+var Switch = function Switch(_ref) {
+  var active = _ref.active,
       onChange = _ref.onChange,
-      defaultChecked = _ref.defaultChecked;
+      disabled = _ref.disabled;
 
-  var _useState = (0, _react.useState)(defaultChecked),
+  var _useState = (0, _react.useState)(active),
       _useState2 = _slicedToArray(_useState, 2),
       checked = _useState2[0],
       setChecked = _useState2[1];
 
   (0, _react.useEffect)(function () {
-    handleChange();
-  }, [value]);
+    return setChecked(active);
+  }, [active]);
 
-  var handleChange = function handleChange(e) {
-    if (e) {
-      var result = !checked;
-      setChecked(result);
-      onChange(result ? value : undefined);
-    } else {
-      onChange(checked ? value : undefined);
-    }
+  var handleChange = function handleChange() {
+    onChange(!checked);
+    setChecked(!checked);
   };
 
-  return /*#__PURE__*/_react["default"].createElement("div", {
-    className: classes.checkboxInput
-  }, /*#__PURE__*/_react["default"].createElement("label", {
-    className: classes.checkboxLabel,
-    id: labelId
-  }, /*#__PURE__*/_react["default"].createElement("input", {
-    type: "checkbox",
-    name: name,
-    "aria-labelledby": labelId,
-    className: classes.checkbox,
-    defaultChecked: checked,
-    value: value,
-    required: required ? 'required' : undefined,
+  return /*#__PURE__*/_react["default"].createElement(_reactSwitch["default"], {
+    checked: checked,
     onChange: handleChange,
-    onFocus: function onFocus() {
-      return _onFocus(id);
-    },
-    onBlur: function onBlur() {
-      return _onBlur(checked ? value : undefined);
-    }
-  }), text));
+    onColor: "#00C08B",
+    offColor: "#D2D8DF",
+    offHandleColor: "#FFF",
+    onHandleColor: "#FFF",
+    activeBoxShadow: undefined,
+    uncheckedIcon: /*#__PURE__*/_react["default"].createElement("div", {
+      style: {
+        color: '#FFF',
+        lineHeight: '20px',
+        fontSize: '11px',
+        paddingLeft: '3px'
+      }
+    }, "OFF"),
+    checkedIcon: /*#__PURE__*/_react["default"].createElement("div", {
+      style: {
+        color: '#FFF',
+        lineHeight: '20px',
+        fontSize: '11px',
+        paddingLeft: '3px'
+      }
+    }, "ON"),
+    className: "switch-control",
+    height: 20,
+    width: 45,
+    id: "icon-switch",
+    disabled: disabled
+  });
 };
 
-CheckboxInput.defaultProps = {
-  text: '',
-  defaultChecked: false,
-  classes: {},
-  name: '',
-  value: '',
-  onChange: function onChange() {},
-  onBlur: function onBlur() {}
-};
-var _default = CheckboxInput;
+var _default = Switch;
 exports["default"] = _default;

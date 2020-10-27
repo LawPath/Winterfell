@@ -5,8 +5,9 @@ import Question from './question';
 
 export default class QuestionSet extends Component {
   render() {
-    var questions = this.props.questions.map((question) => {
+    const questions = this.props.questions.map((question) => {
       const answer = this.props.questionAnswers[question.questionId];
+      console.log('This is the current question ', question, answer, this.props.questionAnswers);
       return (
         <Question
           key={question.questionId}
@@ -18,19 +19,33 @@ export default class QuestionSet extends Component {
           text={question.text}
           postText={question.postText}
           label={question.label}
-          postQuestionComponent={question.postQuestionComponent}
-          value={answer ? answer.value : undefined}
+          suggestions={question.suggestions}
+          value={
+            answer
+              ? // &&
+                // answer.enablePrefilledAnswer &&
+                // (!answer.value || (answer.value && answer.value.trim('') === ''))
+                //   ? answer.prefilledData
+                //   : answer && answer.value
+                answer.value
+              : undefined
+          }
+          prefilledData={answer ? answer.prefilledData : undefined}
+          enablePrefilledAnswer={answer ? answer.enablePrefilledAnswer : undefined}
           input={question.input}
           classes={this.props.classes}
           renderError={this.props.renderError}
           renderRequiredAsterisk={this.props.renderRequiredAsterisk}
           questionAnswers={this.props.questionAnswers}
+          labeledAnswsers={this.props.labeledAnswsers}
+          panelConstants={this.props.panelConstants}
           validationErrors={this.props.validationErrors}
           onAnswerChange={this.props.onAnswerChange}
           onQuestionBlur={this.props.onQuestionBlur}
           onFocus={this.props.onFocus}
           onKeyDown={this.props.onKeyDown}
-          onPostQuestionComponent={this.props.onPostQuestionComponent}
+          onClickInputIcon={this.props.onClickInputIcon}
+          onSwitchQuestion={this.props.onSwitchQuestion}
         />
       );
     });
@@ -67,9 +82,12 @@ QuestionSet.defaultProps = {
   validationErrors: {},
   renderError: undefined,
   renderRequiredAsterisk: undefined,
+  panelConstants: undefined,
+  labeledAnswsers: [],
   onAnswerChange: () => {},
   onQuestionBlur: () => {},
   onKeyDown: () => {},
   onFocus: () => {},
-  onPostQuestionComponent: {},
+  onClickInputIcon: () => {},
+  onSwitchQuestion: () => {},
 };

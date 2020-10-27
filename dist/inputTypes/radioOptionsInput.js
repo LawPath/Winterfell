@@ -25,26 +25,29 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-var RadioOptionsInput = function RadioOptionsInput(value, classes) {
-  var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
-  var name = arguments.length > 3 ? arguments[3] : undefined;
-  var labelId = arguments.length > 4 ? arguments[4] : undefined;
-  var required = arguments.length > 5 ? arguments[5] : undefined;
-  var onFocus = arguments.length > 6 ? arguments[6] : undefined;
-  var id = arguments.length > 7 ? arguments[7] : undefined;
-
-  var _onBlur = arguments.length > 8 ? arguments[8] : undefined;
+var RadioOptionsInput = function RadioOptionsInput(_ref) {
+  var id = _ref.id,
+      name = _ref.name,
+      value = _ref.value,
+      classes = _ref.classes,
+      options = _ref.options,
+      labelId = _ref.labelId,
+      required = _ref.required,
+      onFocus = _ref.onFocus,
+      onChange = _ref.onChange,
+      _onBlur = _ref.onBlur;
 
   var _useState = (0, _react.useState)(value),
       _useState2 = _slicedToArray(_useState, 2),
       inputValue = _useState2[0],
       setInputValue = _useState2[1];
 
-  var handleChange = function handleChange(e) {
-    setInputValue(e.target.value);
-    onChange(e.target.value);
+  var handleChange = function handleChange(optionValue) {
+    setInputValue(optionValue);
+    onChange(optionValue);
   };
 
+  if (!options) return null;
   return /*#__PURE__*/_react["default"].createElement("ul", {
     className: classes.radioList
   }, options.map(function (opt) {

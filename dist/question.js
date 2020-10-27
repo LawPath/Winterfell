@@ -11,8 +11,6 @@ var _lodash = _interopRequireDefault(require("lodash"));
 
 var _inputTypes = _interopRequireDefault(require("./inputTypes"));
 
-var _postQuestionComponents = _interopRequireDefault(require("./custom/postQuestionComponents"));
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
@@ -78,7 +76,9 @@ var Question = /*#__PURE__*/function (_Component) {
       var _this$props = this.props,
           input = _this$props.input,
           questionAnswers = _this$props.questionAnswers,
-          questionId = _this$props.questionId;
+          questionId = _this$props.questionId,
+          label = _this$props.label;
+      this.props.onSwitchQuestion(questionId, label);
 
       if (typeof input["default"] === 'undefined' || input.type === 'checkboxInput' && typeof questionAnswers[questionId] === 'undefined') {
         return;
@@ -92,7 +92,6 @@ var Question = /*#__PURE__*/function (_Component) {
       var _this2 = this;
 
       var Input = _inputTypes["default"][this.props.input.type];
-      var PostQuestionComponent = this.props.postQuestionComponent && this.props.postQuestionComponent.name ? _postQuestionComponents["default"][this.props.postQuestionComponent.name] : null;
 
       if (!Input) {
         throw new Error('Winterfell: Input Type "' + this.props.input.type + '" not defined as Winterfell Input Type');
@@ -128,16 +127,20 @@ var Question = /*#__PURE__*/function (_Component) {
               validateOn: conditionalQuestion.validateOn,
               validations: conditionalQuestion.validations,
               value: answer ? answer.value : undefined,
+              prefilledData: answer ? answer.prefilledData : undefined,
+              enablePrefilledAnswer: answer ? answer.enablePrefilledAnswer : undefined,
               input: conditionalQuestion.input,
               classes: _this2.props.classes,
               renderError: _this2.props.renderError,
               questionAnswers: _this2.props.questionAnswers,
+              labeledAnswsers: _this2.props.labeledAnswsers,
+              panelConstants: _this2.props.panelConstants,
               validationErrors: _this2.props.validationErrors,
               onAnswerChange: _this2.props.onAnswerChange,
               onQuestionBlur: _this2.props.onQuestionBlur,
               onFocus: _this2.props.onFocus,
               onKeyDown: _this2.props.onKeyDown,
-              onPostQuestionComponent: _this2.props.onPostQuestionComponent
+              onClickInputIcon: _this2.props.onClickInputIcon
             }));
           })();
         });
@@ -158,7 +161,7 @@ var Question = /*#__PURE__*/function (_Component) {
       var labelId = "".concat(this.props.questionId, "-label");
       return /*#__PURE__*/_react["default"].createElement("div", {
         className: this.props.classes.question
-      }, !!this.props.question ? /*#__PURE__*/_react["default"].createElement("label", {
+      }, !!this.props.question ? /*#__PURE__*/_react["default"].createElement("p", {
         className: this.props.classes.label,
         id: labelId,
         htmlFor: this.props.questionId
@@ -169,6 +172,8 @@ var Question = /*#__PURE__*/function (_Component) {
         id: this.props.questionId,
         labelId: labelId,
         value: value,
+        prefilledData: this.props.prefilledData,
+        enablePrefilledAnswer: this.props.enablePrefilledAnswer,
         text: this.props.input.text,
         options: this.props.input.options,
         placeholder: this.props.input.placeholder,
@@ -177,13 +182,12 @@ var Question = /*#__PURE__*/function (_Component) {
         onChange: this.handleInputChange.bind(this, this.props.questionId),
         onBlur: this.handleInputBlur.bind(this, this.props.questionId),
         onFocus: this.props.onFocus,
-        onKeyDown: this.props.onKeyDown
-      }, _typeof(this.props.input.props) === 'object' ? this.props.input.props : {})), !!this.props.postText ? /*#__PURE__*/_react["default"].createElement("p", {
+        onKeyDown: this.props.onKeyDown,
+        onClickInputIcon: this.props.onClickInputIcon,
+        inputIconTooltipText: this.props.panelConstants.tooltipContent
+      }, _typeof(this.props.input.props) === 'object' ? this.props.input.props : {})), !!this.props.suggestions ? /*#__PURE__*/_react["default"].createElement("p", {
         className: this.props.classes.questionPostText
-      }, this.props.postText) : undefined, conditionalItems, this.props.postQuestionComponent && this.props.postQuestionComponent.name ? /*#__PURE__*/_react["default"].createElement(PostQuestionComponent, _extends({
-        questionId: this.props.questionId,
-        onChange: this.handleInputChange.bind(this, this.props.questionId)
-      }, this.props.postQuestionComponent, this.props.onPostQuestionComponent)) : undefined);
+      }, this.props.panelConstants.suggestionHintText) : undefined, conditionalItems);
     }
   }]);
 
@@ -199,8 +203,6 @@ Question.defaultProps = {
   validations: [],
   text: undefined,
   postText: undefined,
-  postQuestionComponent: {},
-  onPostQuestionComponent: {},
   value: undefined,
   input: {
     "default": undefined,
@@ -208,14 +210,19 @@ Question.defaultProps = {
     limit: undefined,
     placeholder: undefined
   },
+  enablePrefilledAnswer: false,
   label: undefined,
   classes: {},
   questionAnswers: {},
+  labeledAnswsers: [],
   validationErrors: {},
   onAnswerChange: function onAnswerChange() {},
   onQuestionBlur: function onQuestionBlur() {},
   onKeyDown: function onKeyDown() {},
   onFocus: function onFocus() {},
+  onClickInputIcon: function onClickInputIcon() {},
+  onSwitchQuestion: function onSwitchQuestion() {},
   renderError: undefined,
-  renderRequiredAsterisk: undefined
+  renderRequiredAsterisk: undefined,
+  panelConstants: undefined
 };

@@ -132,7 +132,7 @@ var AddressInput = function AddressInput(_ref) {
       name: "".concat(name, "-state"),
       id: "".concat(id, "-state"),
       className: classes.select,
-      value: value.state ? inputValue.state.value : '',
+      value: inputValue.state ? inputValue.state.value : '',
       required: required ? 'required' : undefined,
       onChange: function onChange(e) {
         return handleSelectState(e);

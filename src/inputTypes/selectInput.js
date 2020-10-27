@@ -28,7 +28,6 @@ const SelectInput = ({
       {opt.text}
     </option>
   ));
-
   return (
     <select
       ref={selectRef}

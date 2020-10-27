@@ -5,6 +5,8 @@ import Validation from './lib/validation';
 import ErrorMessages from './lib/errors';
 import Button from './button';
 import QuestionSet from './questionSet';
+import SuggestionSet from './SuggestionSet';
+import Switch from './custom/switch';
 
 export default class QuestionPanel extends React.Component {
   constructor(props) {
@@ -12,7 +14,26 @@ export default class QuestionPanel extends React.Component {
 
     this.state = {
       validationErrors: this.props.validationErrors,
+      currentQuestion: null,
     };
+  }
+
+  componentWillReceiveProps(newprops) {
+    if (newprops.currentQuestionId) {
+      console.log('This is the state of the information before: ', newprops);
+      let currentQuestion = this.props.questionAnswers
+        ? this.props.questionAnswers[newprops.currentQuestionId]
+        : null;
+      if (!currentQuestion) return;
+      console.log(
+        'This is the state of the information: ',
+        newprops,
+        newprops.currentQuestionId,
+        currentQuestion.enablePrefilledAnswer,
+        currentQuestion,
+      );
+      this.setState({ currentQuestion });
+    }
   }
 
   handleAnswerValidate(questionId, questionAnswer, validations) {
@@ -123,7 +144,6 @@ export default class QuestionPanel extends React.Component {
 
   handleAnswerChange(questionId, questionAnswer, questionLabel, validations, validateOn) {
     this.props.onAnswerChange(questionId, questionAnswer, questionLabel);
-
     this.setState({
       validationErrors: _.chain(this.state.validationErrors).set(questionId, []).value(),
     });
@@ -166,14 +186,40 @@ export default class QuestionPanel extends React.Component {
           questions={questionSet.questions}
           classes={this.props.classes}
           questionAnswers={this.props.questionAnswers}
+          labeledAnswsers={this.props.labeledAnswsers}
           renderError={this.props.renderError}
           renderRequiredAsterisk={this.props.renderRequiredAsterisk}
           validationErrors={this.state.validationErrors}
+          panelConstants={this.props.panelConstants}
           onAnswerChange={this.handleAnswerChange.bind(this)}
           onQuestionBlur={this.handleQuestionBlur.bind(this)}
           onFocus={this.props.onFocus}
           onKeyDown={this.handleInputKeyDown.bind(this)}
-          onPostQuestionComponent={this.props.onPostQuestionComponent}
+          onClickInputIcon={this.props.onClickInputIcon}
+          onSwitchQuestion={this.props.onSwitchQuestion}
+        />
+      );
+    });
+
+    const suggestionSets = this.props.questionSets.map((questionSetMeta) => {
+      const questionSet = _.find(this.props.schema.questionSets, {
+        questionSetId: questionSetMeta.questionSetId,
+      });
+
+      if (!questionSet) {
+        return undefined;
+      }
+      return (
+        <SuggestionSet
+          key={questionSet.questionSetId}
+          id={questionSet.questionSetId}
+          name={questionSet.name}
+          questions={questionSet.questions}
+          classes={this.props.classes}
+          suggestionPanel={this.props.suggestionPanel}
+          questionAnswers={this.props.questionAnswers}
+          onAnswerChange={this.props.onAnswerChange}
+          defaultSuggestions={this.props.defaultSuggestions}
         />
       );
     });
@@ -199,73 +245,94 @@ export default class QuestionPanel extends React.Component {
         completionPercent = Math.floor((100 / nQuestionsTotal) * nQuestionsCompleted);
       }
     }
+
     var progressBar = undefined;
     if (typeof this.props.progress !== 'undefined' && this.props.progress.showBar) {
       progressBar = (
         <div className={this.props.classes.progressBar}>
-          <div className={this.props.classes.progressBarTitle}>
-            {this.props.progress.text}
-            {this.props.progress.legendPosition === 'inline' ? `${completionPercent}%` : ''}
-          </div>
-          {this.props.progress.legendPosition === 'top' ? (
-            <div className={this.props.classes.progressBarLegend}>
-              {this.props.progress.showPercent ? `${completionPercent}%` : ''}
-            </div>
-          ) : null}
           <div className={this.props.classes.progressBarIncomplete}>
             <div
               className={this.props.classes.progressBarComplete}
               style={{ width: `${completionPercent}%` }}
-            ></div>
-            {this.props.progress.legendPosition === 'bar' ? (
-              <div className={this.props.classes.progressBarLegend}>
-                {this.props.progress.showPercent ? `${completionPercent}%` : ''}
-              </div>
-            ) : null}
+            >
+              {this.props.progress.showPercent
+                ? `${
+                    this.props.progress.postText ? this.props.progress.postText : ''
+                  }${completionPercent}%${
+                    this.props.progress.postText ? this.props.progress.postText : ''
+                  }`
+                : ''}
+            </div>
           </div>
         </div>
       );
     }
-
     return (
       <div className={this.props.classes.questionPanel}>
-        {this.props.progress && this.props.progress.position === 'top' ? progressBar : undefined}
-        {typeof this.props.panelHeader !== 'undefined' ||
-        typeof this.props.panelText !== 'undefined' ? (
-          <div className={this.props.classes.questionPanelHeaderContainer}>
-            {typeof this.props.panelHeader !== 'undefined' ? (
-              <h3 className={this.props.classes.questionPanelHeaderText}>
-                {this.props.panelHeader}
-              </h3>
+        <div className="question-panel-header">
+          {this.props.panelAcions}
+          {this.props.progress && this.props.progress.position === 'top' ? progressBar : undefined}
+        </div>
+        <div className="question-panel-body">
+          <div className={this.props.classes.questionSets}>{questionSets}</div>
+          {this.props.progress && this.props.progress.position === 'middle'
+            ? progressBar
+            : undefined}
+          <div
+            className={`${this.props.classes.buttonBar} ${this.props.extraClasses.buttonBar || ''}`}
+          >
+            {this.props.currentPanelIndex > 0 && !this.props.backButton.disabled ? (
+              <Button
+                text={this.props.backButton.text || 'Back'}
+                onClick={this.handleBackButtonClick.bind(this)}
+                className={`${this.props.classes.backButton} ${
+                  this.props.extraClasses.backButton || ''
+                }`}
+              />
             ) : undefined}
-            {typeof this.props.panelText !== 'undefined' ? (
-              <p className={this.props.classes.questionPanelText}>{this.props.panelText}</p>
+            {!this.props.button.disabled ? (
+              <Button
+                text={this.props.button.text}
+                onClick={this.handleMainButtonClick.bind(this)}
+                className={`${this.props.classes.controlButton} ${
+                  this.props.extraClasses.button || ''
+                }`}
+              />
             ) : undefined}
           </div>
-        ) : undefined}
-        <div className={this.props.classes.questionSets}>{questionSets}</div>
-        {this.props.progress && this.props.progress.position === 'middle' ? progressBar : undefined}
-        <div
-          className={`${this.props.classes.buttonBar} ${this.props.extraClasses.buttonBar || ''}`}
-        >
-          {this.props.currentPanelIndex > 0 && !this.props.backButton.disabled ? (
-            <Button
-              text={this.props.backButton.text || 'Back'}
-              onClick={this.handleBackButtonClick.bind(this)}
-              className={`${this.props.classes.backButton} ${
-                this.props.extraClasses.backButton || ''
-              }`}
+        </div>
+        <div className="question-panel-post-body-header">
+          <div className={this.props.classes.postBodyHeader}>
+            <img
+              className={this.props.classes.postBodyHeaderIcon}
+              src={this.props.panelConstants.titleIcon}
             />
-          ) : undefined}
-          {!this.props.button.disabled ? (
-            <Button
-              text={this.props.button.text}
-              onClick={this.handleMainButtonClick.bind(this)}
-              className={`${this.props.classes.controlButton} ${
-                this.props.extraClasses.button || ''
-              }`}
+            <span class={this.props.classes.postBodyHeaderText}>
+              {this.props.panelConstants.postBodyHeaderText}
+            </span>
+          </div>
+        </div>
+        <div className="question-panel-post-body">{suggestionSets}</div>
+        <div className="question-panel-footer">
+          <div className="prefill-action-bar">
+            <img
+              className="prefill-action-bar-icon"
+              src="https://assets.lawpath.com/images/svg/editor/builder.svg"
             />
-          ) : undefined}
+            <span className="prefill-action-bar-text">Use pre-fill information</span>
+            <span className="prefill-action-bar-action">
+              {this.state.currentQuestion ? (
+                <Switch
+                  active={this.state.currentQuestion.enablePrefilledAnswer}
+                  onChange={this.props.onEnablePrefilledAnswer}
+                  disabled={
+                    !this.state.currentQuestion ||
+                    (this.state.currentQuestion && !this.state.currentQuestion.label)
+                  }
+                />
+              ) : null}
+            </span>
+          </div>
         </div>
         {this.props.progress && this.props.progress.position === 'bottom' ? progressBar : undefined}
       </div>
@@ -281,10 +348,13 @@ QuestionPanel.defaultProps = {
   panelId: undefined,
   panelIndex: undefined,
   panelHeader: undefined,
+  panelAcions: undefined,
+  panelConstants: undefined,
   panelText: undefined,
   progress: undefined,
   numPanels: undefined,
   currentPanelIndex: undefined,
+  labeledAnswsers: [],
   action: {
     default: {},
     conditions: [],
@@ -299,9 +369,12 @@ QuestionPanel.defaultProps = {
   questionAnswers: {},
   renderError: undefined,
   renderRequiredAsterisk: undefined,
+  currentQuestionId: undefined,
   onAnswerChange: () => {},
   onSwitchPanel: () => {},
   onPanelBack: () => {},
   onFocus: () => {},
-  onPostQuestionComponent: {},
+  onClickInputIcon: () => {},
+  onSwitchQuestion: () => {},
+  onEnablePrefilledAnswer: () => {},
 };

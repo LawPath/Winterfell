@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import _ from 'lodash';
 
 import InputTypes from './inputTypes';
-import PostQuestionComponents from './custom/postQuestionComponents';
 
 export default class Question extends Component {
   componentDidMount() {
-    const { input, questionAnswers, questionId } = this.props;
+    const { input, questionAnswers, questionId, label } = this.props;
+
+    this.props.onSwitchQuestion(questionId, label);
     if (
       typeof input.default === 'undefined' ||
       (input.type === 'checkboxInput' && typeof questionAnswers[questionId] === 'undefined')
@@ -32,10 +33,6 @@ export default class Question extends Component {
 
   render() {
     const Input = InputTypes[this.props.input.type];
-    const PostQuestionComponent =
-      this.props.postQuestionComponent && this.props.postQuestionComponent.name
-        ? PostQuestionComponents[this.props.postQuestionComponent.name]
-        : null;
     if (!Input) {
       throw new Error(
         'Winterfell: Input Type "' +
@@ -81,16 +78,20 @@ export default class Question extends Component {
                 validateOn={conditionalQuestion.validateOn}
                 validations={conditionalQuestion.validations}
                 value={answer ? answer.value : undefined}
+                prefilledData={answer ? answer.prefilledData : undefined}
+                enablePrefilledAnswer={answer ? answer.enablePrefilledAnswer : undefined}
                 input={conditionalQuestion.input}
                 classes={this.props.classes}
                 renderError={this.props.renderError}
                 questionAnswers={this.props.questionAnswers}
+                labeledAnswsers={this.props.labeledAnswsers}
+                panelConstants={this.props.panelConstants}
                 validationErrors={this.props.validationErrors}
                 onAnswerChange={this.props.onAnswerChange}
                 onQuestionBlur={this.props.onQuestionBlur}
                 onFocus={this.props.onFocus}
                 onKeyDown={this.props.onKeyDown}
-                onPostQuestionComponent={this.props.onPostQuestionComponent}
+                onClickInputIcon={this.props.onClickInputIcon}
               />,
             );
           })(),
@@ -125,15 +126,16 @@ export default class Question extends Component {
         : [];
 
     let labelId = `${this.props.questionId}-label`;
+
     return (
       <div className={this.props.classes.question}>
         {!!this.props.question ? (
-          <label className={this.props.classes.label} id={labelId} htmlFor={this.props.questionId}>
+          <p className={this.props.classes.label} id={labelId} htmlFor={this.props.questionId}>
             {this.props.question}
             {typeof this.props.renderRequiredAsterisk !== 'undefined' && this.props.input.required
               ? this.props.renderRequiredAsterisk()
               : undefined}
-          </label>
+          </p>
         ) : undefined}
         {!!this.props.text ? (
           <p className={this.props.classes.questionText}>{this.props.text}</p>
@@ -144,6 +146,8 @@ export default class Question extends Component {
           id={this.props.questionId}
           labelId={labelId}
           value={value}
+          prefilledData={this.props.prefilledData}
+          enablePrefilledAnswer={this.props.enablePrefilledAnswer}
           text={this.props.input.text}
           options={this.props.input.options}
           placeholder={this.props.input.placeholder}
@@ -153,20 +157,16 @@ export default class Question extends Component {
           onBlur={this.handleInputBlur.bind(this, this.props.questionId)}
           onFocus={this.props.onFocus}
           onKeyDown={this.props.onKeyDown}
+          onClickInputIcon={this.props.onClickInputIcon}
+          inputIconTooltipText={this.props.panelConstants.tooltipContent}
           {...(typeof this.props.input.props === 'object' ? this.props.input.props : {})}
         />
-        {!!this.props.postText ? (
-          <p className={this.props.classes.questionPostText}>{this.props.postText}</p>
+        {!!this.props.suggestions ? (
+          <p className={this.props.classes.questionPostText}>
+            {this.props.panelConstants.suggestionHintText}
+          </p>
         ) : undefined}
         {conditionalItems}
-        {this.props.postQuestionComponent && this.props.postQuestionComponent.name ? (
-          <PostQuestionComponent
-            questionId={this.props.questionId}
-            onChange={this.handleInputChange.bind(this, this.props.questionId)}
-            {...this.props.postQuestionComponent}
-            {...this.props.onPostQuestionComponent}
-          />
-        ) : undefined}
       </div>
     );
   }
@@ -180,8 +180,6 @@ Question.defaultProps = {
   validations: [],
   text: undefined,
   postText: undefined,
-  postQuestionComponent: {},
-  onPostQuestionComponent: {},
   value: undefined,
   input: {
     default: undefined,
@@ -189,14 +187,19 @@ Question.defaultProps = {
     limit: undefined,
     placeholder: undefined,
   },
+  enablePrefilledAnswer: false,
   label: undefined,
   classes: {},
   questionAnswers: {},
+  labeledAnswsers: [],
   validationErrors: {},
   onAnswerChange: () => {},
   onQuestionBlur: () => {},
   onKeyDown: () => {},
   onFocus: () => {},
+  onClickInputIcon: () => {},
+  onSwitchQuestion: () => {},
   renderError: undefined,
   renderRequiredAsterisk: undefined,
+  panelConstants: undefined,
 };

@@ -57,6 +57,7 @@ var QuestionSet = /*#__PURE__*/function (_Component) {
 
       var questions = this.props.questions.map(function (question) {
         var answer = _this.props.questionAnswers[question.questionId];
+        console.log('This is the current question ', question, answer, _this.props.questionAnswers);
         return /*#__PURE__*/_react["default"].createElement(_question["default"], {
           key: question.questionId,
           questionSetId: _this.props.id,
@@ -67,19 +68,29 @@ var QuestionSet = /*#__PURE__*/function (_Component) {
           text: question.text,
           postText: question.postText,
           label: question.label,
-          postQuestionComponent: question.postQuestionComponent,
-          value: answer ? answer.value : undefined,
+          suggestions: question.suggestions,
+          value: answer ? // &&
+          // answer.enablePrefilledAnswer &&
+          // (!answer.value || (answer.value && answer.value.trim('') === ''))
+          //   ? answer.prefilledData
+          //   : answer && answer.value
+          answer.value : undefined,
+          prefilledData: answer ? answer.prefilledData : undefined,
+          enablePrefilledAnswer: answer ? answer.enablePrefilledAnswer : undefined,
           input: question.input,
           classes: _this.props.classes,
           renderError: _this.props.renderError,
           renderRequiredAsterisk: _this.props.renderRequiredAsterisk,
           questionAnswers: _this.props.questionAnswers,
+          labeledAnswsers: _this.props.labeledAnswsers,
+          panelConstants: _this.props.panelConstants,
           validationErrors: _this.props.validationErrors,
           onAnswerChange: _this.props.onAnswerChange,
           onQuestionBlur: _this.props.onQuestionBlur,
           onFocus: _this.props.onFocus,
           onKeyDown: _this.props.onKeyDown,
-          onPostQuestionComponent: _this.props.onPostQuestionComponent
+          onClickInputIcon: _this.props.onClickInputIcon,
+          onSwitchQuestion: _this.props.onSwitchQuestion
         });
       });
       return /*#__PURE__*/_react["default"].createElement("div", {
@@ -109,9 +120,12 @@ QuestionSet.defaultProps = {
   validationErrors: {},
   renderError: undefined,
   renderRequiredAsterisk: undefined,
+  panelConstants: undefined,
+  labeledAnswsers: [],
   onAnswerChange: function onAnswerChange() {},
   onQuestionBlur: function onQuestionBlur() {},
   onKeyDown: function onKeyDown() {},
   onFocus: function onFocus() {},
-  onPostQuestionComponent: {}
+  onClickInputIcon: function onClickInputIcon() {},
+  onSwitchQuestion: function onSwitchQuestion() {}
 };

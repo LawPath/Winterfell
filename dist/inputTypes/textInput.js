@@ -9,9 +9,17 @@ exports["default"] = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
+var _tooltip = _interopRequireDefault(require("../custom/tooltip"));
+
+var _TextInput$defaultPro;
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
@@ -36,7 +44,10 @@ var TextInput = function TextInput(_ref) {
       onChange = _ref.onChange,
       _onFocus = _ref.onFocus,
       _onBlur = _ref.onBlur,
-      onKeyDown = _ref.onKeyDown;
+      onKeyDown = _ref.onKeyDown,
+      onClickInputIcon = _ref.onClickInputIcon,
+      enablePrefilledAnswer = _ref.enablePrefilledAnswer,
+      inputIconTooltipText = _ref.inputIconTooltipText;
 
   var _useState = (0, _react.useState)(value),
       _useState2 = _slicedToArray(_useState, 2),
@@ -49,11 +60,12 @@ var TextInput = function TextInput(_ref) {
 
   var handleChange = function handleChange(e) {
     setInputValue(e.target.value);
-    console.log('Handle change of input is called: ', e.target.value);
     onChange(e.target.value);
   };
 
-  return /*#__PURE__*/_react["default"].createElement("input", {
+  return /*#__PURE__*/_react["default"].createElement("div", {
+    className: "input-group"
+  }, /*#__PURE__*/_react["default"].createElement("input", {
     type: "text",
     name: name,
     id: id,
@@ -69,20 +81,30 @@ var TextInput = function TextInput(_ref) {
     onBlur: function onBlur() {
       return _onBlur(value);
     },
-    onKeyDown: onKeyDown
-  });
+    onKeyDown: onKeyDown,
+    "data-prefiled-data": enablePrefilledAnswer
+  }), enablePrefilledAnswer ? /*#__PURE__*/_react["default"].createElement("div", {
+    "class": "input-group-append"
+  }, /*#__PURE__*/_react["default"].createElement("span", {
+    "class": "input-group-text"
+  }, /*#__PURE__*/_react["default"].createElement(_tooltip["default"], {
+    onClick: onClickInputIcon,
+    content: inputIconTooltipText,
+    icon: "https://assets.lawpath.com/images/svg/editor/builder.svg"
+  }))) : null);
 };
 
-TextInput.defaultProps = {
+TextInput.defaultProps = (_TextInput$defaultPro = {
   classes: {},
   name: '',
   id: '',
   value: '',
   placeholder: '',
+  enablePrefilledAnswer: true,
   onChange: function onChange() {},
   onBlur: function onBlur() {},
   onKeyDown: function onKeyDown() {},
   onFocus: function onFocus() {}
-};
+}, _defineProperty(_TextInput$defaultPro, "onFocus", function onFocus() {}), _defineProperty(_TextInput$defaultPro, "onClickInputIcon", function onClickInputIcon() {}), _defineProperty(_TextInput$defaultPro, "onClickInputIcon", function onClickInputIcon() {}), _TextInput$defaultPro);
 var _default = TextInput;
 exports["default"] = _default;

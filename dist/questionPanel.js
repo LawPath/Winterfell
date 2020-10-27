@@ -19,6 +19,10 @@ var _button = _interopRequireDefault(require("./button"));
 
 var _questionSet = _interopRequireDefault(require("./questionSet"));
 
+var _SuggestionSet = _interopRequireDefault(require("./SuggestionSet"));
+
+var _switch = _interopRequireDefault(require("./custom/switch"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -55,12 +59,26 @@ var QuestionPanel = /*#__PURE__*/function (_React$Component) {
 
     _this = _super.call(this, props);
     _this.state = {
-      validationErrors: _this.props.validationErrors
+      validationErrors: _this.props.validationErrors,
+      currentQuestion: null
     };
     return _this;
   }
 
   _createClass(QuestionPanel, [{
+    key: "componentWillReceiveProps",
+    value: function componentWillReceiveProps(newprops) {
+      if (newprops.currentQuestionId) {
+        console.log('This is the state of the information before: ', newprops);
+        var currentQuestion = this.props.questionAnswers ? this.props.questionAnswers[newprops.currentQuestionId] : null;
+        if (!currentQuestion) return;
+        console.log('This is the state of the information: ', newprops, newprops.currentQuestionId, currentQuestion.enablePrefilledAnswer, currentQuestion);
+        this.setState({
+          currentQuestion: currentQuestion
+        });
+      }
+    }
+  }, {
     key: "handleAnswerValidate",
     value: function handleAnswerValidate(questionId, questionAnswer, validations) {
       var _this2 = this;
@@ -222,14 +240,38 @@ var QuestionPanel = /*#__PURE__*/function (_React$Component) {
           questions: questionSet.questions,
           classes: _this4.props.classes,
           questionAnswers: _this4.props.questionAnswers,
+          labeledAnswsers: _this4.props.labeledAnswsers,
           renderError: _this4.props.renderError,
           renderRequiredAsterisk: _this4.props.renderRequiredAsterisk,
           validationErrors: _this4.state.validationErrors,
+          panelConstants: _this4.props.panelConstants,
           onAnswerChange: _this4.handleAnswerChange.bind(_this4),
           onQuestionBlur: _this4.handleQuestionBlur.bind(_this4),
           onFocus: _this4.props.onFocus,
           onKeyDown: _this4.handleInputKeyDown.bind(_this4),
-          onPostQuestionComponent: _this4.props.onPostQuestionComponent
+          onClickInputIcon: _this4.props.onClickInputIcon,
+          onSwitchQuestion: _this4.props.onSwitchQuestion
+        });
+      });
+      var suggestionSets = this.props.questionSets.map(function (questionSetMeta) {
+        var questionSet = _lodash["default"].find(_this4.props.schema.questionSets, {
+          questionSetId: questionSetMeta.questionSetId
+        });
+
+        if (!questionSet) {
+          return undefined;
+        }
+
+        return /*#__PURE__*/_react["default"].createElement(_SuggestionSet["default"], {
+          key: questionSet.questionSetId,
+          id: questionSet.questionSetId,
+          name: questionSet.name,
+          questions: questionSet.questions,
+          classes: _this4.props.classes,
+          suggestionPanel: _this4.props.suggestionPanel,
+          questionAnswers: _this4.props.questionAnswers,
+          onAnswerChange: _this4.props.onAnswerChange,
+          defaultSuggestions: _this4.props.defaultSuggestions
         });
       });
       var completionPercent = 0;
@@ -260,30 +302,22 @@ var QuestionPanel = /*#__PURE__*/function (_React$Component) {
         progressBar = /*#__PURE__*/_react["default"].createElement("div", {
           className: this.props.classes.progressBar
         }, /*#__PURE__*/_react["default"].createElement("div", {
-          className: this.props.classes.progressBarTitle
-        }, this.props.progress.text, this.props.progress.legendPosition === 'inline' ? "".concat(completionPercent, "%") : ''), this.props.progress.legendPosition === 'top' ? /*#__PURE__*/_react["default"].createElement("div", {
-          className: this.props.classes.progressBarLegend
-        }, this.props.progress.showPercent ? "".concat(completionPercent, "%") : '') : null, /*#__PURE__*/_react["default"].createElement("div", {
           className: this.props.classes.progressBarIncomplete
         }, /*#__PURE__*/_react["default"].createElement("div", {
           className: this.props.classes.progressBarComplete,
           style: {
             width: "".concat(completionPercent, "%")
           }
-        }), this.props.progress.legendPosition === 'bar' ? /*#__PURE__*/_react["default"].createElement("div", {
-          className: this.props.classes.progressBarLegend
-        }, this.props.progress.showPercent ? "".concat(completionPercent, "%") : '') : null));
+        }, this.props.progress.showPercent ? "".concat(this.props.progress.postText ? this.props.progress.postText : '').concat(completionPercent, "%").concat(this.props.progress.postText ? this.props.progress.postText : '') : '')));
       }
 
       return /*#__PURE__*/_react["default"].createElement("div", {
         className: this.props.classes.questionPanel
-      }, this.props.progress && this.props.progress.position === 'top' ? progressBar : undefined, typeof this.props.panelHeader !== 'undefined' || typeof this.props.panelText !== 'undefined' ? /*#__PURE__*/_react["default"].createElement("div", {
-        className: this.props.classes.questionPanelHeaderContainer
-      }, typeof this.props.panelHeader !== 'undefined' ? /*#__PURE__*/_react["default"].createElement("h3", {
-        className: this.props.classes.questionPanelHeaderText
-      }, this.props.panelHeader) : undefined, typeof this.props.panelText !== 'undefined' ? /*#__PURE__*/_react["default"].createElement("p", {
-        className: this.props.classes.questionPanelText
-      }, this.props.panelText) : undefined) : undefined, /*#__PURE__*/_react["default"].createElement("div", {
+      }, /*#__PURE__*/_react["default"].createElement("div", {
+        className: "question-panel-header"
+      }, this.props.panelAcions, this.props.progress && this.props.progress.position === 'top' ? progressBar : undefined), /*#__PURE__*/_react["default"].createElement("div", {
+        className: "question-panel-body"
+      }, /*#__PURE__*/_react["default"].createElement("div", {
         className: this.props.classes.questionSets
       }, questionSets), this.props.progress && this.props.progress.position === 'middle' ? progressBar : undefined, /*#__PURE__*/_react["default"].createElement("div", {
         className: "".concat(this.props.classes.buttonBar, " ").concat(this.props.extraClasses.buttonBar || '')
@@ -295,7 +329,33 @@ var QuestionPanel = /*#__PURE__*/function (_React$Component) {
         text: this.props.button.text,
         onClick: this.handleMainButtonClick.bind(this),
         className: "".concat(this.props.classes.controlButton, " ").concat(this.props.extraClasses.button || '')
-      }) : undefined), this.props.progress && this.props.progress.position === 'bottom' ? progressBar : undefined);
+      }) : undefined)), /*#__PURE__*/_react["default"].createElement("div", {
+        className: "question-panel-post-body-header"
+      }, /*#__PURE__*/_react["default"].createElement("div", {
+        className: this.props.classes.postBodyHeader
+      }, /*#__PURE__*/_react["default"].createElement("img", {
+        className: this.props.classes.postBodyHeaderIcon,
+        src: this.props.panelConstants.titleIcon
+      }), /*#__PURE__*/_react["default"].createElement("span", {
+        "class": this.props.classes.postBodyHeaderText
+      }, this.props.panelConstants.postBodyHeaderText))), /*#__PURE__*/_react["default"].createElement("div", {
+        className: "question-panel-post-body"
+      }, suggestionSets), /*#__PURE__*/_react["default"].createElement("div", {
+        className: "question-panel-footer"
+      }, /*#__PURE__*/_react["default"].createElement("div", {
+        className: "prefill-action-bar"
+      }, /*#__PURE__*/_react["default"].createElement("img", {
+        className: "prefill-action-bar-icon",
+        src: "https://assets.lawpath.com/images/svg/editor/builder.svg"
+      }), /*#__PURE__*/_react["default"].createElement("span", {
+        className: "prefill-action-bar-text"
+      }, "Use pre-fill information"), /*#__PURE__*/_react["default"].createElement("span", {
+        className: "prefill-action-bar-action"
+      }, this.state.currentQuestion ? /*#__PURE__*/_react["default"].createElement(_switch["default"], {
+        active: this.state.currentQuestion.enablePrefilledAnswer,
+        onChange: this.props.onEnablePrefilledAnswer,
+        disabled: !this.state.currentQuestion || this.state.currentQuestion && !this.state.currentQuestion.label
+      }) : null))), this.props.progress && this.props.progress.position === 'bottom' ? progressBar : undefined);
     }
   }]);
 
@@ -311,10 +371,13 @@ QuestionPanel.defaultProps = {
   panelId: undefined,
   panelIndex: undefined,
   panelHeader: undefined,
+  panelAcions: undefined,
+  panelConstants: undefined,
   panelText: undefined,
   progress: undefined,
   numPanels: undefined,
   currentPanelIndex: undefined,
+  labeledAnswsers: [],
   action: {
     "default": {},
     conditions: []
@@ -329,9 +392,12 @@ QuestionPanel.defaultProps = {
   questionAnswers: {},
   renderError: undefined,
   renderRequiredAsterisk: undefined,
+  currentQuestionId: undefined,
   onAnswerChange: function onAnswerChange() {},
   onSwitchPanel: function onSwitchPanel() {},
   onPanelBack: function onPanelBack() {},
   onFocus: function onFocus() {},
-  onPostQuestionComponent: {}
+  onClickInputIcon: function onClickInputIcon() {},
+  onSwitchQuestion: function onSwitchQuestion() {},
+  onEnablePrefilledAnswer: function onEnablePrefilledAnswer() {}
 };

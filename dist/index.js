@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = void 0;
+exports["default"] = exports.Winterfell = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
@@ -15,9 +15,11 @@ var _errors = _interopRequireDefault(require("./lib/errors"));
 
 var _validation = _interopRequireDefault(require("./lib/validation"));
 
-var _postQuestionComponents = _interopRequireDefault(require("./custom/postQuestionComponents"));
-
 var _questionPanel = _interopRequireDefault(require("./questionPanel"));
+
+var _questionAnswers = require("./lib/questionAnswers");
+
+var _Winterfell$defaultPr;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -26,6 +28,10 @@ function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -62,16 +68,116 @@ var Winterfell = /*#__PURE__*/function (_Component) {
     _this = _super.call(this, props);
 
     _defineProperty(_assertThisInitialized(_this), "handleAnswerChange", function (questionId, questionAnswer, questionLabel) {
-      var questionAnswers = _lodash["default"].chain(_this.state.questionAnswers).set(questionId, {
+      var mergedData = _lodash["default"].merge(_lodash["default"].get(_this.state.questionAnswers, [questionId]), {
         value: questionAnswer,
         label: questionLabel
-      }).value();
+      });
+
+      if (mergedData.enablePrefilledAnswer && mergedData.value !== mergedData.prefilledData) {
+        /* If user edit the prefill data, we will toggle out the prefill toggle */
+        mergedData.enablePrefilledAnswer = false;
+      }
+
+      var questionAnswers = _lodash["default"].set(_this.state.questionAnswers, questionId, mergedData);
 
       _this.setState({
         questionAnswers: questionAnswers
       });
 
-      console.log('This is the data: ', questionAnswers, _this.state.questionAnswers, questionId, questionAnswer, questionLabel);
+      _this.props.onUpdate(questionAnswers);
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "handleOnSwitchQuestion", function (questionId, label) {
+      var currentQuestionAnswers = _this.state.questionAnswers;
+
+      if (label) {
+        var prefillData = (0, _questionAnswers.getPrefillData)(_this.props.labeledAnswsers, questionId, label);
+
+        var currentQuestion = _lodash["default"].get(_this.state.questionAnswers, questionId);
+
+        if (currentQuestion === null || currentQuestion === undefined) {
+          if (prefillData) {
+            console.log('The answer is empty and have prefill data');
+
+            _lodash["default"].set(currentQuestionAnswers, questionId, {
+              label: label,
+              enablePrefilledAnswer: true,
+              value: prefillData,
+              prefilledData: prefillData
+            });
+          } else {
+            console.log('The answer is empty and do not have have prefill data');
+
+            _lodash["default"].set(currentQuestionAnswers, questionId, {
+              label: label,
+              enablePrefilledAnswer: false,
+              prefilledData: prefillData
+            });
+          }
+        } else {
+          /* Get the enable prefill toggle variable*/
+          var enablePrefilledAnswer = _lodash["default"].get(_this.state.questionAnswers, [questionId, 'enablePrefilledAnswer']);
+
+          console.log('This is the value : ', enablePrefilledAnswer);
+          var mergedData;
+
+          if (!enablePrefilledAnswer) {
+            console.log('Going to enablePrefilledAnswer && enablePrefilledAnswer.enablePrefilledAnswer === false');
+            mergedData = _lodash["default"].merge(_lodash["default"].get(_this.state.questionAnswers, [questionId]), {
+              label: label,
+              prefilledData: prefillData
+            });
+          } else {
+            console.log('Going to  else of has label');
+            mergedData = _lodash["default"].merge(_lodash["default"].get(_this.state.questionAnswers, [questionId]), {
+              label: label,
+              enablePrefilledAnswer: true,
+              prefilledData: prefillData
+            });
+          }
+
+          if (mergedData.value && mergedData.enablePrefilledAnswer && mergedData.value !== mergedData.prefilledData) {
+            console.log('It has prefilled data and is overriden by user');
+            mergedData.enablePrefilledAnswer = false;
+          } else if (!mergedData.value && mergedData.enablePrefilledAnswer) {
+            console.log('It has prefilled data and there is no input value');
+            mergedData.value = mergedData.prefilledData;
+          }
+
+          console.log('This is the merged data: ', mergedData, questionId);
+
+          _lodash["default"].set(currentQuestionAnswers, [questionId], _objectSpread({}, mergedData));
+        } // currentQuestionAnswers = currentQuestionAnswers.value();
+
+
+        console.log('This is the information of current question: ', currentQuestionAnswers);
+      } else {
+        var _mergedData = _lodash["default"].merge(_lodash["default"].get(_this.state.questionAnswers, [questionId]), {
+          label: null,
+          enablePrefilledAnswer: false
+        });
+
+        _lodash["default"].set(currentQuestionAnswers, [questionId], _objectSpread({}, _mergedData));
+      }
+
+      _this.setState({
+        questionAnswers: currentQuestionAnswers,
+        currentQuestionId: questionId
+      });
+
+      _this.props.onUpdate(currentQuestionAnswers);
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "handleOnEnablePrefilledAnswer", function (enable) {
+      var mergedData = _lodash["default"].merge(_lodash["default"].get(_this.state.questionAnswers, [_this.state.currentQuestionId]), {
+        enablePrefilledAnswer: enable
+      });
+
+      var questionAnswers = _lodash["default"].chain(_this.state.questionAnswers).set(_this.state.currentQuestionId, mergedData).value();
+
+      _this.setState({
+        questionAnswers: questionAnswers
+      });
 
       _this.props.onUpdate(questionAnswers);
     });
@@ -169,7 +275,8 @@ var Winterfell = /*#__PURE__*/function (_Component) {
       currentPanel: currentPanel,
       action: props.action,
       questionAnswers: props.questionAnswers,
-      panelMoved: false
+      panelMoved: false,
+      currentQuestionId: undefined
     };
     return _this;
   }
@@ -177,6 +284,7 @@ var Winterfell = /*#__PURE__*/function (_Component) {
   _createClass(Winterfell, [{
     key: "componentDidMount",
     value: function componentDidMount() {
+      console.log('This is this.props.labeledAnswsers ', this.props.labeledAnswsers);
       this.props.onRender();
     }
   }, {
@@ -273,6 +381,9 @@ var Winterfell = /*#__PURE__*/function (_Component) {
       }, /*#__PURE__*/_react["default"].createElement(_questionPanel["default"], {
         schema: this.state.schema,
         classes: this.state.schema.classes,
+        panelConstants: this.state.schema.panelConstants,
+        defaultSuggestions: this.state.schema.defaultSuggestions,
+        suggestionPanel: this.state.schema.suggestionPanel,
         panelId: currentPanel.panelId,
         panelIndex: currentPanel.panelIndex,
         panelHeader: currentPanel.panelHeader,
@@ -293,26 +404,30 @@ var Winterfell = /*#__PURE__*/function (_Component) {
         onPanelBack: this.handleBackButtonClick.bind(this),
         onSwitchPanel: this.handleSwitchPanel.bind(this),
         onSubmit: this.handleSubmit.bind(this),
-        onPostQuestionComponent: this.props.onPostQuestionComponent
-      }), this.props.extraComponent ? this.props.extraComponent : null));
+        onClickInputIcon: this.props.onClickInputIcon,
+        panelAcions: this.props.extraComponent,
+        onSwitchQuestion: this.handleOnSwitchQuestion.bind(this),
+        labeledAnswsers: this.props.labeledAnswsers,
+        currentQuestionId: this.state.currentQuestionId,
+        onEnablePrefilledAnswer: this.handleOnEnablePrefilledAnswer
+      })));
     }
   }]);
 
   return Winterfell;
 }(_react.Component);
 
+exports.Winterfell = Winterfell;
 Winterfell.inputTypes = _inputTypes["default"];
 Winterfell.errorMessages = _errors["default"];
 Winterfell.validation = _validation["default"];
-Winterfell.postQuestionComponents = _postQuestionComponents["default"];
 Winterfell.addInputType = Winterfell.inputTypes.addInputType;
 Winterfell.addInputTypes = Winterfell.inputTypes.addInputTypes;
-Winterfell.addPostQuestionComponent = Winterfell.postQuestionComponents.addPostQuestionComponent;
 Winterfell.addErrorMessage = Winterfell.errorMessages.addErrorMessage;
 Winterfell.addErrorMessages = Winterfell.errorMessages.addErrorMessages;
 Winterfell.addValidationMethod = Winterfell.validation.addValidationMethod;
 Winterfell.addValidationMethods = Winterfell.validation.addValidationMethods;
-Winterfell.defaultProps = {
+Winterfell.defaultProps = (_Winterfell$defaultPr = {
   questionAnswers: {},
   encType: 'application/x-www-form-urlencoded',
   method: 'POST',
@@ -322,12 +437,7 @@ Winterfell.defaultProps = {
   renderError: undefined,
   renderRequiredAsterisk: undefined,
   currentQuestionId: undefined,
-  onSubmit: function onSubmit() {},
-  onUpdate: function onUpdate() {},
-  onFocus: function onFocus() {},
-  onSwitchPanel: function onSwitchPanel() {},
-  onRender: function onRender() {},
-  onPostQuestionComponent: {}
-};
+  panelConstants: undefined
+}, _defineProperty(_Winterfell$defaultPr, "questionAnswers", undefined), _defineProperty(_Winterfell$defaultPr, "labeledAnswsers", []), _defineProperty(_Winterfell$defaultPr, "onSubmit", function onSubmit() {}), _defineProperty(_Winterfell$defaultPr, "onUpdate", function onUpdate() {}), _defineProperty(_Winterfell$defaultPr, "onFocus", function onFocus() {}), _defineProperty(_Winterfell$defaultPr, "onSwitchPanel", function onSwitchPanel() {}), _defineProperty(_Winterfell$defaultPr, "onRender", function onRender() {}), _defineProperty(_Winterfell$defaultPr, "onClickInputIcon", function onClickInputIcon() {}), _Winterfell$defaultPr);
 var _default = Winterfell;
 exports["default"] = _default;

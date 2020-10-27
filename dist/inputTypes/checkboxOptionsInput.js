@@ -47,7 +47,6 @@ var CheckboxOptionsInput = function CheckboxOptionsInput(_ref) {
       setInputValue = _useState2[1];
 
   (0, _react.useEffect)(function () {
-    console.log('This is data: ', value);
     setInputValue(value);
   }, [value]);
 

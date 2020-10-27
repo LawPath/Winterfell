@@ -1,22 +1,25 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-const RadioOptionsInput = (
+const RadioOptionsInput = ({
+  id,
+  name,
   value,
   classes,
-  options = [],
-  name,
+  options,
   labelId,
   required,
   onFocus,
-  id,
+  onChange,
   onBlur,
-) => {
+}) => {
   const [inputValue, setInputValue] = useState(value);
-  const handleChange = (e) => {
-    setInputValue(e.target.value);
-    onChange(e.target.value);
+
+  const handleChange = (optionValue) => {
+    setInputValue(optionValue);
+    onChange(optionValue);
   };
 
+  if (!options) return null;
   return (
     <ul className={classes.radioList}>
       {options.map((opt) => (

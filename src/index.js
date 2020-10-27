@@ -4,10 +4,10 @@ import _ from 'lodash';
 import inputTypes from './inputTypes';
 import errorMessages from './lib/errors';
 import validation from './lib/validation';
-import postQuestionComponents from './custom/postQuestionComponents';
 import QuestionPanel from './questionPanel';
+import { getPrefillData, groupAnswersByLabel } from './lib/questionAnswers';
 
-class Winterfell extends Component {
+export class Winterfell extends Component {
   constructor(props) {
     super(props);
 
@@ -53,10 +53,12 @@ class Winterfell extends Component {
       action: props.action,
       questionAnswers: props.questionAnswers,
       panelMoved: false,
+      currentQuestionId: undefined,
     };
   }
 
   componentDidMount() {
+    console.log('This is this.props.labeledAnswsers ', this.props.labeledAnswsers);
     this.props.onRender();
   }
 
@@ -131,12 +133,116 @@ class Winterfell extends Component {
   }
 
   handleAnswerChange = (questionId, questionAnswer, questionLabel) => {
-    const questionAnswers = _.chain(this.state.questionAnswers)
-      .set(questionId, { value: questionAnswer, label: questionLabel })
-      .value();
-    this.setState({
-      questionAnswers: questionAnswers,
+    const mergedData = _.merge(_.get(this.state.questionAnswers, [questionId]), {
+      value: questionAnswer,
+      label: questionLabel,
     });
+
+    if (mergedData.enablePrefilledAnswer && mergedData.value !== mergedData.prefilledData) {
+      /* If user edit the prefill data, we will toggle out the prefill toggle */
+      mergedData.enablePrefilledAnswer = false;
+    }
+
+    const questionAnswers = _.set(this.state.questionAnswers, questionId, mergedData);
+
+    this.setState({ questionAnswers: questionAnswers });
+
+    this.props.onUpdate(questionAnswers);
+  };
+
+  handleOnSwitchQuestion = (questionId, label) => {
+    let currentQuestionAnswers = this.state.questionAnswers;
+
+    if (label) {
+      const prefillData = getPrefillData(this.props.labeledAnswsers, questionId, label);
+
+      const currentQuestion = _.get(this.state.questionAnswers, questionId);
+
+      if (currentQuestion === null || currentQuestion === undefined) {
+        if (prefillData) {
+          console.log('The answer is empty and have prefill data');
+
+          _.set(currentQuestionAnswers, questionId, {
+            label: label,
+            enablePrefilledAnswer: true,
+            value: prefillData,
+            prefilledData: prefillData,
+          });
+        } else {
+          console.log('The answer is empty and do not have have prefill data');
+
+          _.set(currentQuestionAnswers, questionId, {
+            label: label,
+            enablePrefilledAnswer: false,
+            prefilledData: prefillData,
+          });
+        }
+      } else {
+        /* Get the enable prefill toggle variable*/
+        const enablePrefilledAnswer = _.get(this.state.questionAnswers, [
+          questionId,
+          'enablePrefilledAnswer',
+        ]);
+        console.log('This is the value : ', enablePrefilledAnswer);
+
+        let mergedData;
+        if (!enablePrefilledAnswer) {
+          console.log(
+            'Going to enablePrefilledAnswer && enablePrefilledAnswer.enablePrefilledAnswer === false',
+          );
+          mergedData = _.merge(_.get(this.state.questionAnswers, [questionId]), {
+            label: label,
+            prefilledData: prefillData,
+          });
+        } else {
+          console.log('Going to  else of has label');
+          mergedData = _.merge(_.get(this.state.questionAnswers, [questionId]), {
+            label: label,
+            enablePrefilledAnswer: true,
+            prefilledData: prefillData,
+          });
+        }
+
+        if (
+          mergedData.value &&
+          mergedData.enablePrefilledAnswer &&
+          mergedData.value !== mergedData.prefilledData
+        ) {
+          console.log('It has prefilled data and is overriden by user');
+          mergedData.enablePrefilledAnswer = false;
+        } else if (!mergedData.value && mergedData.enablePrefilledAnswer) {
+          console.log('It has prefilled data and there is no input value');
+          mergedData.value = mergedData.prefilledData;
+        }
+
+        console.log('This is the merged data: ', mergedData, questionId);
+        _.set(currentQuestionAnswers, [questionId], { ...mergedData });
+      }
+      // currentQuestionAnswers = currentQuestionAnswers.value();
+      console.log('This is the information of current question: ', currentQuestionAnswers);
+    } else {
+      const mergedData = _.merge(_.get(this.state.questionAnswers, [questionId]), {
+        label: null,
+        enablePrefilledAnswer: false,
+      });
+      _.set(currentQuestionAnswers, [questionId], { ...mergedData });
+    }
+
+    this.setState({
+      questionAnswers: currentQuestionAnswers,
+      currentQuestionId: questionId,
+    });
+    this.props.onUpdate(currentQuestionAnswers);
+  };
+
+  handleOnEnablePrefilledAnswer = (enable) => {
+    const mergedData = _.merge(_.get(this.state.questionAnswers, [this.state.currentQuestionId]), {
+      enablePrefilledAnswer: enable,
+    });
+    let questionAnswers = _.chain(this.state.questionAnswers)
+      .set(this.state.currentQuestionId, mergedData)
+      .value();
+    this.setState({ questionAnswers: questionAnswers });
     this.props.onUpdate(questionAnswers);
   };
 
@@ -229,6 +335,9 @@ class Winterfell extends Component {
           <QuestionPanel
             schema={this.state.schema}
             classes={this.state.schema.classes}
+            panelConstants={this.state.schema.panelConstants}
+            defaultSuggestions={this.state.schema.defaultSuggestions}
+            suggestionPanel={this.state.schema.suggestionPanel}
             panelId={currentPanel.panelId}
             panelIndex={currentPanel.panelIndex}
             panelHeader={currentPanel.panelHeader}
@@ -249,9 +358,13 @@ class Winterfell extends Component {
             onPanelBack={this.handleBackButtonClick.bind(this)}
             onSwitchPanel={this.handleSwitchPanel.bind(this)}
             onSubmit={this.handleSubmit.bind(this)}
-            onPostQuestionComponent={this.props.onPostQuestionComponent}
+            onClickInputIcon={this.props.onClickInputIcon}
+            panelAcions={this.props.extraComponent}
+            onSwitchQuestion={this.handleOnSwitchQuestion.bind(this)}
+            labeledAnswsers={this.props.labeledAnswsers}
+            currentQuestionId={this.state.currentQuestionId}
+            onEnablePrefilledAnswer={this.handleOnEnablePrefilledAnswer}
           />
-          {this.props.extraComponent ? this.props.extraComponent : null}
         </div>
       </form>
     );
@@ -262,12 +375,8 @@ Winterfell.inputTypes = inputTypes;
 Winterfell.errorMessages = errorMessages;
 Winterfell.validation = validation;
 
-Winterfell.postQuestionComponents = postQuestionComponents;
-
 Winterfell.addInputType = Winterfell.inputTypes.addInputType;
 Winterfell.addInputTypes = Winterfell.inputTypes.addInputTypes;
-
-Winterfell.addPostQuestionComponent = Winterfell.postQuestionComponents.addPostQuestionComponent;
 
 Winterfell.addErrorMessage = Winterfell.errorMessages.addErrorMessage;
 Winterfell.addErrorMessages = Winterfell.errorMessages.addErrorMessages;
@@ -285,11 +394,14 @@ Winterfell.defaultProps = {
   renderError: undefined,
   renderRequiredAsterisk: undefined,
   currentQuestionId: undefined,
+  panelConstants: undefined,
+  questionAnswers: undefined,
+  labeledAnswsers: [],
   onSubmit: () => {},
   onUpdate: () => {},
   onFocus: () => {},
   onSwitchPanel: () => {},
   onRender: () => {},
-  onPostQuestionComponent: {},
+  onClickInputIcon: () => {},
 };
 export default Winterfell;
