@@ -21,9 +21,9 @@ var IconInput = function IconInput(_ref) {
   }, children, active ? /*#__PURE__*/_react["default"].createElement("div", {
     "class": "input-group-append"
   }, /*#__PURE__*/_react["default"].createElement("span", {
-    "class": "input-group-text"
+    "class": "input-group-text",
+    onClick: onClick
   }, /*#__PURE__*/_react["default"].createElement(_tooltip["default"], {
-    onClick: onClick,
     content: tooltipContent
   }, /*#__PURE__*/_react["default"].createElement("span", {
     className: "prefill-icon"

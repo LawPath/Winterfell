@@ -7,8 +7,8 @@ const IconInput = ({ children, active, onClick, tooltipContent }) => {
       {children}
       {active ? (
         <div class="input-group-append">
-          <span class="input-group-text">
-            <Tooltip onClick={onClick} content={tooltipContent}>
+          <span class="input-group-text" onClick={onClick}>
+            <Tooltip content={tooltipContent}>
               <span className="prefill-icon"></span>
             </Tooltip>
           </span>
