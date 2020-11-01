@@ -78,7 +78,7 @@ var Question = /*#__PURE__*/function (_Component) {
           questionAnswers = _this$props.questionAnswers,
           questionId = _this$props.questionId,
           label = _this$props.label;
-      this.props.onSwitchQuestion(questionId, label);
+      this.props.onMounted(questionId, label);
 
       if (typeof input["default"] === 'undefined' || input.type === 'checkboxInput' && typeof questionAnswers[questionId] === 'undefined') {
         return;
@@ -133,7 +133,7 @@ var Question = /*#__PURE__*/function (_Component) {
               classes: _this2.props.classes,
               renderError: _this2.props.renderError,
               questionAnswers: _this2.props.questionAnswers,
-              labeledAnswsers: _this2.props.labeledAnswsers,
+              labeledAnswers: _this2.props.labeledAnswers,
               panelConstants: _this2.props.panelConstants,
               validationErrors: _this2.props.validationErrors,
               onAnswerChange: _this2.props.onAnswerChange,
@@ -214,14 +214,14 @@ Question.defaultProps = {
   label: undefined,
   classes: {},
   questionAnswers: {},
-  labeledAnswsers: [],
+  labeledAnswers: [],
   validationErrors: {},
   onAnswerChange: function onAnswerChange() {},
   onQuestionBlur: function onQuestionBlur() {},
   onKeyDown: function onKeyDown() {},
   onFocus: function onFocus() {},
   onClickInputIcon: function onClickInputIcon() {},
-  onSwitchQuestion: function onSwitchQuestion() {},
+  onMounted: function onMounted() {},
   renderError: undefined,
   renderRequiredAsterisk: undefined,
   panelConstants: undefined

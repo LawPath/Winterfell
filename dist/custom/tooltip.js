@@ -22,23 +22,25 @@ var tooltipContent = function tooltipContent(_ref) {
 
 var Tooltip = function Tooltip(_ref2) {
   var content = _ref2.content,
-      icon = _ref2.icon,
-      onClick = _ref2.onClick;
+      _ref2$placement = _ref2.placement,
+      placement = _ref2$placement === void 0 ? 'bottom' : _ref2$placement,
+      children = _ref2.children;
   return /*#__PURE__*/_react["default"].createElement(_reactSimpleTooltip["default"], {
     content: tooltipContent({
       content: content
     }),
-    placement: "bottom",
+    placement: placement,
     color: "#000",
     padding: 10,
     fontSize: "12px",
     border: "#FFEABC",
     radius: 3,
-    background: "#FFEABC"
-  }, /*#__PURE__*/_react["default"].createElement("img", {
-    onClick: onClick,
-    src: icon
-  }));
+    background: "#FFEABC",
+    style: {
+      whiteSpace: 'nowrap',
+      textAlign: 'center'
+    }
+  }, children);
 };
 
 var _default = Tooltip;

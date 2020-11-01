@@ -17,6 +17,14 @@ function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return 
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -41,7 +49,7 @@ var CheckboxOptionsInput = function CheckboxOptionsInput(_ref) {
       value = _ref.value,
       onChange = _ref.onChange;
 
-  var _useState = (0, _react.useState)(value.length > 0 ? (0, _cloneArray["default"])(value) : []),
+  var _useState = (0, _react.useState)(value.length > 0 ? _toConsumableArray(value) : []),
       _useState2 = _slicedToArray(_useState, 2),
       inputValue = _useState2[0],
       setInputValue = _useState2[1];
@@ -50,19 +58,23 @@ var CheckboxOptionsInput = function CheckboxOptionsInput(_ref) {
     setInputValue(value);
   }, [value]);
 
-  var handleChange = function handleChange(e, newVal) {
-    var currentValue = value;
+  var handleChange = function handleChange(e) {
+    var _e$target = e.target,
+        checked = _e$target.checked,
+        newValue = _e$target.value;
 
-    if (e.target.checked) {
-      currentValue.push(newVal);
+    var updatedInputValue = _toConsumableArray(inputValue);
+
+    if (checked) {
+      updatedInputValue.push(newValue);
     } else {
-      currentValue = currentValue.filter(function (v) {
-        return v != newVal;
+      updatedInputValue = updatedInputValue.filter(function (v) {
+        return v !== newValue;
       });
     }
 
-    setInputValue(currentValue);
-    onChange(currentValue);
+    setInputValue(updatedInputValue);
+    onChange(updatedInputValue);
   };
 
   return /*#__PURE__*/_react["default"].createElement("ul", {
@@ -82,9 +94,7 @@ var CheckboxOptionsInput = function CheckboxOptionsInput(_ref) {
       checked: inputValue.indexOf(opt.value) > -1,
       className: classes.checkbox,
       required: required ? 'required' : undefined,
-      onChange: function onChange(event) {
-        return handleChange(event, opt.value);
-      },
+      onChange: handleChange,
       onFocus: function onFocus() {
         return _onFocus(id);
       },

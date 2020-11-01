@@ -69,12 +69,7 @@ var QuestionSet = /*#__PURE__*/function (_Component) {
           postText: question.postText,
           label: question.label,
           suggestions: question.suggestions,
-          value: answer ? // &&
-          // answer.enablePrefilledAnswer &&
-          // (!answer.value || (answer.value && answer.value.trim('') === ''))
-          //   ? answer.prefilledData
-          //   : answer && answer.value
-          answer.value : undefined,
+          value: answer ? answer.value : undefined,
           prefilledData: answer ? answer.prefilledData : undefined,
           enablePrefilledAnswer: answer ? answer.enablePrefilledAnswer : undefined,
           input: question.input,
@@ -82,7 +77,7 @@ var QuestionSet = /*#__PURE__*/function (_Component) {
           renderError: _this.props.renderError,
           renderRequiredAsterisk: _this.props.renderRequiredAsterisk,
           questionAnswers: _this.props.questionAnswers,
-          labeledAnswsers: _this.props.labeledAnswsers,
+          labeledAnswers: _this.props.labeledAnswers,
           panelConstants: _this.props.panelConstants,
           validationErrors: _this.props.validationErrors,
           onAnswerChange: _this.props.onAnswerChange,
@@ -90,7 +85,7 @@ var QuestionSet = /*#__PURE__*/function (_Component) {
           onFocus: _this.props.onFocus,
           onKeyDown: _this.props.onKeyDown,
           onClickInputIcon: _this.props.onClickInputIcon,
-          onSwitchQuestion: _this.props.onSwitchQuestion
+          onMounted: _this.props.onQuestionMounted
         });
       });
       return /*#__PURE__*/_react["default"].createElement("div", {
@@ -121,7 +116,7 @@ QuestionSet.defaultProps = {
   renderError: undefined,
   renderRequiredAsterisk: undefined,
   panelConstants: undefined,
-  labeledAnswsers: [],
+  labeledAnswers: [],
   onAnswerChange: function onAnswerChange() {},
   onQuestionBlur: function onQuestionBlur() {},
   onKeyDown: function onKeyDown() {},

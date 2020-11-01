@@ -240,7 +240,7 @@ var QuestionPanel = /*#__PURE__*/function (_React$Component) {
           questions: questionSet.questions,
           classes: _this4.props.classes,
           questionAnswers: _this4.props.questionAnswers,
-          labeledAnswsers: _this4.props.labeledAnswsers,
+          labeledAnswers: _this4.props.labeledAnswers,
           renderError: _this4.props.renderError,
           renderRequiredAsterisk: _this4.props.renderRequiredAsterisk,
           validationErrors: _this4.state.validationErrors,
@@ -250,7 +250,7 @@ var QuestionPanel = /*#__PURE__*/function (_React$Component) {
           onFocus: _this4.props.onFocus,
           onKeyDown: _this4.handleInputKeyDown.bind(_this4),
           onClickInputIcon: _this4.props.onClickInputIcon,
-          onSwitchQuestion: _this4.props.onSwitchQuestion
+          onQuestionMounted: _this4.props.onQuestionMounted
         });
       });
       var suggestionSets = this.props.questionSets.map(function (questionSetMeta) {
@@ -377,7 +377,7 @@ QuestionPanel.defaultProps = {
   progress: undefined,
   numPanels: undefined,
   currentPanelIndex: undefined,
-  labeledAnswsers: [],
+  labeledAnswers: [],
   action: {
     "default": {},
     conditions: []
@@ -398,6 +398,6 @@ QuestionPanel.defaultProps = {
   onPanelBack: function onPanelBack() {},
   onFocus: function onFocus() {},
   onClickInputIcon: function onClickInputIcon() {},
-  onSwitchQuestion: function onSwitchQuestion() {},
+  onQuestionMounted: function onQuestionMounted() {},
   onEnablePrefilledAnswer: function onEnablePrefilledAnswer() {}
 };

@@ -3,19 +3,23 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.groupAnswersByLabel = exports.getPrefillData = exports.syncAnswerQuestionsToLabledAnswers = void 0;
+exports.addAnswersToLabledAnswers = exports.groupAnswersByLabel = exports.getPrefillData = exports.syncAnswerQuestionsToLabledAnswers = void 0;
 
-var syncAnswerQuestionsToLabledAnswers = function syncAnswerQuestionsToLabledAnswers(questionAnswers, labeledAnswsers) {
+var _lodash = _interopRequireDefault(require("lodash"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var syncAnswerQuestionsToLabledAnswers = function syncAnswerQuestionsToLabledAnswers(questionAnswers, labeledAnswers) {
   var newQuestionAnswers = questionAnswers;
 
-  _.forEach(newQuestionAnswers, function (value, key) {
+  _lodash["default"].forEach(newQuestionAnswers, function (value, key) {
     if (value && value.label) {
-      var foundLabeledAnswers = _.find(labeledAnswsers, {
+      var foundLabeledAnswers = _lodash["default"].find(labeledAnswers, {
         id: value.label
       });
 
       if (foundLabeledAnswers) {
-        var firstLabeledAnswer = _.find(foundLabeledAnswers.answers, {
+        var firstLabeledAnswer = _lodash["default"].find(foundLabeledAnswers.answers, {
           id: key
         });
 
@@ -32,13 +36,13 @@ var syncAnswerQuestionsToLabledAnswers = function syncAnswerQuestionsToLabledAns
 
 exports.syncAnswerQuestionsToLabledAnswers = syncAnswerQuestionsToLabledAnswers;
 
-var getPrefillData = function getPrefillData(labeledAnswsers, label) {
-  var foundLabeledAnswers = _.find(labeledAnswsers, {
+var getPrefillData = function getPrefillData(labeledAnswers, label) {
+  var foundLabeledAnswer = _lodash["default"].find(labeledAnswers, {
     id: label
   });
 
-  if (foundLabeledAnswers) {
-    return foundLabeledAnswers.defaultValue;
+  if (foundLabeledAnswer) {
+    return foundLabeledAnswer.defaultValue;
   }
 
   return null;
@@ -49,17 +53,17 @@ exports.getPrefillData = getPrefillData;
 var groupAnswersByLabel = function groupAnswersByLabel(questionAnswers) {
   var category = {};
 
-  _.forEach(questionAnswers, function (value, key) {
+  _lodash["default"].forEach(questionAnswers, function (value, key) {
     if (value && value.label && value.value && value.value !== '') {
       if (category[value.label]) {
         /* Group answers have same label */
         category[value.label].push({
-          value: _.isObject(value.value) ? JSON.stringify(value.value) : value.value,
+          value: _lodash["default"].isObject(value.value) ? JSON.stringify(value.value) : value.value,
           id: key
         });
       } else {
         category[value.label] = [{
-          value: _.isObject(value.value) ? JSON.stringify(value.value) : value.value,
+          value: _lodash["default"].isObject(value.value) ? JSON.stringify(value.value) : value.value,
           id: key
         }];
       }
@@ -70,3 +74,22 @@ var groupAnswersByLabel = function groupAnswersByLabel(questionAnswers) {
 };
 
 exports.groupAnswersByLabel = groupAnswersByLabel;
+
+var addAnswersToLabledAnswers = function addAnswersToLabledAnswers(labeledAnswsers, questionAnswers) {
+  var groupedLabels = groupAnswersByLabel(questionAnswers);
+  var data = Array.from(labeledAnswsers);
+
+  var updatedAnswersGroupedLabels = _lodash["default"].chain(data).merge(groupedLabels).value();
+
+  var temporaryData = Array.from(updatedAnswersGroupedLabels.map(function (label) {
+    if (label && label.answers && label.answers.length > 0 && (!label.defaultValue || label.defaultValue && label.defaultValue.value)) {
+      var newLabel = label;
+      newLabel.defaultValue = label.answers[0].value;
+      return newLabel;
+    }
+
+    return label;
+  }));
+};
+
+exports.addAnswersToLabledAnswers = addAnswersToLabledAnswers;

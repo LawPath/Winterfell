@@ -9,7 +9,7 @@ exports["default"] = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _tooltip = _interopRequireDefault(require("../custom/tooltip"));
+var _inputFormGroup = _interopRequireDefault(require("../formGroups/inputFormGroup"));
 
 var _TextInput$defaultPro;
 
@@ -63,8 +63,10 @@ var TextInput = function TextInput(_ref) {
     onChange(e.target.value);
   };
 
-  return /*#__PURE__*/_react["default"].createElement("div", {
-    className: "input-group"
+  return /*#__PURE__*/_react["default"].createElement(_inputFormGroup["default"], {
+    active: enablePrefilledAnswer,
+    onClick: onClickInputIcon,
+    tooltipContent: inputIconTooltipText
   }, /*#__PURE__*/_react["default"].createElement("input", {
     type: "text",
     name: name,
@@ -83,15 +85,7 @@ var TextInput = function TextInput(_ref) {
     },
     onKeyDown: onKeyDown,
     "data-prefiled-data": enablePrefilledAnswer
-  }), enablePrefilledAnswer ? /*#__PURE__*/_react["default"].createElement("div", {
-    "class": "input-group-append"
-  }, /*#__PURE__*/_react["default"].createElement("span", {
-    "class": "input-group-text"
-  }, /*#__PURE__*/_react["default"].createElement(_tooltip["default"], {
-    onClick: onClickInputIcon,
-    content: inputIconTooltipText,
-    icon: "https://assets.lawpath.com/images/svg/editor/builder.svg"
-  }))) : null);
+  }));
 };
 
 TextInput.defaultProps = (_TextInput$defaultPro = {
@@ -105,6 +99,6 @@ TextInput.defaultProps = (_TextInput$defaultPro = {
   onBlur: function onBlur() {},
   onKeyDown: function onKeyDown() {},
   onFocus: function onFocus() {}
-}, _defineProperty(_TextInput$defaultPro, "onFocus", function onFocus() {}), _defineProperty(_TextInput$defaultPro, "onClickInputIcon", function onClickInputIcon() {}), _defineProperty(_TextInput$defaultPro, "onClickInputIcon", function onClickInputIcon() {}), _TextInput$defaultPro);
+}, _defineProperty(_TextInput$defaultPro, "onFocus", function onFocus() {}), _defineProperty(_TextInput$defaultPro, "onClickInputIcon", function onClickInputIcon() {}), _TextInput$defaultPro);
 var _default = TextInput;
 exports["default"] = _default;

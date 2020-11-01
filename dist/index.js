@@ -87,11 +87,11 @@ var Winterfell = /*#__PURE__*/function (_Component) {
       _this.props.onUpdate(questionAnswers);
     });
 
-    _defineProperty(_assertThisInitialized(_this), "handleOnSwitchQuestion", function (questionId, label) {
+    _defineProperty(_assertThisInitialized(_this), "onQuestionMounted", function (questionId, label) {
       var currentQuestionAnswers = _this.state.questionAnswers;
 
       if (label) {
-        var prefillData = (0, _questionAnswers.getPrefillData)(_this.props.labeledAnswsers, questionId, label);
+        var prefillData = (0, _questionAnswers.getPrefillData)(_this.props.labeledAnswers, label);
 
         var currentQuestion = _lodash["default"].get(_this.state.questionAnswers, questionId);
 
@@ -118,25 +118,24 @@ var Winterfell = /*#__PURE__*/function (_Component) {
           /* Get the enable prefill toggle variable*/
           var enablePrefilledAnswer = _lodash["default"].get(_this.state.questionAnswers, [questionId, 'enablePrefilledAnswer']);
 
-          console.log('This is the value : ', enablePrefilledAnswer);
           var mergedData;
 
           if (!enablePrefilledAnswer) {
-            console.log('Going to enablePrefilledAnswer && enablePrefilledAnswer.enablePrefilledAnswer === false');
             mergedData = _lodash["default"].merge(_lodash["default"].get(_this.state.questionAnswers, [questionId]), {
               label: label,
               prefilledData: prefillData
             });
+            console.log('Going to !enablePrefilledAnswer ', mergedData);
           } else {
-            console.log('Going to  else of has label');
             mergedData = _lodash["default"].merge(_lodash["default"].get(_this.state.questionAnswers, [questionId]), {
               label: label,
               enablePrefilledAnswer: true,
               prefilledData: prefillData
             });
+            console.log('Going to else of has label ', mergedData);
           }
 
-          if (mergedData.value && mergedData.enablePrefilledAnswer && mergedData.value !== mergedData.prefilledData) {
+          if (mergedData.value && mergedData.enablePrefilledAnswer && !_lodash["default"].isEqual(mergedData.value, mergedData.prefilledData)) {
             console.log('It has prefilled data and is overriden by user');
             mergedData.enablePrefilledAnswer = false;
           } else if (!mergedData.value && mergedData.enablePrefilledAnswer) {
@@ -147,8 +146,7 @@ var Winterfell = /*#__PURE__*/function (_Component) {
           console.log('This is the merged data: ', mergedData, questionId);
 
           _lodash["default"].set(currentQuestionAnswers, [questionId], _objectSpread({}, mergedData));
-        } // currentQuestionAnswers = currentQuestionAnswers.value();
-
+        }
 
         console.log('This is the information of current question: ', currentQuestionAnswers);
       } else {
@@ -173,6 +171,11 @@ var Winterfell = /*#__PURE__*/function (_Component) {
         enablePrefilledAnswer: enable
       });
 
+      if (mergedData.enablePrefilledAnswer) {
+        /* if the prefill-value is enabled, we will replace the inputed text  */
+        mergedData.value = mergedData.prefilledData;
+      }
+
       var questionAnswers = _lodash["default"].chain(_this.state.questionAnswers).set(_this.state.currentQuestionId, mergedData).value();
 
       _this.setState({
@@ -196,8 +199,7 @@ var Winterfell = /*#__PURE__*/function (_Component) {
       }
 
       _this.setState({
-        currentPanel: panel,
-        currentQuestionId: undefined
+        currentPanel: panel
       }, _this.props.onSwitchPanel.bind(null, panel));
     });
 
@@ -284,7 +286,6 @@ var Winterfell = /*#__PURE__*/function (_Component) {
   _createClass(Winterfell, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      console.log('This is this.props.labeledAnswsers ', this.props.labeledAnswsers);
       this.props.onRender();
     }
   }, {
@@ -355,6 +356,22 @@ var Winterfell = /*#__PURE__*/function (_Component) {
         }
       }
 
+      if (!_lodash["default"].isEqual(this.props.labeledAnswers, nextProps.labeledAnswers)) {
+        /* Update the the labeledAswers when they got updated from parent*/
+        _lodash["default"].forEach(nextProps.questionAnswers, function (value, key) {
+          var prefillData = (0, _questionAnswers.getPrefillData)(nextProps.labeledAnswers, value.label);
+
+          if (value.enablePrefilledAnswer) {
+            var mergedData = _lodash["default"].merge(value, {
+              value: prefillData,
+              prefilledData: prefillData
+            });
+
+            _lodash["default"].set(newState.questionAnswers, [key], _objectSpread({}, mergedData));
+          }
+        });
+      }
+
       this.setState(newState);
     }
   }, {
@@ -406,8 +423,8 @@ var Winterfell = /*#__PURE__*/function (_Component) {
         onSubmit: this.handleSubmit.bind(this),
         onClickInputIcon: this.props.onClickInputIcon,
         panelAcions: this.props.extraComponent,
-        onSwitchQuestion: this.handleOnSwitchQuestion.bind(this),
-        labeledAnswsers: this.props.labeledAnswsers,
+        onQuestionMounted: this.onQuestionMounted.bind(this),
+        labeledAnswers: this.props.labeledAnswers,
         currentQuestionId: this.state.currentQuestionId,
         onEnablePrefilledAnswer: this.handleOnEnablePrefilledAnswer
       })));
@@ -438,6 +455,6 @@ Winterfell.defaultProps = (_Winterfell$defaultPr = {
   renderRequiredAsterisk: undefined,
   currentQuestionId: undefined,
   panelConstants: undefined
-}, _defineProperty(_Winterfell$defaultPr, "questionAnswers", undefined), _defineProperty(_Winterfell$defaultPr, "labeledAnswsers", []), _defineProperty(_Winterfell$defaultPr, "onSubmit", function onSubmit() {}), _defineProperty(_Winterfell$defaultPr, "onUpdate", function onUpdate() {}), _defineProperty(_Winterfell$defaultPr, "onFocus", function onFocus() {}), _defineProperty(_Winterfell$defaultPr, "onSwitchPanel", function onSwitchPanel() {}), _defineProperty(_Winterfell$defaultPr, "onRender", function onRender() {}), _defineProperty(_Winterfell$defaultPr, "onClickInputIcon", function onClickInputIcon() {}), _Winterfell$defaultPr);
+}, _defineProperty(_Winterfell$defaultPr, "questionAnswers", undefined), _defineProperty(_Winterfell$defaultPr, "labeledAnswers", []), _defineProperty(_Winterfell$defaultPr, "onSubmit", function onSubmit() {}), _defineProperty(_Winterfell$defaultPr, "onUpdate", function onUpdate() {}), _defineProperty(_Winterfell$defaultPr, "onFocus", function onFocus() {}), _defineProperty(_Winterfell$defaultPr, "onSwitchPanel", function onSwitchPanel() {}), _defineProperty(_Winterfell$defaultPr, "onRender", function onRender() {}), _defineProperty(_Winterfell$defaultPr, "onClickInputIcon", function onClickInputIcon() {}), _Winterfell$defaultPr);
 var _default = Winterfell;
 exports["default"] = _default;
