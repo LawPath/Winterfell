@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import Tooltip from '../custom/tooltip';
+import IconInput from '../formGroups/inputFormGroup';
 
 const TextInput = ({
   name,
@@ -28,7 +28,11 @@ const TextInput = ({
     onChange(e.target.value);
   };
   return (
-    <div className="input-group">
+    <IconInput
+      active={enablePrefilledAnswer}
+      onClick={onClickInputIcon}
+      tooltipContent={inputIconTooltipText}
+    >
       <input
         type="text"
         name={name}
@@ -44,18 +48,7 @@ const TextInput = ({
         onKeyDown={onKeyDown}
         data-prefiled-data={enablePrefilledAnswer}
       />
-      {enablePrefilledAnswer ? (
-        <div class="input-group-append">
-          <span class="input-group-text">
-            <Tooltip
-              onClick={onClickInputIcon}
-              content={inputIconTooltipText}
-              icon="https://assets.lawpath.com/images/svg/editor/builder.svg"
-            />
-          </span>
-        </div>
-      ) : null}
-    </div>
+    </IconInput>
   );
 };
 
@@ -71,7 +64,6 @@ TextInput.defaultProps = {
   onKeyDown: () => {},
   onFocus: () => {},
   onFocus: () => {},
-  onClickInputIcon: () => {},
   onClickInputIcon: () => {},
 };
 

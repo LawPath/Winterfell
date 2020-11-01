@@ -14,20 +14,21 @@ const CheckboxOptionsInput = ({
 
   onChange,
 }) => {
-  const [inputValue, setInputValue] = useState(value.length > 0 ? cloneArray(value) : []);
+  const [inputValue, setInputValue] = useState(value.length > 0 ? [...value] : []);
   useEffect(() => {
     setInputValue(value);
   }, [value]);
 
-  const handleChange = (e, newVal) => {
-    var currentValue = value;
-    if (e.target.checked) {
-      currentValue.push(newVal);
+  const handleChange = (e) => {
+    const { checked, value: newValue } = e.target;
+    let updatedInputValue = [...inputValue];
+    if (checked) {
+      updatedInputValue.push(newValue);
     } else {
-      currentValue = currentValue.filter((v) => v != newVal);
+      updatedInputValue = updatedInputValue.filter((v) => v !== newValue);
     }
-    setInputValue(currentValue);
-    onChange(currentValue);
+    setInputValue(updatedInputValue);
+    onChange(updatedInputValue);
   };
 
   return (
@@ -43,7 +44,7 @@ const CheckboxOptionsInput = ({
               checked={inputValue.indexOf(opt.value) > -1}
               className={classes.checkbox}
               required={required ? 'required' : undefined}
-              onChange={(event) => handleChange(event, opt.value)}
+              onChange={handleChange}
               onFocus={() => onFocus(id)}
               onBlur={() => onBlur(inputValue)}
             />
