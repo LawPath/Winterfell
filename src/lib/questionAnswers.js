@@ -1,8 +1,10 @@
-export const syncAnswerQuestionsToLabledAnswers = (questionAnswers, labeledAnswsers) => {
+import _ from 'lodash';
+
+export const syncAnswerQuestionsToLabledAnswers = (questionAnswers, labeledAnswers) => {
   const newQuestionAnswers = questionAnswers;
   _.forEach(newQuestionAnswers, (value, key) => {
     if (value && value.label) {
-      const foundLabeledAnswers = _.find(labeledAnswsers, {
+      const foundLabeledAnswers = _.find(labeledAnswers, {
         id: value.label,
       });
       if (foundLabeledAnswers) {
@@ -19,12 +21,12 @@ export const syncAnswerQuestionsToLabledAnswers = (questionAnswers, labeledAnsws
   return newQuestionAnswers;
 };
 
-export const getPrefillData = (labeledAnswsers, label) => {
-  const foundLabeledAnswers = _.find(labeledAnswsers, {
+export const getPrefillData = (labeledAnswers, label) => {
+  const foundLabeledAnswer = _.find(labeledAnswers, {
     id: label,
   });
-  if (foundLabeledAnswers) {
-    return foundLabeledAnswers.defaultValue;
+  if (foundLabeledAnswer) {
+    return foundLabeledAnswer.defaultValue;
   }
   return null;
 };
@@ -51,4 +53,26 @@ export const groupAnswersByLabel = (questionAnswers) => {
   });
 
   return category;
+};
+
+export const addAnswersToLabledAnswers = (labeledAnswsers, questionAnswers) => {
+  const groupedLabels = groupAnswersByLabel(questionAnswers);
+  const data = Array.from(labeledAnswsers);
+  const updatedAnswersGroupedLabels = _.chain(data).merge(groupedLabels).value();
+  const temporaryData = Array.from(
+    updatedAnswersGroupedLabels.map((label) => {
+      if (
+        label &&
+        label.answers &&
+        label.answers.length > 0 &&
+        (!label.defaultValue || (label.defaultValue && label.defaultValue.value))
+      ) {
+        const newLabel = label;
+        newLabel.defaultValue = label.answers[0].value;
+        return newLabel;
+      }
+
+      return label;
+    }),
+  );
 };

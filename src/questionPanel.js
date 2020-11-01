@@ -186,7 +186,7 @@ export default class QuestionPanel extends React.Component {
           questions={questionSet.questions}
           classes={this.props.classes}
           questionAnswers={this.props.questionAnswers}
-          labeledAnswsers={this.props.labeledAnswsers}
+          labeledAnswers={this.props.labeledAnswers}
           renderError={this.props.renderError}
           renderRequiredAsterisk={this.props.renderRequiredAsterisk}
           validationErrors={this.state.validationErrors}
@@ -196,7 +196,7 @@ export default class QuestionPanel extends React.Component {
           onFocus={this.props.onFocus}
           onKeyDown={this.handleInputKeyDown.bind(this)}
           onClickInputIcon={this.props.onClickInputIcon}
-          onSwitchQuestion={this.props.onSwitchQuestion}
+          onQuestionMounted={this.props.onQuestionMounted}
         />
       );
     });
@@ -354,7 +354,7 @@ QuestionPanel.defaultProps = {
   progress: undefined,
   numPanels: undefined,
   currentPanelIndex: undefined,
-  labeledAnswsers: [],
+  labeledAnswers: [],
   action: {
     default: {},
     conditions: [],
@@ -375,6 +375,6 @@ QuestionPanel.defaultProps = {
   onPanelBack: () => {},
   onFocus: () => {},
   onClickInputIcon: () => {},
-  onSwitchQuestion: () => {},
+  onQuestionMounted: () => {},
   onEnablePrefilledAnswer: () => {},
 };

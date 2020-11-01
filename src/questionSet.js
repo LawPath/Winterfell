@@ -20,16 +20,7 @@ export default class QuestionSet extends Component {
           postText={question.postText}
           label={question.label}
           suggestions={question.suggestions}
-          value={
-            answer
-              ? // &&
-                // answer.enablePrefilledAnswer &&
-                // (!answer.value || (answer.value && answer.value.trim('') === ''))
-                //   ? answer.prefilledData
-                //   : answer && answer.value
-                answer.value
-              : undefined
-          }
+          value={answer ? answer.value : undefined}
           prefilledData={answer ? answer.prefilledData : undefined}
           enablePrefilledAnswer={answer ? answer.enablePrefilledAnswer : undefined}
           input={question.input}
@@ -37,7 +28,7 @@ export default class QuestionSet extends Component {
           renderError={this.props.renderError}
           renderRequiredAsterisk={this.props.renderRequiredAsterisk}
           questionAnswers={this.props.questionAnswers}
-          labeledAnswsers={this.props.labeledAnswsers}
+          labeledAnswers={this.props.labeledAnswers}
           panelConstants={this.props.panelConstants}
           validationErrors={this.props.validationErrors}
           onAnswerChange={this.props.onAnswerChange}
@@ -45,7 +36,7 @@ export default class QuestionSet extends Component {
           onFocus={this.props.onFocus}
           onKeyDown={this.props.onKeyDown}
           onClickInputIcon={this.props.onClickInputIcon}
-          onSwitchQuestion={this.props.onSwitchQuestion}
+          onMounted={this.props.onQuestionMounted}
         />
       );
     });
@@ -83,7 +74,7 @@ QuestionSet.defaultProps = {
   renderError: undefined,
   renderRequiredAsterisk: undefined,
   panelConstants: undefined,
-  labeledAnswsers: [],
+  labeledAnswers: [],
   onAnswerChange: () => {},
   onQuestionBlur: () => {},
   onKeyDown: () => {},

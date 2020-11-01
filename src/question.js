@@ -7,7 +7,8 @@ export default class Question extends Component {
   componentDidMount() {
     const { input, questionAnswers, questionId, label } = this.props;
 
-    this.props.onSwitchQuestion(questionId, label);
+    this.props.onMounted(questionId, label);
+
     if (
       typeof input.default === 'undefined' ||
       (input.type === 'checkboxInput' && typeof questionAnswers[questionId] === 'undefined')
@@ -84,7 +85,7 @@ export default class Question extends Component {
                 classes={this.props.classes}
                 renderError={this.props.renderError}
                 questionAnswers={this.props.questionAnswers}
-                labeledAnswsers={this.props.labeledAnswsers}
+                labeledAnswers={this.props.labeledAnswers}
                 panelConstants={this.props.panelConstants}
                 validationErrors={this.props.validationErrors}
                 onAnswerChange={this.props.onAnswerChange}
@@ -191,14 +192,14 @@ Question.defaultProps = {
   label: undefined,
   classes: {},
   questionAnswers: {},
-  labeledAnswsers: [],
+  labeledAnswers: [],
   validationErrors: {},
   onAnswerChange: () => {},
   onQuestionBlur: () => {},
   onKeyDown: () => {},
   onFocus: () => {},
   onClickInputIcon: () => {},
-  onSwitchQuestion: () => {},
+  onMounted: () => {},
   renderError: undefined,
   renderRequiredAsterisk: undefined,
   panelConstants: undefined,
