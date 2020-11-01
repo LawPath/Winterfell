@@ -1,5 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import SimpleSwitch from 'react-switch';
+import Tooltip from './tooltip';
+
+const OffButton = () => {
+  return <div className="switch-btn">OFF</div>;
+};
+const OnButton = () => {
+  return <div className="switch-btn">OFF</div>;
+};
+
+const switchConfig = {
+  onColor: '#00C08B',
+  offColor: '#D2D8DF',
+  offHandleColor: '#FFF',
+  onHandleColor: '#FFF',
+  activeBoxShadow: '0px 1px 3px #00000036',
+  boxShadow: '0px 1px 3px #00000036',
+  height: 20,
+  width: 45,
+};
 
 const Switch = ({ active, onChange, disabled }) => {
   const [checked, setChecked] = useState(active);
@@ -9,32 +28,33 @@ const Switch = ({ active, onChange, disabled }) => {
     onChange(!checked);
     setChecked(!checked);
   };
-
   return (
-    <SimpleSwitch
-      checked={checked}
-      onChange={handleChange}
-      onColor="#00C08B"
-      offColor="#D2D8DF"
-      offHandleColor="#FFF"
-      onHandleColor="#FFF"
-      activeBoxShadow={undefined}
-      uncheckedIcon={
-        <div style={{ color: '#FFF', lineHeight: '20px', fontSize: '11px', paddingLeft: '3px' }}>
-          OFF
-        </div>
+    <Tooltip
+      content={
+        disabled
+          ? '<span>This field cannot be pre-<br/>filled.</span>'
+          : checked
+          ? '<span>Pre-fill information has <br/> been used. Toggle off to <br/> remove.</span>'
+          : '<span>Pre-fill information is <br/> available. Toggle on to use.</span>'
       }
-      checkedIcon={
-        <div style={{ color: '#FFF', lineHeight: '20px', fontSize: '11px', paddingLeft: '3px' }}>
-          ON
-        </div>
-      }
-      className="switch-control"
-      height={20}
-      width={45}
-      id="icon-switch"
-      disabled={disabled}
-    />
+      placement="top"
+    >
+      <SimpleSwitch
+        {...switchConfig}
+        className={`switch-control ${
+          disabled
+            ? 'switch-control-disabled'
+            : checked
+            ? 'switch-control-active'
+            : 'switch-control-inactive'
+        }`}
+        uncheckedIcon={<OffButton />}
+        checkedIcon={<OnButton />}
+        checked={checked}
+        onChange={handleChange}
+        disabled={disabled}
+      />
+    </Tooltip>
   );
 };
 

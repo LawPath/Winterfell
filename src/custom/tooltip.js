@@ -8,19 +8,20 @@ const tooltipContent = ({ content }) => (
     }}
   ></span>
 );
-const Tooltip = ({ content, icon, onClick }) => {
+const Tooltip = ({ content, placement = 'bottom', children }) => {
   return (
     <SimpleTooltip
       content={tooltipContent({ content })}
-      placement="bottom"
+      placement={placement}
       color="#000"
       padding={10}
       fontSize="12px"
       border="#FFEABC"
       radius={3}
       background="#FFEABC"
+      style={{ whiteSpace: 'nowrap', textAlign: 'center' }}
     >
-      <img onClick={onClick} src={icon} />
+      {children}
     </SimpleTooltip>
   );
 };

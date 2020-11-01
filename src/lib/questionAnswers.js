@@ -24,7 +24,7 @@ export const getPrefillData = (labeledAnswsers, label) => {
     id: label,
   });
   if (foundLabeledAnswers) {
-    return firstLabeledAnswer.defaultValue;
+    return foundLabeledAnswers.defaultValue;
   }
   return null;
 };

@@ -15,12 +15,12 @@ var syncAnswerQuestionsToLabledAnswers = function syncAnswerQuestionsToLabledAns
       });
 
       if (foundLabeledAnswers) {
-        var _firstLabeledAnswer = _.find(foundLabeledAnswers.answers, {
+        var firstLabeledAnswer = _.find(foundLabeledAnswers.answers, {
           id: key
         });
 
-        if (_firstLabeledAnswer) {
-          newQuestionAnswers[key].prefilledData = _firstLabeledAnswer.value;
+        if (firstLabeledAnswer) {
+          newQuestionAnswers[key].prefilledData = firstLabeledAnswer.value;
           newQuestionAnswers[key].enablePrefilledAnswer = true;
         }
       }
@@ -38,7 +38,7 @@ var getPrefillData = function getPrefillData(labeledAnswsers, label) {
   });
 
   if (foundLabeledAnswers) {
-    return firstLabeledAnswer.defaultValue;
+    return foundLabeledAnswers.defaultValue;
   }
 
   return null;
