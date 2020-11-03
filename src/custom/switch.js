@@ -6,7 +6,7 @@ const OffButton = () => {
   return <div className="switch-btn">OFF</div>;
 };
 const OnButton = () => {
-  return <div className="switch-btn">OFF</div>;
+  return <div className="switch-btn">ON</div>;
 };
 
 const switchConfig = {

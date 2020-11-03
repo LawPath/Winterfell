@@ -42,7 +42,7 @@ var OffButton = function OffButton() {
 var OnButton = function OnButton() {
   return /*#__PURE__*/_react["default"].createElement("div", {
     className: "switch-btn"
-  }, "OFF");
+  }, "ON");
 };
 
 var switchConfig = {

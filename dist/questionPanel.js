@@ -19,8 +19,6 @@ var _button = _interopRequireDefault(require("./button"));
 
 var _questionSet = _interopRequireDefault(require("./questionSet"));
 
-var _SuggestionSet = _interopRequireDefault(require("./SuggestionSet"));
-
 var _switch = _interopRequireDefault(require("./custom/switch"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
@@ -253,6 +251,8 @@ var QuestionPanel = /*#__PURE__*/function (_React$Component) {
           onQuestionMounted: _this4.props.onQuestionMounted
         });
       });
+      /* Append suggestion section to the form builder */
+
       var suggestionSets = this.props.questionSets.map(function (questionSetMeta) {
         var questionSet = _lodash["default"].find(_this4.props.schema.questionSets, {
           questionSetId: questionSetMeta.questionSetId
@@ -262,13 +262,12 @@ var QuestionPanel = /*#__PURE__*/function (_React$Component) {
           return undefined;
         }
 
-        return /*#__PURE__*/_react["default"].createElement(_SuggestionSet["default"], {
-          key: questionSet.questionSetId,
-          id: questionSet.questionSetId,
-          name: questionSet.name,
+        var SuggestionSet = _this4.props.answersSuggestionComponent;
+        return /*#__PURE__*/_react["default"].createElement(SuggestionSet, {
           questions: questionSet.questions,
           classes: _this4.props.classes,
           suggestionPanel: _this4.props.suggestionPanel,
+          panelConstants: _this4.props.panelConstants,
           questionAnswers: _this4.props.questionAnswers,
           onAnswerChange: _this4.props.onAnswerChange,
           defaultSuggestions: _this4.props.defaultSuggestions
@@ -330,16 +329,7 @@ var QuestionPanel = /*#__PURE__*/function (_React$Component) {
         onClick: this.handleMainButtonClick.bind(this),
         className: "".concat(this.props.classes.controlButton, " ").concat(this.props.extraClasses.button || '')
       }) : undefined)), /*#__PURE__*/_react["default"].createElement("div", {
-        className: "question-panel-post-body-header"
-      }, /*#__PURE__*/_react["default"].createElement("div", {
-        className: this.props.classes.postBodyHeader
-      }, /*#__PURE__*/_react["default"].createElement("img", {
-        className: this.props.classes.postBodyHeaderIcon,
-        src: this.props.panelConstants.titleIcon
-      }), /*#__PURE__*/_react["default"].createElement("span", {
-        "class": this.props.classes.postBodyHeaderText
-      }, this.props.panelConstants.postBodyHeaderText))), /*#__PURE__*/_react["default"].createElement("div", {
-        className: "question-panel-post-body"
+        className: "d-none d-md-block"
       }, suggestionSets), /*#__PURE__*/_react["default"].createElement("div", {
         className: "question-panel-footer"
       }, /*#__PURE__*/_react["default"].createElement("div", {

@@ -240,6 +240,11 @@ export class Winterfell extends Component {
       currentQuestionId: questionId,
     });
     this.props.onUpdate(currentQuestionAnswers);
+    this.props.onRender({
+      questionId,
+      currentQuestionAnswers,
+      currentPanel: this.state.currentPanel,
+    });
   };
 
   handleOnEnablePrefilledAnswer = (enable) => {
@@ -376,6 +381,7 @@ export class Winterfell extends Component {
             labeledAnswers={this.props.labeledAnswers}
             currentQuestionId={this.state.currentQuestionId}
             onEnablePrefilledAnswer={this.handleOnEnablePrefilledAnswer}
+            answersSuggestionComponent={this.props.answersSuggestionComponent}
           />
         </div>
       </form>
@@ -408,6 +414,7 @@ Winterfell.defaultProps = {
   currentQuestionId: undefined,
   panelConstants: undefined,
   questionAnswers: undefined,
+  answersSuggestionComponent: undefined,
   labeledAnswers: [],
   onSubmit: () => {},
   onUpdate: () => {},

@@ -164,6 +164,12 @@ var Winterfell = /*#__PURE__*/function (_Component) {
       });
 
       _this.props.onUpdate(currentQuestionAnswers);
+
+      _this.props.onRender({
+        questionId: questionId,
+        currentQuestionAnswers: currentQuestionAnswers,
+        currentPanel: _this.state.currentPanel
+      });
     });
 
     _defineProperty(_assertThisInitialized(_this), "handleOnEnablePrefilledAnswer", function (enable) {
@@ -426,7 +432,8 @@ var Winterfell = /*#__PURE__*/function (_Component) {
         onQuestionMounted: this.onQuestionMounted.bind(this),
         labeledAnswers: this.props.labeledAnswers,
         currentQuestionId: this.state.currentQuestionId,
-        onEnablePrefilledAnswer: this.handleOnEnablePrefilledAnswer
+        onEnablePrefilledAnswer: this.handleOnEnablePrefilledAnswer,
+        answersSuggestionComponent: this.props.answersSuggestionComponent
       })));
     }
   }]);
@@ -455,6 +462,6 @@ Winterfell.defaultProps = (_Winterfell$defaultPr = {
   renderRequiredAsterisk: undefined,
   currentQuestionId: undefined,
   panelConstants: undefined
-}, _defineProperty(_Winterfell$defaultPr, "questionAnswers", undefined), _defineProperty(_Winterfell$defaultPr, "labeledAnswers", []), _defineProperty(_Winterfell$defaultPr, "onSubmit", function onSubmit() {}), _defineProperty(_Winterfell$defaultPr, "onUpdate", function onUpdate() {}), _defineProperty(_Winterfell$defaultPr, "onFocus", function onFocus() {}), _defineProperty(_Winterfell$defaultPr, "onSwitchPanel", function onSwitchPanel() {}), _defineProperty(_Winterfell$defaultPr, "onRender", function onRender() {}), _defineProperty(_Winterfell$defaultPr, "onClickInputIcon", function onClickInputIcon() {}), _Winterfell$defaultPr);
+}, _defineProperty(_Winterfell$defaultPr, "questionAnswers", undefined), _defineProperty(_Winterfell$defaultPr, "answersSuggestionComponent", undefined), _defineProperty(_Winterfell$defaultPr, "labeledAnswers", []), _defineProperty(_Winterfell$defaultPr, "onSubmit", function onSubmit() {}), _defineProperty(_Winterfell$defaultPr, "onUpdate", function onUpdate() {}), _defineProperty(_Winterfell$defaultPr, "onFocus", function onFocus() {}), _defineProperty(_Winterfell$defaultPr, "onSwitchPanel", function onSwitchPanel() {}), _defineProperty(_Winterfell$defaultPr, "onRender", function onRender() {}), _defineProperty(_Winterfell$defaultPr, "onClickInputIcon", function onClickInputIcon() {}), _Winterfell$defaultPr);
 var _default = Winterfell;
 exports["default"] = _default;

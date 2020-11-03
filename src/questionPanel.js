@@ -5,7 +5,6 @@ import Validation from './lib/validation';
 import ErrorMessages from './lib/errors';
 import Button from './button';
 import QuestionSet from './questionSet';
-import SuggestionSet from './SuggestionSet';
 import Switch from './custom/switch';
 
 export default class QuestionPanel extends React.Component {
@@ -201,6 +200,7 @@ export default class QuestionPanel extends React.Component {
       );
     });
 
+    /* Append suggestion section to the form builder */
     const suggestionSets = this.props.questionSets.map((questionSetMeta) => {
       const questionSet = _.find(this.props.schema.questionSets, {
         questionSetId: questionSetMeta.questionSetId,
@@ -209,14 +209,13 @@ export default class QuestionPanel extends React.Component {
       if (!questionSet) {
         return undefined;
       }
+      const SuggestionSet = this.props.answersSuggestionComponent;
       return (
         <SuggestionSet
-          key={questionSet.questionSetId}
-          id={questionSet.questionSetId}
-          name={questionSet.name}
           questions={questionSet.questions}
           classes={this.props.classes}
           suggestionPanel={this.props.suggestionPanel}
+          panelConstants={this.props.panelConstants}
           questionAnswers={this.props.questionAnswers}
           onAnswerChange={this.props.onAnswerChange}
           defaultSuggestions={this.props.defaultSuggestions}
@@ -301,18 +300,7 @@ export default class QuestionPanel extends React.Component {
             ) : undefined}
           </div>
         </div>
-        <div className="question-panel-post-body-header">
-          <div className={this.props.classes.postBodyHeader}>
-            <img
-              className={this.props.classes.postBodyHeaderIcon}
-              src={this.props.panelConstants.titleIcon}
-            />
-            <span class={this.props.classes.postBodyHeaderText}>
-              {this.props.panelConstants.postBodyHeaderText}
-            </span>
-          </div>
-        </div>
-        <div className="question-panel-post-body">{suggestionSets}</div>
+        <div className="d-none d-md-block">{suggestionSets}</div>
         <div className="question-panel-footer">
           <div className="prefill-action-bar">
             <img
