@@ -56,7 +56,11 @@ var TextInput = function TextInput(_ref) {
 
   (0, _react.useEffect)(function () {
     setInputValue(value);
-  }, [value]);
+
+    if (enablePrefilledAnswer) {
+      _onFocus(id);
+    }
+  }, [value, enablePrefilledAnswer]);
 
   var handleChange = function handleChange(e) {
     setInputValue(e.target.value);

@@ -21,12 +21,17 @@ const TextInput = ({
 
   useEffect(() => {
     setInputValue(value);
-  }, [value]);
+
+    if (enablePrefilledAnswer) {
+      onFocus(id);
+    }
+  }, [value, enablePrefilledAnswer]);
 
   const handleChange = (e) => {
     setInputValue(e.target.value);
     onChange(e.target.value);
   };
+
   return (
     <IconInput
       active={enablePrefilledAnswer}
