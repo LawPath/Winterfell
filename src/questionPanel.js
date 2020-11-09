@@ -6,6 +6,37 @@ import ErrorMessages from './lib/errors';
 import Button from './button';
 import QuestionSet from './questionSet';
 import Switch from './custom/switch';
+import styled from 'styled-components';
+
+export const constants = {
+  headerHeight: 55,
+};
+
+export const breakpoint = {
+  desktop: 768,
+  wideDesktop: 1200,
+};
+
+export const mediaQuery = {
+  desktop: `min-width: ${breakpoint.desktop}px`,
+  wideDesktop: `min-width: ${breakpoint.wideDesktop}px`,
+};
+
+const QuestionPanelStyleComponent = styled.div.attrs({ 'data-id': 'winterfell-question-panel' })`
+  display: grid;
+  height: 100%;
+  grid-template-rows: auto 1fr calc(20vh + 155px) auto;
+  grid-template-areas:
+    'header'
+    'body'
+    'bodyFooter'
+    'footer';
+
+  @media only screen and (max-width: 768px) {
+    grid-template-rows: auto auto auto auto;
+    height: auto;
+  }
+`;
 
 export default class QuestionPanel extends React.Component {
   constructor(props) {
@@ -267,7 +298,7 @@ export default class QuestionPanel extends React.Component {
       );
     }
     return (
-      <div className={this.props.classes.questionPanel}>
+      <QuestionPanelStyleComponent>
         <div className="question-panel-header">
           {this.props.panelAcions}
           {this.props.progress && this.props.progress.position === 'top' ? progressBar : undefined}
@@ -277,6 +308,9 @@ export default class QuestionPanel extends React.Component {
           {this.props.progress && this.props.progress.position === 'middle'
             ? progressBar
             : undefined}
+        </div>
+
+        <div className="question-panel-body-footer">
           <div
             className={`${this.props.classes.buttonBar} ${this.props.extraClasses.buttonBar || ''}`}
           >
@@ -299,8 +333,8 @@ export default class QuestionPanel extends React.Component {
               />
             ) : undefined}
           </div>
+          <div className="d-none d-md-block">{suggestionSets}</div>
         </div>
-        <div className="d-none d-md-block">{suggestionSets}</div>
         <div className="question-panel-footer">
           <div className="prefill-action-bar">
             <img
@@ -323,7 +357,7 @@ export default class QuestionPanel extends React.Component {
           </div>
         </div>
         {this.props.progress && this.props.progress.position === 'bottom' ? progressBar : undefined}
-      </div>
+      </QuestionPanelStyleComponent>
     );
   }
 }

@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = void 0;
+exports["default"] = exports.mediaQuery = exports.breakpoint = exports.constants = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
@@ -20,6 +20,8 @@ var _button = _interopRequireDefault(require("./button"));
 var _questionSet = _interopRequireDefault(require("./questionSet"));
 
 var _switch = _interopRequireDefault(require("./custom/switch"));
+
+var _styledComponents = _interopRequireDefault(require("styled-components"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -44,6 +46,37 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _templateObject() {
+  var data = _taggedTemplateLiteral(["\n  display: grid;\n  height: 100%;\n  grid-template-rows: auto 1fr calc(20vh + 155px) auto;\n  grid-template-areas:\n    'header'\n    'body'\n    'bodyFooter'\n    'footer';\n\n  @media only screen and (max-width: 768px) {\n    grid-template-rows: auto auto auto auto;\n    height: auto;\n  }\n"]);
+
+  _templateObject = function _templateObject() {
+    return data;
+  };
+
+  return data;
+}
+
+function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+var constants = {
+  headerHeight: 55
+};
+exports.constants = constants;
+var breakpoint = {
+  desktop: 768,
+  wideDesktop: 1200
+};
+exports.breakpoint = breakpoint;
+var mediaQuery = {
+  desktop: "min-width: ".concat(breakpoint.desktop, "px"),
+  wideDesktop: "min-width: ".concat(breakpoint.wideDesktop, "px")
+};
+exports.mediaQuery = mediaQuery;
+
+var QuestionPanelStyleComponent = _styledComponents["default"].div.attrs({
+  'data-id': 'winterfell-question-panel'
+})(_templateObject());
 
 var QuestionPanel = /*#__PURE__*/function (_React$Component) {
   _inherits(QuestionPanel, _React$Component);
@@ -310,15 +343,15 @@ var QuestionPanel = /*#__PURE__*/function (_React$Component) {
         }, this.props.progress.showPercent ? "".concat(this.props.progress.postText ? this.props.progress.postText : '').concat(completionPercent, "%").concat(this.props.progress.postText ? this.props.progress.postText : '') : '')));
       }
 
-      return /*#__PURE__*/_react["default"].createElement("div", {
-        className: this.props.classes.questionPanel
-      }, /*#__PURE__*/_react["default"].createElement("div", {
+      return /*#__PURE__*/_react["default"].createElement(QuestionPanelStyleComponent, null, /*#__PURE__*/_react["default"].createElement("div", {
         className: "question-panel-header"
       }, this.props.panelAcions, this.props.progress && this.props.progress.position === 'top' ? progressBar : undefined), /*#__PURE__*/_react["default"].createElement("div", {
         className: "question-panel-body"
       }, /*#__PURE__*/_react["default"].createElement("div", {
         className: this.props.classes.questionSets
-      }, questionSets), this.props.progress && this.props.progress.position === 'middle' ? progressBar : undefined, /*#__PURE__*/_react["default"].createElement("div", {
+      }, questionSets), this.props.progress && this.props.progress.position === 'middle' ? progressBar : undefined), /*#__PURE__*/_react["default"].createElement("div", {
+        className: "question-panel-body-footer"
+      }, /*#__PURE__*/_react["default"].createElement("div", {
         className: "".concat(this.props.classes.buttonBar, " ").concat(this.props.extraClasses.buttonBar || '')
       }, this.props.currentPanelIndex > 0 && !this.props.backButton.disabled ? /*#__PURE__*/_react["default"].createElement(_button["default"], {
         text: this.props.backButton.text || 'Back',
@@ -328,9 +361,9 @@ var QuestionPanel = /*#__PURE__*/function (_React$Component) {
         text: this.props.button.text,
         onClick: this.handleMainButtonClick.bind(this),
         className: "".concat(this.props.classes.controlButton, " ").concat(this.props.extraClasses.button || '')
-      }) : undefined)), /*#__PURE__*/_react["default"].createElement("div", {
+      }) : undefined), /*#__PURE__*/_react["default"].createElement("div", {
         className: "d-none d-md-block"
-      }, suggestionSets), /*#__PURE__*/_react["default"].createElement("div", {
+      }, suggestionSets)), /*#__PURE__*/_react["default"].createElement("div", {
         className: "question-panel-footer"
       }, /*#__PURE__*/_react["default"].createElement("div", {
         className: "prefill-action-bar"
