@@ -50,18 +50,10 @@ export default class QuestionPanel extends React.Component {
 
   componentWillReceiveProps(newprops) {
     if (newprops.currentQuestionId) {
-      console.log('This is the state of the information before: ', newprops);
       let currentQuestion = this.props.questionAnswers
         ? this.props.questionAnswers[newprops.currentQuestionId]
         : null;
       if (!currentQuestion) return;
-      console.log(
-        'This is the state of the information: ',
-        newprops,
-        newprops.currentQuestionId,
-        currentQuestion.enablePrefilledAnswer,
-        currentQuestion,
-      );
       this.setState({ currentQuestion });
     }
   }

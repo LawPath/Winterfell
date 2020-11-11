@@ -141,7 +141,6 @@ export class Winterfell extends Component {
         }
       });
     }
-
     this.setState(newState);
   }
 
@@ -171,7 +170,7 @@ export class Winterfell extends Component {
 
       if (currentQuestion === null || currentQuestion === undefined) {
         if (prefillData) {
-          console.log('The answer is empty and have prefill data');
+          console.log('Set prefill data: answer is empty and have prefill data');
 
           _.set(currentQuestionAnswers, questionId, {
             label: label,
@@ -180,7 +179,7 @@ export class Winterfell extends Component {
             prefilledData: prefillData,
           });
         } else {
-          console.log('The answer is empty and do not have have prefill data');
+          console.log('Set prefill data: answer is empty and no prefill data');
 
           _.set(currentQuestionAnswers, questionId, {
             label: label,
@@ -201,14 +200,14 @@ export class Winterfell extends Component {
             label: label,
             prefilledData: prefillData,
           });
-          console.log('Going to !enablePrefilledAnswer ', mergedData);
+          console.log('Set prefill data: answer is existed and prefillMode is disable ', mergedData);
         } else {
           mergedData = _.merge(_.get(this.state.questionAnswers, [questionId]), {
             label: label,
             enablePrefilledAnswer: true,
             prefilledData: prefillData,
           });
-          console.log('Going to else of has label ', mergedData);
+          console.log('Set prefill data: answer is existed and prefillMode is enable ', mergedData);
         }
 
         if (
@@ -216,17 +215,14 @@ export class Winterfell extends Component {
           mergedData.enablePrefilledAnswer &&
           !_.isEqual(mergedData.value, mergedData.prefilledData)
         ) {
-          console.log('It has prefilled data and is overriden by user');
+          console.log('Set prefill data: have prefilled data and data is overriden by user');
           mergedData.enablePrefilledAnswer = false;
         } else if (!mergedData.value && mergedData.enablePrefilledAnswer) {
-          console.log('It has prefilled data and there is no input value');
+          console.log('Set prefill data: prefillMode is enable and prefilledData will override the user-input data ');
           mergedData.value = mergedData.prefilledData;
         }
-
-        console.log('This is the merged data: ', mergedData, questionId);
         _.set(currentQuestionAnswers, [questionId], { ...mergedData });
       }
-      console.log('This is the information of current question: ', currentQuestionAnswers);
     } else {
       const mergedData = _.merge(_.get(this.state.questionAnswers, [questionId]), {
         label: null,
@@ -239,8 +235,8 @@ export class Winterfell extends Component {
       questionAnswers: currentQuestionAnswers,
       currentQuestionId: questionId,
     });
-    this.props.onUpdate(currentQuestionAnswers);
     this.props.onRender({
+      questionAnswers: currentQuestionAnswers,
       questionId,
       currentQuestionAnswers,
       currentPanel: this.state.currentPanel,
@@ -279,12 +275,8 @@ export class Winterfell extends Component {
       this.panelHistory.push(panel.panelId);
     }
 
-    this.setState(
-      {
-        currentPanel: panel,
-      },
-      this.props.onSwitchPanel.bind(null, panel),
-    );
+    this.setState({ currentPanel: panel });
+    this.props.onSwitchPanel(panel);
   };
 
   handleBackButtonClick = () => {
@@ -332,13 +324,13 @@ export class Winterfell extends Component {
   };
 
   render() {
-    var currentPanel = _.find(
+    const currentPanel = _.find(
       this.state.schema.questionPanels,
       (panel) => panel.panelId == this.state.currentPanel.panelId,
     );
 
-    var numPanels = this.state.schema.questionPanels.length;
-    var currentPanelIndex = _.indexOf(this.state.schema.questionPanels, currentPanel) + 1;
+    const numPanels = this.state.schema.questionPanels.length;
+    const currentPanelIndex = _.indexOf(this.state.schema.questionPanels, currentPanel) + 1;
 
     return (
       <form

@@ -97,7 +97,7 @@ var Winterfell = /*#__PURE__*/function (_Component) {
 
         if (currentQuestion === null || currentQuestion === undefined) {
           if (prefillData) {
-            console.log('The answer is empty and have prefill data');
+            console.log('Set prefill data: answer is empty and have prefill data');
 
             _lodash["default"].set(currentQuestionAnswers, questionId, {
               label: label,
@@ -106,7 +106,7 @@ var Winterfell = /*#__PURE__*/function (_Component) {
               prefilledData: prefillData
             });
           } else {
-            console.log('The answer is empty and do not have have prefill data');
+            console.log('Set prefill data: answer is empty and no prefill data');
 
             _lodash["default"].set(currentQuestionAnswers, questionId, {
               label: label,
@@ -125,30 +125,26 @@ var Winterfell = /*#__PURE__*/function (_Component) {
               label: label,
               prefilledData: prefillData
             });
-            console.log('Going to !enablePrefilledAnswer ', mergedData);
+            console.log('Set prefill data: answer is existed and prefillMode is disable ', mergedData);
           } else {
             mergedData = _lodash["default"].merge(_lodash["default"].get(_this.state.questionAnswers, [questionId]), {
               label: label,
               enablePrefilledAnswer: true,
               prefilledData: prefillData
             });
-            console.log('Going to else of has label ', mergedData);
+            console.log('Set prefill data: answer is existed and prefillMode is enable ', mergedData);
           }
 
           if (mergedData.value && mergedData.enablePrefilledAnswer && !_lodash["default"].isEqual(mergedData.value, mergedData.prefilledData)) {
-            console.log('It has prefilled data and is overriden by user');
+            console.log('Set prefill data: have prefilled data and data is overriden by user');
             mergedData.enablePrefilledAnswer = false;
           } else if (!mergedData.value && mergedData.enablePrefilledAnswer) {
-            console.log('It has prefilled data and there is no input value');
+            console.log('Set prefill data: prefillMode is enable and prefilledData will override the user-input data ');
             mergedData.value = mergedData.prefilledData;
           }
 
-          console.log('This is the merged data: ', mergedData, questionId);
-
           _lodash["default"].set(currentQuestionAnswers, [questionId], _objectSpread({}, mergedData));
         }
-
-        console.log('This is the information of current question: ', currentQuestionAnswers);
       } else {
         var _mergedData = _lodash["default"].merge(_lodash["default"].get(_this.state.questionAnswers, [questionId]), {
           label: null,
@@ -163,9 +159,8 @@ var Winterfell = /*#__PURE__*/function (_Component) {
         currentQuestionId: questionId
       });
 
-      _this.props.onUpdate(currentQuestionAnswers);
-
       _this.props.onRender({
+        questionAnswers: currentQuestionAnswers,
         questionId: questionId,
         currentQuestionAnswers: currentQuestionAnswers,
         currentPanel: _this.state.currentPanel
@@ -206,7 +201,9 @@ var Winterfell = /*#__PURE__*/function (_Component) {
 
       _this.setState({
         currentPanel: panel
-      }, _this.props.onSwitchPanel.bind(null, panel));
+      });
+
+      _this.props.onSwitchPanel(panel);
     });
 
     _defineProperty(_assertThisInitialized(_this), "handleBackButtonClick", function () {
