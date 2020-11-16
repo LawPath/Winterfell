@@ -7,6 +7,7 @@ import Button from './button';
 import QuestionSet from './questionSet';
 import Switch from './custom/switch';
 import styled from 'styled-components';
+import ProgressBar from './custom/progressBar';
 
 export const constants = {
   headerHeight: 55,
@@ -58,7 +59,7 @@ export default class QuestionPanel extends React.Component {
     }
   }
 
-  handleAnswerValidate(questionId, questionAnswer, validations) {
+  handleAnswerValidate = (questionId, questionAnswer, validations) => {
     if (typeof validations === 'undefined' || validations.length === 0) {
       return;
     }
@@ -86,9 +87,9 @@ export default class QuestionPanel extends React.Component {
     this.setState({
       validationErrors: validationErrors,
     });
-  }
+  };
 
-  handleMainButtonClick() {
+  handleMainButtonClick = () => {
     var action = this.props.action.default;
     var conditions = this.props.action.conditions || [];
 
@@ -158,13 +159,13 @@ export default class QuestionPanel extends React.Component {
         this.props.onSubmit(action.target);
         break;
     }
-  }
+  };
 
-  handleBackButtonClick() {
+  handleBackButtonClick = () => {
     this.props.onPanelBack();
-  }
+  };
 
-  handleAnswerChange(questionId, questionAnswer, questionLabel, validations, validateOn) {
+  handleAnswerChange = (questionId, questionAnswer, questionLabel, validations, validateOn) => {
     this.props.onAnswerChange(questionId, questionAnswer, questionLabel);
     this.setState({
       validationErrors: _.chain(this.state.validationErrors).set(questionId, []).value(),
@@ -173,22 +174,53 @@ export default class QuestionPanel extends React.Component {
     if (validateOn === 'change') {
       this.handleAnswerValidate(questionId, questionAnswer, validations);
     }
-  }
+  };
 
-  handleQuestionBlur(questionId, questionAnswer, validations, validateOn) {
+  handleQuestionBlur = (questionId, questionAnswer, validations, validateOn) => {
     if (validateOn === 'blur') {
       this.handleAnswerValidate(questionId, questionAnswer, validations);
     }
-  }
+  };
 
-  handleInputKeyDown(e) {
+  handleInputKeyDown = (e) => {
     if (KeyCodez[e.keyCode] === 'enter') {
       e.preventDefault();
       this.handleMainButtonClick.call(this);
     }
-  }
+  };
+
+  getProgressBarInfo = () => {
+    let completionPercent = 0;
+    let progressBarText = '';
+    const { progress } = this.props;
+
+    if (progress) {
+      if (!progress.variation || progress.variation === 'classic') {
+        completionPercent = Math.floor((100 / this.props.numPanels) * this.props.currentPanelIndex);
+      } else if (progress.variation === 'only-completed' && this.props.questionAnswers) {
+        const questionSetsCompleted = this.props.schema.questionSets.reduce(
+          (acc, qs) =>
+            acc.concat(
+              qs.questions.map((q) => ({
+                questionId: q.questionId,
+                answered: !!this.props.questionAnswers[q.questionId],
+              })),
+            ),
+          [],
+        );
+        let nQuestionsCompleted = questionSetsCompleted.filter((e) => e.answered).length;
+        let nQuestionsTotal = questionSetsCompleted.length;
+        completionPercent = Math.floor((100 / nQuestionsTotal) * nQuestionsCompleted);
+      }
+
+      progressBarText = `${progress.preText || ''}${completionPercent}%${progress.postText || ''}`;
+    }
+    return { text: progressBarText, progress: completionPercent };
+  };
 
   render() {
+    const { progress: completionPercent, text: progressText } = this.getProgressBarInfo();
+
     const questionSets = this.props.questionSets.map((questionSetMeta) => {
       const questionSet = _.find(this.props.schema.questionSets, {
         questionSetId: questionSetMeta.questionSetId,
@@ -213,10 +245,10 @@ export default class QuestionPanel extends React.Component {
           renderRequiredAsterisk={this.props.renderRequiredAsterisk}
           validationErrors={this.state.validationErrors}
           panelConstants={this.props.panelConstants}
-          onAnswerChange={this.handleAnswerChange.bind(this)}
-          onQuestionBlur={this.handleQuestionBlur.bind(this)}
+          onAnswerChange={this.handleAnswerChange}
+          onQuestionBlur={this.handleQuestionBlur}
           onFocus={this.props.onFocus}
-          onKeyDown={this.handleInputKeyDown.bind(this)}
+          onKeyDown={this.handleInputKeyDown}
           onClickInputIcon={this.props.onClickInputIcon}
           onQuestionMounted={this.props.onQuestionMounted}
         />
@@ -246,60 +278,14 @@ export default class QuestionPanel extends React.Component {
       );
     });
 
-    var completionPercent = 0;
-
-    if (typeof this.props.progress !== 'undefined') {
-      if (!this.props.progress.variation || this.props.progress.variation === 'classic') {
-        completionPercent = Math.floor((100 / this.props.numPanels) * this.props.currentPanelIndex);
-      } else if (this.props.progress.variation === 'only-completed' && this.props.questionAnswers) {
-        const questionSetsCompleted = this.props.schema.questionSets.reduce(
-          (acc, qs) =>
-            acc.concat(
-              qs.questions.map((q) => ({
-                questionId: q.questionId,
-                answered: !!this.props.questionAnswers[q.questionId],
-              })),
-            ),
-          [],
-        );
-        let nQuestionsCompleted = questionSetsCompleted.filter((e) => e.answered).length;
-        let nQuestionsTotal = questionSetsCompleted.length;
-        completionPercent = Math.floor((100 / nQuestionsTotal) * nQuestionsCompleted);
-      }
-    }
-
-    var progressBar = undefined;
-    if (typeof this.props.progress !== 'undefined' && this.props.progress.showBar) {
-      progressBar = (
-        <div className={this.props.classes.progressBar}>
-          <div className={this.props.classes.progressBarIncomplete}>
-            <div
-              className={this.props.classes.progressBarComplete}
-              style={{ width: `${completionPercent}%` }}
-            >
-              {this.props.progress.showPercent
-                ? `${
-                    this.props.progress.postText ? this.props.progress.postText : ''
-                  }${completionPercent}%${
-                    this.props.progress.postText ? this.props.progress.postText : ''
-                  }`
-                : ''}
-            </div>
-          </div>
-        </div>
-      );
-    }
     return (
       <QuestionPanelStyleComponent>
         <div className="question-panel-header">
           {this.props.panelAcions}
-          {this.props.progress && this.props.progress.position === 'top' ? progressBar : undefined}
+          <ProgressBar progress={completionPercent} text={progressText} />
         </div>
         <div className="question-panel-body">
           <div className={this.props.classes.questionSets}>{questionSets}</div>
-          {this.props.progress && this.props.progress.position === 'middle'
-            ? progressBar
-            : undefined}
         </div>
 
         <div className="question-panel-body-footer">
@@ -309,7 +295,7 @@ export default class QuestionPanel extends React.Component {
             {this.props.currentPanelIndex > 0 && !this.props.backButton.disabled ? (
               <Button
                 text={this.props.backButton.text || 'Back'}
-                onClick={this.handleBackButtonClick.bind(this)}
+                onClick={this.handleBackButtonClick}
                 className={`${this.props.classes.backButton} ${
                   this.props.extraClasses.backButton || ''
                 }`}
@@ -318,7 +304,7 @@ export default class QuestionPanel extends React.Component {
             {!this.props.button.disabled ? (
               <Button
                 text={this.props.button.text}
-                onClick={this.handleMainButtonClick.bind(this)}
+                onClick={this.handleMainButtonClick}
                 className={`${this.props.classes.controlButton} ${
                   this.props.extraClasses.button || ''
                 }`}
@@ -348,7 +334,6 @@ export default class QuestionPanel extends React.Component {
             </span>
           </div>
         </div>
-        {this.props.progress && this.props.progress.position === 'bottom' ? progressBar : undefined}
       </QuestionPanelStyleComponent>
     );
   }
