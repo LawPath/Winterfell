@@ -23,6 +23,8 @@ var _switch = _interopRequireDefault(require("./custom/switch"));
 
 var _styledComponents = _interopRequireDefault(require("styled-components"));
 
+var _progressBar = _interopRequireDefault(require("./custom/progressBar"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -46,6 +48,8 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _templateObject() {
   var data = _taggedTemplateLiteral(["\n  display: grid;\n  height: 100%;\n  grid-template-rows: auto 1fr calc(20vh + 155px) auto;\n  grid-template-areas:\n    'header'\n    'body'\n    'bodyFooter'\n    'footer';\n\n  @media only screen and (max-width: 768px) {\n    grid-template-rows: auto auto auto auto;\n    height: auto;\n  }\n"]);
@@ -89,6 +93,175 @@ var QuestionPanel = /*#__PURE__*/function (_React$Component) {
     _classCallCheck(this, QuestionPanel);
 
     _this = _super.call(this, props);
+
+    _defineProperty(_assertThisInitialized(_this), "handleAnswerValidate", function (questionId, questionAnswer, validations) {
+      if (typeof validations === 'undefined' || validations.length === 0) {
+        return;
+      }
+      /*
+       * Run the question through its validations and
+       * show any error messages if invalid.
+       */
+
+
+      var questionValidationErrors = [];
+      validations.forEach(function (validation) {
+        if (_validation["default"].validateAnswer(questionAnswer.value, validation, _this.props.questionAnswers)) {
+          return;
+        }
+
+        questionValidationErrors.push({
+          type: validation.type,
+          message: _errors["default"].getErrorMessage(validation)
+        });
+      });
+
+      var validationErrors = _lodash["default"].chain(_this.state.validationErrors).set(questionId, questionValidationErrors).value();
+
+      _this.setState({
+        validationErrors: validationErrors
+      });
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "handleMainButtonClick", function () {
+      var action = _this.props.action["default"];
+      var conditions = _this.props.action.conditions || [];
+      /*
+       * We need to get all the question sets for this panel.
+       * Collate a list of the question set IDs required
+       * and run through the schema to grab the question sets.
+       */
+
+      var questionSetIds = _this.props.questionSets.map(function (qS) {
+        return qS.questionSetId;
+      });
+
+      var questionSets = _lodash["default"].chain(_this.props.schema.questionSets).filter(function (qS) {
+        return questionSetIds.indexOf(qS.questionSetId) > -1;
+      }).value();
+      /*
+       * Get any incorrect fields that need error messages.
+       */
+
+
+      var invalidQuestions = _validation["default"].getQuestionPanelInvalidQuestions(questionSets, _this.props.questionAnswers);
+      /*
+       * If the panel isn't valid...
+       */
+
+
+      if (Object.keys(invalidQuestions).length > 0) {
+        var validationErrors = _lodash["default"].mapValues(invalidQuestions, function (validations) {
+          return validations.map(function (validation) {
+            return {
+              type: validation.type,
+              message: _errors["default"].getErrorMessage(validation)
+            };
+          });
+        });
+
+        _this.setState({
+          validationErrors: validationErrors
+        });
+
+        return;
+      }
+      /*
+       * Panel is valid. So what do we do next?
+       * Check our conditions and act upon them, or the default.
+       */
+
+
+      conditions.forEach(function (condition) {
+        var answerObject = _this.props.questionAnswers[condition.questionId];
+        var answer = answerObject.value;
+        action = answer == condition.value ? {
+          action: condition.action,
+          target: condition.target
+        } : action;
+      });
+      /*
+       * Decide which action to take depending on
+       * the action decided upon.
+       */
+
+      switch (action.action) {
+        case 'GOTO':
+          _this.props.onSwitchPanel(action.target);
+
+          break;
+
+        case 'SUBMIT':
+          _this.props.onSubmit(action.target);
+
+          break;
+      }
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "handleBackButtonClick", function () {
+      _this.props.onPanelBack();
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "handleAnswerChange", function (questionId, questionAnswer, questionLabel, validations, validateOn) {
+      _this.props.onAnswerChange(questionId, questionAnswer, questionLabel);
+
+      _this.setState({
+        validationErrors: _lodash["default"].chain(_this.state.validationErrors).set(questionId, []).value()
+      });
+
+      if (validateOn === 'change') {
+        _this.handleAnswerValidate(questionId, questionAnswer, validations);
+      }
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "handleQuestionBlur", function (questionId, questionAnswer, validations, validateOn) {
+      if (validateOn === 'blur') {
+        _this.handleAnswerValidate(questionId, questionAnswer, validations);
+      }
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "handleInputKeyDown", function (e) {
+      if (_keycodez["default"][e.keyCode] === 'enter') {
+        e.preventDefault();
+
+        _this.handleMainButtonClick.call(_assertThisInitialized(_this));
+      }
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "getProgressBarInfo", function () {
+      var completionPercent = 0;
+      var progressBarText = '';
+      var progress = _this.props.progress;
+
+      if (progress) {
+        if (!progress.variation || progress.variation === 'classic') {
+          completionPercent = Math.floor(100 / _this.props.numPanels * _this.props.currentPanelIndex);
+        } else if (progress.variation === 'only-completed' && _this.props.questionAnswers) {
+          var questionSetsCompleted = _this.props.schema.questionSets.reduce(function (acc, qs) {
+            return acc.concat(qs.questions.map(function (q) {
+              return {
+                questionId: q.questionId,
+                answered: !!_this.props.questionAnswers[q.questionId]
+              };
+            }));
+          }, []);
+
+          var nQuestionsCompleted = questionSetsCompleted.filter(function (e) {
+            return e.answered;
+          }).length;
+          var nQuestionsTotal = questionSetsCompleted.length;
+          completionPercent = Math.floor(100 / nQuestionsTotal * nQuestionsCompleted);
+        }
+
+        progressBarText = "".concat(progress.preText || '').concat(completionPercent, "%").concat(progress.postText || '');
+      }
+
+      return {
+        text: progressBarText,
+        progress: completionPercent
+      };
+    });
+
     _this.state = {
       validationErrors: _this.props.validationErrors,
       currentQuestion: null
@@ -108,151 +281,16 @@ var QuestionPanel = /*#__PURE__*/function (_React$Component) {
       }
     }
   }, {
-    key: "handleAnswerValidate",
-    value: function handleAnswerValidate(questionId, questionAnswer, validations) {
-      var _this2 = this;
-
-      if (typeof validations === 'undefined' || validations.length === 0) {
-        return;
-      }
-      /*
-       * Run the question through its validations and
-       * show any error messages if invalid.
-       */
-
-
-      var questionValidationErrors = [];
-      validations.forEach(function (validation) {
-        if (_validation["default"].validateAnswer(questionAnswer.value, validation, _this2.props.questionAnswers)) {
-          return;
-        }
-
-        questionValidationErrors.push({
-          type: validation.type,
-          message: _errors["default"].getErrorMessage(validation)
-        });
-      });
-
-      var validationErrors = _lodash["default"].chain(this.state.validationErrors).set(questionId, questionValidationErrors).value();
-
-      this.setState({
-        validationErrors: validationErrors
-      });
-    }
-  }, {
-    key: "handleMainButtonClick",
-    value: function handleMainButtonClick() {
-      var _this3 = this;
-
-      var action = this.props.action["default"];
-      var conditions = this.props.action.conditions || [];
-      /*
-       * We need to get all the question sets for this panel.
-       * Collate a list of the question set IDs required
-       * and run through the schema to grab the question sets.
-       */
-
-      var questionSetIds = this.props.questionSets.map(function (qS) {
-        return qS.questionSetId;
-      });
-
-      var questionSets = _lodash["default"].chain(this.props.schema.questionSets).filter(function (qS) {
-        return questionSetIds.indexOf(qS.questionSetId) > -1;
-      }).value();
-      /*
-       * Get any incorrect fields that need error messages.
-       */
-
-
-      var invalidQuestions = _validation["default"].getQuestionPanelInvalidQuestions(questionSets, this.props.questionAnswers);
-      /*
-       * If the panel isn't valid...
-       */
-
-
-      if (Object.keys(invalidQuestions).length > 0) {
-        var validationErrors = _lodash["default"].mapValues(invalidQuestions, function (validations) {
-          return validations.map(function (validation) {
-            return {
-              type: validation.type,
-              message: _errors["default"].getErrorMessage(validation)
-            };
-          });
-        });
-
-        this.setState({
-          validationErrors: validationErrors
-        });
-        return;
-      }
-      /*
-       * Panel is valid. So what do we do next?
-       * Check our conditions and act upon them, or the default.
-       */
-
-
-      conditions.forEach(function (condition) {
-        var answerObject = _this3.props.questionAnswers[condition.questionId];
-        var answer = answerObject.value;
-        action = answer == condition.value ? {
-          action: condition.action,
-          target: condition.target
-        } : action;
-      });
-      /*
-       * Decide which action to take depending on
-       * the action decided upon.
-       */
-
-      switch (action.action) {
-        case 'GOTO':
-          this.props.onSwitchPanel(action.target);
-          break;
-
-        case 'SUBMIT':
-          this.props.onSubmit(action.target);
-          break;
-      }
-    }
-  }, {
-    key: "handleBackButtonClick",
-    value: function handleBackButtonClick() {
-      this.props.onPanelBack();
-    }
-  }, {
-    key: "handleAnswerChange",
-    value: function handleAnswerChange(questionId, questionAnswer, questionLabel, validations, validateOn) {
-      this.props.onAnswerChange(questionId, questionAnswer, questionLabel);
-      this.setState({
-        validationErrors: _lodash["default"].chain(this.state.validationErrors).set(questionId, []).value()
-      });
-
-      if (validateOn === 'change') {
-        this.handleAnswerValidate(questionId, questionAnswer, validations);
-      }
-    }
-  }, {
-    key: "handleQuestionBlur",
-    value: function handleQuestionBlur(questionId, questionAnswer, validations, validateOn) {
-      if (validateOn === 'blur') {
-        this.handleAnswerValidate(questionId, questionAnswer, validations);
-      }
-    }
-  }, {
-    key: "handleInputKeyDown",
-    value: function handleInputKeyDown(e) {
-      if (_keycodez["default"][e.keyCode] === 'enter') {
-        e.preventDefault();
-        this.handleMainButtonClick.call(this);
-      }
-    }
-  }, {
     key: "render",
     value: function render() {
-      var _this4 = this;
+      var _this2 = this;
+
+      var _this$getProgressBarI = this.getProgressBarInfo(),
+          completionPercent = _this$getProgressBarI.progress,
+          progressText = _this$getProgressBarI.text;
 
       var questionSets = this.props.questionSets.map(function (questionSetMeta) {
-        var questionSet = _lodash["default"].find(_this4.props.schema.questionSets, {
+        var questionSet = _lodash["default"].find(_this2.props.schema.questionSets, {
           questionSetId: questionSetMeta.questionSetId
         });
 
@@ -267,25 +305,25 @@ var QuestionPanel = /*#__PURE__*/function (_React$Component) {
           questionSetHeader: questionSet.questionSetHeader,
           questionSetText: questionSet.questionSetText,
           questions: questionSet.questions,
-          classes: _this4.props.classes,
-          questionAnswers: _this4.props.questionAnswers,
-          labeledAnswers: _this4.props.labeledAnswers,
-          renderError: _this4.props.renderError,
-          renderRequiredAsterisk: _this4.props.renderRequiredAsterisk,
-          validationErrors: _this4.state.validationErrors,
-          panelConstants: _this4.props.panelConstants,
-          onAnswerChange: _this4.handleAnswerChange.bind(_this4),
-          onQuestionBlur: _this4.handleQuestionBlur.bind(_this4),
-          onFocus: _this4.props.onFocus,
-          onKeyDown: _this4.handleInputKeyDown.bind(_this4),
-          onClickInputIcon: _this4.props.onClickInputIcon,
-          onQuestionMounted: _this4.props.onQuestionMounted
+          classes: _this2.props.classes,
+          questionAnswers: _this2.props.questionAnswers,
+          labeledAnswers: _this2.props.labeledAnswers,
+          renderError: _this2.props.renderError,
+          renderRequiredAsterisk: _this2.props.renderRequiredAsterisk,
+          validationErrors: _this2.state.validationErrors,
+          panelConstants: _this2.props.panelConstants,
+          onAnswerChange: _this2.handleAnswerChange,
+          onQuestionBlur: _this2.handleQuestionBlur,
+          onFocus: _this2.props.onFocus,
+          onKeyDown: _this2.handleInputKeyDown,
+          onClickInputIcon: _this2.props.onClickInputIcon,
+          onQuestionMounted: _this2.props.onQuestionMounted
         });
       });
       /* Append suggestion section to the form builder */
 
       var suggestionSets = this.props.questionSets.map(function (questionSetMeta) {
-        var questionSet = _lodash["default"].find(_this4.props.schema.questionSets, {
+        var questionSet = _lodash["default"].find(_this2.props.schema.questionSets, {
           questionSetId: questionSetMeta.questionSetId
         });
 
@@ -293,71 +331,37 @@ var QuestionPanel = /*#__PURE__*/function (_React$Component) {
           return undefined;
         }
 
-        var SuggestionSet = _this4.props.answersSuggestionComponent;
+        var SuggestionSet = _this2.props.answersSuggestionComponent;
         return /*#__PURE__*/_react["default"].createElement(SuggestionSet, {
           questions: questionSet.questions,
-          classes: _this4.props.classes,
-          suggestionPanel: _this4.props.suggestionPanel,
-          panelConstants: _this4.props.panelConstants,
-          questionAnswers: _this4.props.questionAnswers,
-          onAnswerChange: _this4.props.onAnswerChange,
-          defaultSuggestions: _this4.props.defaultSuggestions
+          classes: _this2.props.classes,
+          suggestionPanel: _this2.props.suggestionPanel,
+          panelConstants: _this2.props.panelConstants,
+          questionAnswers: _this2.props.questionAnswers,
+          onAnswerChange: _this2.props.onAnswerChange,
+          defaultSuggestions: _this2.props.defaultSuggestions
         });
       });
-      var completionPercent = 0;
-
-      if (typeof this.props.progress !== 'undefined') {
-        if (!this.props.progress.variation || this.props.progress.variation === 'classic') {
-          completionPercent = Math.floor(100 / this.props.numPanels * this.props.currentPanelIndex);
-        } else if (this.props.progress.variation === 'only-completed' && this.props.questionAnswers) {
-          var questionSetsCompleted = this.props.schema.questionSets.reduce(function (acc, qs) {
-            return acc.concat(qs.questions.map(function (q) {
-              return {
-                questionId: q.questionId,
-                answered: !!_this4.props.questionAnswers[q.questionId]
-              };
-            }));
-          }, []);
-          var nQuestionsCompleted = questionSetsCompleted.filter(function (e) {
-            return e.answered;
-          }).length;
-          var nQuestionsTotal = questionSetsCompleted.length;
-          completionPercent = Math.floor(100 / nQuestionsTotal * nQuestionsCompleted);
-        }
-      }
-
-      var progressBar = undefined;
-
-      if (typeof this.props.progress !== 'undefined' && this.props.progress.showBar) {
-        progressBar = /*#__PURE__*/_react["default"].createElement("div", {
-          className: this.props.classes.progressBar
-        }, /*#__PURE__*/_react["default"].createElement("div", {
-          className: this.props.classes.progressBarIncomplete
-        }, /*#__PURE__*/_react["default"].createElement("div", {
-          className: this.props.classes.progressBarComplete,
-          style: {
-            width: "".concat(completionPercent, "%")
-          }
-        }, this.props.progress.showPercent ? "".concat(this.props.progress.postText ? this.props.progress.postText : '').concat(completionPercent, "%").concat(this.props.progress.postText ? this.props.progress.postText : '') : '')));
-      }
-
       return /*#__PURE__*/_react["default"].createElement(QuestionPanelStyleComponent, null, /*#__PURE__*/_react["default"].createElement("div", {
         className: "question-panel-header"
-      }, this.props.panelAcions, this.props.progress && this.props.progress.position === 'top' ? progressBar : undefined), /*#__PURE__*/_react["default"].createElement("div", {
+      }, this.props.panelAcions, /*#__PURE__*/_react["default"].createElement(_progressBar["default"], {
+        progress: completionPercent,
+        text: progressText
+      })), /*#__PURE__*/_react["default"].createElement("div", {
         className: "question-panel-body"
       }, /*#__PURE__*/_react["default"].createElement("div", {
         className: this.props.classes.questionSets
-      }, questionSets), this.props.progress && this.props.progress.position === 'middle' ? progressBar : undefined), /*#__PURE__*/_react["default"].createElement("div", {
+      }, questionSets)), /*#__PURE__*/_react["default"].createElement("div", {
         className: "question-panel-body-footer"
       }, /*#__PURE__*/_react["default"].createElement("div", {
         className: "".concat(this.props.classes.buttonBar, " ").concat(this.props.extraClasses.buttonBar || '')
       }, this.props.currentPanelIndex > 0 && !this.props.backButton.disabled ? /*#__PURE__*/_react["default"].createElement(_button["default"], {
         text: this.props.backButton.text || 'Back',
-        onClick: this.handleBackButtonClick.bind(this),
+        onClick: this.handleBackButtonClick,
         className: "".concat(this.props.classes.backButton, " ").concat(this.props.extraClasses.backButton || '')
       }) : undefined, !this.props.button.disabled ? /*#__PURE__*/_react["default"].createElement(_button["default"], {
         text: this.props.button.text,
-        onClick: this.handleMainButtonClick.bind(this),
+        onClick: this.handleMainButtonClick,
         className: "".concat(this.props.classes.controlButton, " ").concat(this.props.extraClasses.button || '')
       }) : undefined), /*#__PURE__*/_react["default"].createElement("div", {
         className: "d-none d-md-block"
@@ -376,7 +380,7 @@ var QuestionPanel = /*#__PURE__*/function (_React$Component) {
         active: this.state.currentQuestion.enablePrefilledAnswer,
         onChange: this.props.onEnablePrefilledAnswer,
         disabled: !this.state.currentQuestion || this.state.currentQuestion && !this.state.currentQuestion.label
-      }) : null))), this.props.progress && this.props.progress.position === 'bottom' ? progressBar : undefined);
+      }) : null))));
     }
   }]);
 
