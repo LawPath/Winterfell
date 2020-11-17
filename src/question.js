@@ -90,6 +90,7 @@ export default class Question extends Component {
                 validationErrors={this.props.validationErrors}
                 onAnswerChange={this.props.onAnswerChange}
                 onQuestionBlur={this.props.onQuestionBlur}
+                onMounted={this.props.onMounted}
                 onFocus={this.props.onFocus}
                 onKeyDown={this.props.onKeyDown}
                 onClickInputIcon={this.props.onClickInputIcon}
@@ -159,7 +160,7 @@ export default class Question extends Component {
           onFocus={this.props.onFocus}
           onKeyDown={this.props.onKeyDown}
           onClickInputIcon={this.props.onClickInputIcon}
-          inputIconTooltipText={this.props.panelConstants.tooltipContent}
+          inputIconTooltipContent={this.props.panelConstants.tooltipContent}
           {...(typeof this.props.input.props === 'object' ? this.props.input.props : {})}
         />
         {!!this.props.suggestions ? (

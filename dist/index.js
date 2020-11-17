@@ -73,7 +73,7 @@ var Winterfell = /*#__PURE__*/function (_Component) {
         label: questionLabel
       });
 
-      if (mergedData.enablePrefilledAnswer && mergedData.value !== mergedData.prefilledData) {
+      if (mergedData && mergedData.enablePrefilledAnswer && mergedData.value !== mergedData.prefilledData) {
         /* If user edit the prefill data, we will toggle out the prefill toggle */
         mergedData.enablePrefilledAnswer = false;
       }

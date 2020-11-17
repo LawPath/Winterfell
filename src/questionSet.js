@@ -7,7 +7,6 @@ export default class QuestionSet extends Component {
   render() {
     const questions = this.props.questions.map((question) => {
       const answer = this.props.questionAnswers[question.questionId];
-      console.log('This is the current question ', question, answer, this.props.questionAnswers);
       return (
         <Question
           key={question.questionId}

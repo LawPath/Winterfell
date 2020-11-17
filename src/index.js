@@ -150,7 +150,11 @@ export class Winterfell extends Component {
       label: questionLabel,
     });
 
-    if (mergedData.enablePrefilledAnswer && mergedData.value !== mergedData.prefilledData) {
+    if (
+      mergedData &&
+      mergedData.enablePrefilledAnswer &&
+      mergedData.value !== mergedData.prefilledData
+    ) {
       /* If user edit the prefill data, we will toggle out the prefill toggle */
       mergedData.enablePrefilledAnswer = false;
     }
@@ -200,7 +204,10 @@ export class Winterfell extends Component {
             label: label,
             prefilledData: prefillData,
           });
-          console.log('Set prefill data: answer is existed and prefillMode is disable ', mergedData);
+          console.log(
+            'Set prefill data: answer is existed and prefillMode is disable ',
+            mergedData,
+          );
         } else {
           mergedData = _.merge(_.get(this.state.questionAnswers, [questionId]), {
             label: label,
@@ -218,7 +225,9 @@ export class Winterfell extends Component {
           console.log('Set prefill data: have prefilled data and data is overriden by user');
           mergedData.enablePrefilledAnswer = false;
         } else if (!mergedData.value && mergedData.enablePrefilledAnswer) {
-          console.log('Set prefill data: prefillMode is enable and prefilledData will override the user-input data ');
+          console.log(
+            'Set prefill data: prefillMode is enable and prefilledData will override the user-input data ',
+          );
           mergedData.value = mergedData.prefilledData;
         }
         _.set(currentQuestionAnswers, [questionId], { ...mergedData });

@@ -57,7 +57,6 @@ var QuestionSet = /*#__PURE__*/function (_Component) {
 
       var questions = this.props.questions.map(function (question) {
         var answer = _this.props.questionAnswers[question.questionId];
-        console.log('This is the current question ', question, answer, _this.props.questionAnswers);
         return /*#__PURE__*/_react["default"].createElement(_question["default"], {
           key: question.questionId,
           questionSetId: _this.props.id,

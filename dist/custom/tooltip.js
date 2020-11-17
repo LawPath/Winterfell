@@ -11,24 +11,17 @@ var _reactSimpleTooltip = _interopRequireDefault(require("react-simple-tooltip")
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-var tooltipContent = function tooltipContent(_ref) {
-  var content = _ref.content;
-  return /*#__PURE__*/_react["default"].createElement("span", {
-    dangerouslySetInnerHTML: {
-      __html: content
-    }
-  });
+var DefaultTooltipContent = function DefaultTooltipContent() {
+  return /*#__PURE__*/_react["default"].createElement("span", null, "This field has been ", /*#__PURE__*/_react["default"].createElement("br", null), "pre-filled. Click ", /*#__PURE__*/_react["default"].createElement("a", null, "here"), " to edit ", /*#__PURE__*/_react["default"].createElement("br", null), " your pre-filled information");
 };
 
-var Tooltip = function Tooltip(_ref2) {
-  var content = _ref2.content,
-      _ref2$placement = _ref2.placement,
-      placement = _ref2$placement === void 0 ? 'bottom' : _ref2$placement,
-      children = _ref2.children;
+var Tooltip = function Tooltip(_ref) {
+  var TooltipContent = _ref.content,
+      _ref$placement = _ref.placement,
+      placement = _ref$placement === void 0 ? 'bottom' : _ref$placement,
+      children = _ref.children;
   return /*#__PURE__*/_react["default"].createElement(_reactSimpleTooltip["default"], {
-    content: tooltipContent({
-      content: content
-    }),
+    content: TooltipContent ? /*#__PURE__*/_react["default"].createElement(TooltipContent, null) : /*#__PURE__*/_react["default"].createElement(DefaultTooltipContent, null),
     placement: placement,
     color: "#000",
     padding: 10,

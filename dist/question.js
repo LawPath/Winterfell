@@ -138,6 +138,7 @@ var Question = /*#__PURE__*/function (_Component) {
               validationErrors: _this2.props.validationErrors,
               onAnswerChange: _this2.props.onAnswerChange,
               onQuestionBlur: _this2.props.onQuestionBlur,
+              onMounted: _this2.props.onMounted,
               onFocus: _this2.props.onFocus,
               onKeyDown: _this2.props.onKeyDown,
               onClickInputIcon: _this2.props.onClickInputIcon
@@ -184,7 +185,7 @@ var Question = /*#__PURE__*/function (_Component) {
         onFocus: this.props.onFocus,
         onKeyDown: this.props.onKeyDown,
         onClickInputIcon: this.props.onClickInputIcon,
-        inputIconTooltipText: this.props.panelConstants.tooltipContent
+        inputIconTooltipContent: this.props.panelConstants.tooltipContent
       }, _typeof(this.props.input.props) === 'object' ? this.props.input.props : {})), !!this.props.suggestions ? /*#__PURE__*/_react["default"].createElement("p", {
         className: this.props.classes.questionPostText
       }, this.props.panelConstants.suggestionHintText) : undefined, conditionalItems);

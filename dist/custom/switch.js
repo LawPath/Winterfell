@@ -33,6 +33,18 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
+var InavailablePrefill = function InavailablePrefill() {
+  return /*#__PURE__*/_react["default"].createElement("span", null, "This field cannot be pre-", /*#__PURE__*/_react["default"].createElement("br", null), "filled.");
+};
+
+var DisabledPrefill = function DisabledPrefill() {
+  return /*#__PURE__*/_react["default"].createElement("span", null, "Pre-fill information has ", /*#__PURE__*/_react["default"].createElement("br", null), " been used. Toggle off to ", /*#__PURE__*/_react["default"].createElement("br", null), " remove.");
+};
+
+var EnabledPrefill = function EnabledPrefill() {
+  return /*#__PURE__*/_react["default"].createElement("span", null, "Pre-fill information is ", /*#__PURE__*/_react["default"].createElement("br", null), " available. Toggle on to use.");
+};
+
 var OffButton = function OffButton() {
   return /*#__PURE__*/_react["default"].createElement("div", {
     className: "switch-btn"
@@ -76,7 +88,7 @@ var Switch = function Switch(_ref) {
   };
 
   return /*#__PURE__*/_react["default"].createElement(_tooltip["default"], {
-    content: disabled ? '<span>This field cannot be pre-<br/>filled.</span>' : checked ? '<span>Pre-fill information has <br/> been used. Toggle off to <br/> remove.</span>' : '<span>Pre-fill information is <br/> available. Toggle on to use.</span>',
+    content: disabled ? InavailablePrefill : checked ? DisabledPrefill : EnabledPrefill,
     placement: "top"
   }, /*#__PURE__*/_react["default"].createElement(_reactSwitch["default"], _extends({}, switchConfig, {
     className: "switch-control ".concat(disabled ? 'switch-control-disabled' : checked ? 'switch-control-active' : 'switch-control-inactive'),

@@ -2,6 +2,24 @@ import React, { useEffect, useState } from 'react';
 import SimpleSwitch from 'react-switch';
 import Tooltip from './tooltip';
 
+const InavailablePrefill = () => (
+  <span>
+    This field cannot be pre-
+    <br />
+    filled.
+  </span>
+);
+const DisabledPrefill = () => (
+  <span>
+    Pre-fill information has <br /> been used. Toggle off to <br /> remove.
+  </span>
+);
+const EnabledPrefill = () => (
+  <span>
+    Pre-fill information is <br /> available. Toggle on to use.
+  </span>
+);
+
 const OffButton = () => {
   return <div className="switch-btn">OFF</div>;
 };
@@ -30,13 +48,7 @@ const Switch = ({ active, onChange, disabled }) => {
   };
   return (
     <Tooltip
-      content={
-        disabled
-          ? '<span>This field cannot be pre-<br/>filled.</span>'
-          : checked
-          ? '<span>Pre-fill information has <br/> been used. Toggle off to <br/> remove.</span>'
-          : '<span>Pre-fill information is <br/> available. Toggle on to use.</span>'
-      }
+      content={disabled ? InavailablePrefill : checked ? DisabledPrefill : EnabledPrefill}
       placement="top"
     >
       <SimpleSwitch

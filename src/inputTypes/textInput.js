@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import IconInput from '../formGroups/inputFormGroup';
 
 const TextInput = ({
@@ -15,7 +15,7 @@ const TextInput = ({
   onKeyDown,
   onClickInputIcon,
   enablePrefilledAnswer,
-  inputIconTooltipText,
+  inputIconTooltipContent,
 }) => {
   const [inputValue, setInputValue] = useState(value);
 
@@ -36,7 +36,7 @@ const TextInput = ({
     <IconInput
       active={enablePrefilledAnswer}
       onClick={onClickInputIcon}
-      tooltipContent={inputIconTooltipText}
+      tooltipContent={inputIconTooltipContent}
     >
       <input
         type="text"

@@ -1,17 +1,17 @@
 import React from 'react';
 import SimpleTooltip from 'react-simple-tooltip';
 
-const tooltipContent = ({ content }) => (
-  <span
-    dangerouslySetInnerHTML={{
-      __html: content,
-    }}
-  ></span>
+const DefaultTooltipContent = () => (
+  <span>
+    This field has been <br />
+    pre-filled. Click <a>here</a> to edit <br /> your pre-filled information
+  </span>
 );
-const Tooltip = ({ content, placement = 'bottom', children }) => {
+
+const Tooltip = ({ content: TooltipContent, placement = 'bottom', children }) => {
   return (
     <SimpleTooltip
-      content={tooltipContent({ content })}
+      content={TooltipContent ? <TooltipContent /> : <DefaultTooltipContent />}
       placement={placement}
       color="#000"
       padding={10}
