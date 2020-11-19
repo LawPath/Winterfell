@@ -49,6 +49,7 @@ const Switch = ({ active, onChange, disabled }) => {
   return (
     <Tooltip
       content={disabled ? InavailablePrefill : checked ? DisabledPrefill : EnabledPrefill}
+      arrowStyle={`right: 20px;`}
       placement="top"
     >
       <SimpleSwitch

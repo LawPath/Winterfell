@@ -12,7 +12,7 @@ var _styledComponents = _interopRequireDefault(require("styled-components"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _templateObject() {
-  var data = _taggedTemplateLiteral(["\n  display: block;\n  width: 20px;\n  height: 20px;\n  background: url(", ") 0 0/100% 100% no-repeat;\n  background-position: center;\n\n  &.onclick {\n    cursor: pointer;\n  }\n"]);
+  var data = _taggedTemplateLiteral(["\n  display: block;\n  width: 20px;\n  height: 20px;\n  background: url(", ") 0 0/100% 100% no-repeat;\n  background-position: center;\n  cursor: ", ";\n"]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -30,6 +30,9 @@ var Icon = _styledComponents["default"].div.attrs({
 })(_templateObject(), function (_ref) {
   var icon = _ref.icon;
   return icon || builderIconUrl;
+}, function (_ref2) {
+  var showingPointer = _ref2.showingPointer;
+  return showingPointer ? 'pointer' : 'initial';
 });
 
 exports.Icon = Icon;

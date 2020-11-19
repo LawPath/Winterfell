@@ -47,6 +47,8 @@ const TextareaInput = ({
   onBlur,
   onClickInputIcon,
   enablePrefilledAnswer,
+  questionLabel,
+  prefilledData,
 }) => {
   const [inputValue, setInputValue] = useState(value);
 
@@ -63,7 +65,6 @@ const TextareaInput = ({
     setInputValue(e.target.value);
     onChange(e.target.value);
   };
-
   return (
     <TextareaWrapper isActive={enablePrefilledAnswer}>
       <textarea
@@ -79,10 +80,10 @@ const TextareaInput = ({
         onFocus={() => onFocus(id)}
         onBlur={() => onBlur(inputValue)}
       />
-      {enablePrefilledAnswer ? (
+      {enablePrefilledAnswer || (!enablePrefilledAnswer && questionLabel && !prefilledData) ? (
         <InputGroupIcon active={enablePrefilledAnswer}>
           <Tooltip>
-            <Icon onClick={onClickInputIcon} />
+            <Icon showingPointer={true} onClick={onClickInputIcon} />
           </Tooltip>
         </InputGroupIcon>
       ) : null}

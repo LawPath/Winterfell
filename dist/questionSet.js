@@ -89,13 +89,7 @@ var QuestionSet = /*#__PURE__*/function (_Component) {
       });
       return /*#__PURE__*/_react["default"].createElement("div", {
         className: this.props.classes.questionSet
-      }, typeof this.props.questionSetHeader !== 'undefined' || typeof this.props.questionSetText !== 'undefined' ? /*#__PURE__*/_react["default"].createElement("div", {
-        className: this.props.classes.questionSetHeaderContainer
-      }, typeof this.props.questionSetHeader !== 'undefined' ? /*#__PURE__*/_react["default"].createElement("h4", {
-        className: this.props.classes.questionSetHeader
-      }, this.props.questionSetHeader) : undefined, typeof this.props.questionSetText !== 'undefined' ? /*#__PURE__*/_react["default"].createElement("p", {
-        className: this.props.classes.questionSetText
-      }, this.props.questionSetText) : undefined) : undefined, questions);
+      }, questions);
     }
   }]);
 

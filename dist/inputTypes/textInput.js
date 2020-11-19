@@ -47,7 +47,9 @@ var TextInput = function TextInput(_ref) {
       onKeyDown = _ref.onKeyDown,
       onClickInputIcon = _ref.onClickInputIcon,
       enablePrefilledAnswer = _ref.enablePrefilledAnswer,
-      inputIconTooltipContent = _ref.inputIconTooltipContent;
+      inputIconTooltipContent = _ref.inputIconTooltipContent,
+      prefilledData = _ref.prefilledData,
+      questionLabel = _ref.questionLabel;
 
   var _useState = (0, _react.useState)(value),
       _useState2 = _slicedToArray(_useState, 2),
@@ -69,6 +71,7 @@ var TextInput = function TextInput(_ref) {
 
   return /*#__PURE__*/_react["default"].createElement(_inputFormGroup["default"], {
     active: enablePrefilledAnswer,
+    showIcon: !enablePrefilledAnswer && !prefilledData && questionLabel,
     onClick: onClickInputIcon,
     tooltipContent: inputIconTooltipContent
   }, /*#__PURE__*/_react["default"].createElement("input", {

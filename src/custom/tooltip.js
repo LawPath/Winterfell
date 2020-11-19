@@ -9,10 +9,15 @@ const DefaultTooltipContent = () => (
   </span>
 );
 
+const arrowDefaultStyle = `
+    right: 10px;
+`;
+
 const Tooltip = ({
   content: TooltipContent = DefaultTooltipContent,
   placement = 'bottom',
   children,
+  arrowStyle = arrowDefaultStyle,
 }) => {
   return (
     <SimpleTooltip
@@ -27,12 +32,12 @@ const Tooltip = ({
       customCss={css`
         div[class$='BaseToolTop'] {
           left: unset;
-          right: 50%;
+          right: 0;
           transform: translateX(5%);
         }
         div[class$='BaseArrow'] {
-          right: 0;
           left: unset;
+          ${arrowStyle}
         }
       `}
       style={{ whiteSpace: 'nowrap', textAlign: 'center' }}

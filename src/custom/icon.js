@@ -9,8 +9,5 @@ export const Icon = styled.div.attrs({ data: 'input-icon' })`
   height: 20px;
   background: url(${({ icon }) => icon || builderIconUrl}) 0 0/100% 100% no-repeat;
   background-position: center;
-
-  &.onclick {
-    cursor: pointer;
-  }
+  cursor: ${({ showingPointer }) => (showingPointer ? 'pointer' : 'initial')};
 `;
