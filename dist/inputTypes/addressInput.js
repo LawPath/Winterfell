@@ -1,36 +1,53 @@
 "use strict";
 
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = void 0;
+exports["default"] = exports.DEFAULT_ADDRESS = exports.DEFAULT_STATE = exports.STATES = void 0;
 
-var _react = _interopRequireWildcard(require("react"));
+var _react = _interopRequireDefault(require("react"));
 
-function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
+var _propTypes = _interopRequireDefault(require("prop-types"));
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+var _lodash = _interopRequireDefault(require("lodash"));
 
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+var _inputFormGroup = _interopRequireDefault(require("../formGroups/inputFormGroup"));
 
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var STATES = [{
-  text: 'Australian Capital Territory',
-  value: 'ACT'
+  text: 'Select state',
+  value: ''
 }, {
   text: 'New South Wales',
   value: 'NSW'
+}, {
+  text: 'Australian Capital Territory',
+  value: 'ACT'
 }, {
   text: 'Northern Territory',
   value: 'NT'
@@ -50,193 +67,300 @@ var STATES = [{
   text: 'Western Australia',
   value: 'WA'
 }];
+exports.STATES = STATES;
+var DEFAULT_STATE = {
+  text: 'New South Wales',
+  value: 'NSW'
+};
+exports.DEFAULT_STATE = DEFAULT_STATE;
+var DEFAULT_ADDRESS = {
+  line1: '',
+  line2: '',
+  city: '',
+  state: DEFAULT_STATE,
+  postcode: ''
+};
+exports.DEFAULT_ADDRESS = DEFAULT_ADDRESS;
 
-var AddressInput = function AddressInput(_ref) {
-  var states = _ref.states,
-      name = _ref.name,
-      id = _ref.id,
-      classes = _ref.classes,
-      required = _ref.required,
-      placeholders = _ref.placeholders,
-      _onFocus = _ref.onFocus,
-      labelId = _ref.labelId;
+var getAddress = function getAddress(address) {
+  var addressObject = address;
 
-  var _useState = (0, _react.useState)(value.type ? value.value : value),
-      _useState2 = _slicedToArray(_useState, 2),
-      inputValue = _useState2[0],
-      setInputValue = _useState2[1];
-
-  var handleSelectState = function handleSelectState(e) {
-    var index = e.nativeEvent.target.selectedIndex;
-    var line1 = inputValue.line1,
-        line2 = inputValue.line2,
-        city = inputValue.city,
-        postcode = inputValue.postcode;
-    var theState = states.find(function (ss) {
-      return ss.value === e.nativeEvent.target[index].value;
-    });
-    var state = {
-      value: {
-        line1: line1,
-        line2: line2,
-        city: city,
-        state: theState,
-        postcode: postcode
-      }
-    };
-    setInputValue(state);
-    onChange({
-      type: 'address',
-      value: state.value
-    });
-  };
-
-  var handleChangeField = function handleChangeField(field, e) {
-    var line1 = inputValue.line1,
-        line2 = inputValue.line2,
-        city = inputValue.city,
-        postcode = inputValue.postcode;
-    var theState = states.find(function (ss) {
-      return ss.value === inputValue.state.value;
-    });
-
-    if (!theState) {
-      theState = states[0];
+  if (typeof addressObject === 'string') {
+    /* Make sure that the value is a object */
+    try {
+      addressObject = JSON.parse(addressObject);
+    } catch (e) {
+      addressObject = DEFAULT_ADDRESS;
+      console.error('Could not parse address string: ', address);
     }
+  }
 
-    var newState = {
-      value: {
-        line1: line1,
-        line2: line2,
-        city: city,
-        state: theState,
-        postcode: postcode
-      }
-    };
-    newState.value[field] = e.target.value;
-    setInputValue(newState);
-    onChange({
-      type: 'address',
-      value: newState.value
-    });
-  };
-
-  var renderSelect = function renderSelect() {
-    var options = states.map(function (opt) {
-      return /*#__PURE__*/_react["default"].createElement("option", {
-        key: opt.value,
-        value: opt.value
-      }, opt.text);
-    });
-    return /*#__PURE__*/_react["default"].createElement("select", {
-      name: "".concat(name, "-state"),
-      id: "".concat(id, "-state"),
-      className: classes.select,
-      value: inputValue.state ? inputValue.state.value : '',
-      required: required ? 'required' : undefined,
-      onChange: function onChange(e) {
-        return handleSelectState(e);
-      },
-      onFocus: function onFocus() {
-        return _onFocus(id);
-      }
-    }, options);
-  };
-
-  return /*#__PURE__*/_react["default"].createElement("div", null, /*#__PURE__*/_react["default"].createElement("div", null, /*#__PURE__*/_react["default"].createElement("input", {
-    type: "text",
-    name: "".concat(name, "-line1"),
-    id: "".concat(id, "-line1"),
-    "aria-labelledby": "".concat(labelId, "-line1"),
-    className: classes.input,
-    placeholder: placeholders.line1,
-    value: inputValue.line1,
-    required: required ? 'required' : undefined,
-    onChange: function onChange(e) {
-      return handleChangeField('line1', e);
-    },
-    onFocus: function onFocus() {
-      return _onFocus(id);
-    }
-  })), /*#__PURE__*/_react["default"].createElement("div", null, /*#__PURE__*/_react["default"].createElement("input", {
-    type: "text",
-    name: "".concat(name, "-line2"),
-    id: "".concat(id, "-line2"),
-    "aria-labelledby": "".concat(labelId, "-line2"),
-    className: classes.input,
-    placeholder: placeholders.line2,
-    value: inputValue.line2,
-    required: required ? 'required' : undefined,
-    onChange: function onChange(e) {
-      return handleChangeField('line2', e);
-    },
-    onFocus: function onFocus() {
-      return _onFocus(id);
-    }
-  })), /*#__PURE__*/_react["default"].createElement("div", {
-    className: "city-line"
-  }, /*#__PURE__*/_react["default"].createElement("div", {
-    className: "beginning"
-  }, /*#__PURE__*/_react["default"].createElement("input", {
-    type: "text",
-    name: "".concat(name, "-city"),
-    id: "".concat(id, "-city"),
-    "aria-labelledby": "".concat(labelId, "-city"),
-    className: classes.input,
-    placeholder: placeholders.city,
-    value: inputValue.city,
-    required: required ? 'required' : undefined,
-    onChange: function onChange(e) {
-      return handleChangeField('city', e);
-    },
-    onFocus: function onFocus() {
-      return _onFocus(id);
-    }
-  })), /*#__PURE__*/_react["default"].createElement("div", {
-    className: "middle"
-  }, renderSelect()), /*#__PURE__*/_react["default"].createElement("div", {
-    className: "ending"
-  }, /*#__PURE__*/_react["default"].createElement("input", {
-    type: "text",
-    name: "".concat(name, "-postcode"),
-    id: "".concat(id, "-postcode"),
-    "aria-labelledby": "".concat(labelId, "-postcode"),
-    className: classes.input,
-    placeholder: placeholders.postcode,
-    value: inputValue.postcode,
-    required: required ? 'required' : undefined,
-    onChange: function onChange(e) {
-      return handleChangeField('postcode', e);
-    },
-    onFocus: function onFocus() {
-      return _onFocus(id);
-    }
-  }))));
+  return addressObject;
 };
 
-AddressInput.defaultProps = {
+var AddressInputType = /*#__PURE__*/function (_React$Component) {
+  _inherits(AddressInputType, _React$Component);
+
+  var _super = _createSuper(AddressInputType);
+
+  function AddressInputType(props) {
+    var _this;
+
+    _classCallCheck(this, AddressInputType);
+
+    _this = _super.call(this, props);
+
+    _defineProperty(_assertThisInitialized(_this), "handleSelectState", function (e) {
+      var index = e.nativeEvent.target.selectedIndex;
+      var _this$state$value = _this.state.value,
+          line1 = _this$state$value.line1,
+          line2 = _this$state$value.line2,
+          city = _this$state$value.city,
+          postcode = _this$state$value.postcode;
+
+      var theState = _this.props.states.find(function (ss) {
+        return ss.value === e.nativeEvent.target[index].value;
+      });
+
+      var state = {
+        value: {
+          line1: line1,
+          line2: line2,
+          city: city,
+          state: theState,
+          postcode: postcode
+        }
+      };
+
+      _this.setState(state, _this.props.onChange.bind(null, {
+        type: 'address',
+        value: state.value
+      }));
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "handleChangeField", function (field, e) {
+      var _this$state$value2 = _this.state.value,
+          line1 = _this$state$value2.line1,
+          line2 = _this$state$value2.line2,
+          city = _this$state$value2.city,
+          postcode = _this$state$value2.postcode,
+          stateObj = _this$state$value2.state;
+
+      var theState = _this.props.states.find(function (ss) {
+        return ss.value === stateObj.value;
+      });
+
+      if (!theState) {
+        theState = _this.props.states[0];
+      }
+
+      var ns = {
+        value: {
+          line1: line1,
+          line2: line2,
+          city: city,
+          state: theState,
+          postcode: postcode
+        }
+      };
+      ns.value[field] = e.target.value;
+
+      _this.setState(ns, _this.props.onChange.bind(null, {
+        type: 'address',
+        value: ns.value
+      }));
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "renderSelect", function () {
+      var options = _this.props.states.map(function (opt) {
+        return /*#__PURE__*/_react["default"].createElement("option", {
+          key: opt.value,
+          value: opt.value
+        }, opt.text);
+      });
+
+      return /*#__PURE__*/_react["default"].createElement("select", {
+        name: "".concat(_this.props.name, "-state"),
+        id: "".concat(_this.props.id, "-state"),
+        className: _this.props.classes.select,
+        value: _this.state.value && _this.state.value.state ? _this.state.value.state.value : '',
+        required: _this.props.required ? 'required' : undefined,
+        onChange: function onChange(e) {
+          return _this.handleSelectState(e);
+        },
+        onFocus: function onFocus() {
+          return _this.props.onFocus(_this.props.id);
+        },
+        "data-prefiled-data": _this.props.enablePrefilledAnswer
+      }, options);
+    });
+
+    var value = DEFAULT_ADDRESS;
+
+    if (_this.props.value) {
+      var valueObj = getAddress(_this.props.value);
+      value = valueObj.type ? valueObj.value : valueObj;
+    }
+
+    if (_this.props.enablePrefilledAnswer) {
+      /* Trigger focus event to once there is prefill data */
+      _this.props.onFocus(_this.props.id);
+    }
+
+    _this.state = {
+      value: value
+    };
+    return _this;
+  }
+
+  _createClass(AddressInputType, [{
+    key: "componentWillReceiveProps",
+    value: function componentWillReceiveProps(nextProps) {
+      if (nextProps.value && !_lodash["default"].isEqual(nextProps.value, this.state.value)) {
+        var valueObj = getAddress(nextProps.value);
+        this.setState({
+          value: valueObj.type ? valueObj.value : valueObj
+        });
+      }
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this2 = this;
+
+      var _this$props = this.props,
+          _onFocus = _this$props.onFocus,
+          placeholders = _this$props.placeholders,
+          enablePrefilledAnswer = _this$props.enablePrefilledAnswer;
+      var sel = this.renderSelect();
+
+      var address = /*#__PURE__*/_react["default"].createElement("div", null, /*#__PURE__*/_react["default"].createElement("div", {
+        className: "address-line"
+      }, /*#__PURE__*/_react["default"].createElement("div", {
+        className: "address-line-1"
+      }, /*#__PURE__*/_react["default"].createElement("div", {
+        className: "input-group"
+      }, /*#__PURE__*/_react["default"].createElement("input", {
+        type: "text",
+        name: "".concat(this.props.name, "-line1"),
+        id: "".concat(this.props.id, "-line1"),
+        "aria-labelledby": "".concat(this.props.labelId, "-line1"),
+        className: "".concat(this.props.classes.input ? this.props.classes.input : 'form-control'),
+        placeholder: placeholders.line1,
+        value: this.state.value.line1,
+        required: this.props.required ? 'required' : undefined,
+        onChange: function onChange(e) {
+          return _this2.handleChangeField('line1', e);
+        },
+        onFocus: function onFocus() {
+          return _onFocus(_this2.props.id);
+        },
+        "data-prefiled-data": enablePrefilledAnswer
+      }))), /*#__PURE__*/_react["default"].createElement("div", {
+        className: "address-line-2"
+      }, /*#__PURE__*/_react["default"].createElement(_inputFormGroup["default"], {
+        active: enablePrefilledAnswer,
+        onClick: this.props.onClickInputIcon
+      }, /*#__PURE__*/_react["default"].createElement("input", {
+        type: "text",
+        name: "".concat(this.props.name, "-line2"),
+        id: "".concat(this.props.id, "-line2"),
+        "aria-labelledby": "".concat(this.props.labelId, "-line2"),
+        className: this.props.classes.input,
+        placeholder: placeholders.line2,
+        value: this.state.value.line2,
+        required: this.props.required ? 'required' : undefined,
+        onChange: function onChange(e) {
+          return _this2.handleChangeField('line2', e);
+        },
+        onFocus: function onFocus() {
+          return _onFocus(_this2.props.id);
+        },
+        "data-prefiled-data": enablePrefilledAnswer
+      })))), /*#__PURE__*/_react["default"].createElement("div", {
+        className: "city-line"
+      }, /*#__PURE__*/_react["default"].createElement("div", {
+        className: "beginning"
+      }, /*#__PURE__*/_react["default"].createElement("input", {
+        type: "text",
+        name: "".concat(this.props.name, "-city"),
+        id: "".concat(this.props.id, "-city"),
+        "aria-labelledby": "".concat(this.props.labelId, "-city"),
+        className: this.props.classes.input,
+        placeholder: placeholders.city,
+        value: this.state.value.city,
+        required: this.props.required ? 'required' : undefined,
+        onChange: function onChange(e) {
+          return _this2.handleChangeField('city', e);
+        },
+        onFocus: function onFocus() {
+          return _onFocus(_this2.props.id);
+        },
+        "data-prefiled-data": enablePrefilledAnswer
+      })), /*#__PURE__*/_react["default"].createElement("div", {
+        className: "ending"
+      }, /*#__PURE__*/_react["default"].createElement("input", {
+        type: "text",
+        name: "".concat(this.props.name, "-postcode"),
+        id: "".concat(this.props.id, "-postcode"),
+        "aria-labelledby": "".concat(this.props.labelId, "-postcode"),
+        className: this.props.classes.input,
+        placeholder: placeholders.postcode,
+        value: this.state.value.postcode,
+        required: this.props.required ? 'required' : undefined,
+        onChange: function onChange(e) {
+          return _this2.handleChangeField('postcode', e);
+        },
+        onFocus: function onFocus() {
+          return _onFocus(_this2.props.id);
+        },
+        "data-prefiled-data": enablePrefilledAnswer
+      }))), /*#__PURE__*/_react["default"].createElement("div", {
+        className: "state-line"
+      }, sel));
+
+      return address;
+    }
+  }]);
+
+  return AddressInputType;
+}(_react["default"].Component);
+
+exports["default"] = AddressInputType;
+AddressInputType.propTypes = {
+  value: _propTypes["default"].object,
+  states: _propTypes["default"].array,
+  onChange: _propTypes["default"].func,
+  name: _propTypes["default"].string,
+  id: _propTypes["default"].string,
+  classes: _propTypes["default"].object,
+  required: _propTypes["default"].string,
+  onFocus: _propTypes["default"].func,
+  placeholders: _propTypes["default"].object,
+  labelId: _propTypes["default"].string.isRequired,
+  enablePrefilledAnswer: _propTypes["default"].bool.isRequired
+};
+AddressInputType.defaultProps = {
   classes: {},
   name: '',
   id: '',
+  required: undefined,
+  enablePrefilledAnswer: false,
   value: {
     line1: '',
     line2: '',
     city: '',
-    state: {
-      text: 'New South Wales',
-      value: 'NSW'
-    },
+    state: DEFAULT_STATE,
     postcode: ''
   },
   placeholders: {
-    line1: 'E.g 100 Pitt St',
-    line2: 'E.g Sydney CBD',
-    city: 'E.g Sydney',
-    postcode: 'E.g 2000'
+    line1: 'E.g. 2/100',
+    line2: 'E.g. Smith Street',
+    city: 'E.g. Sydney',
+    postcode: 'E.g. 2000'
   },
   states: STATES,
   onChange: function onChange() {},
+  onClickInputIcon: function onClickInputIcon() {},
   onFocus: function onFocus() {}
 };
-var _default = AddressInput;
-exports["default"] = _default;

@@ -430,7 +430,8 @@ var Winterfell = /*#__PURE__*/function (_Component) {
         labeledAnswers: this.props.labeledAnswers,
         currentQuestionId: this.state.currentQuestionId,
         onEnablePrefilledAnswer: this.handleOnEnablePrefilledAnswer,
-        answersSuggestionComponent: this.props.answersSuggestionComponent
+        answersSuggestionComponent: this.props.answersSuggestionComponent,
+        windowHeight: this.props.windowHeight
       })));
     }
   }]);
@@ -459,6 +460,6 @@ Winterfell.defaultProps = (_Winterfell$defaultPr = {
   renderRequiredAsterisk: undefined,
   currentQuestionId: undefined,
   panelConstants: undefined
-}, _defineProperty(_Winterfell$defaultPr, "questionAnswers", undefined), _defineProperty(_Winterfell$defaultPr, "answersSuggestionComponent", undefined), _defineProperty(_Winterfell$defaultPr, "labeledAnswers", []), _defineProperty(_Winterfell$defaultPr, "onSubmit", function onSubmit() {}), _defineProperty(_Winterfell$defaultPr, "onUpdate", function onUpdate() {}), _defineProperty(_Winterfell$defaultPr, "onFocus", function onFocus() {}), _defineProperty(_Winterfell$defaultPr, "onSwitchPanel", function onSwitchPanel() {}), _defineProperty(_Winterfell$defaultPr, "onRender", function onRender() {}), _defineProperty(_Winterfell$defaultPr, "onClickInputIcon", function onClickInputIcon() {}), _Winterfell$defaultPr);
+}, _defineProperty(_Winterfell$defaultPr, "questionAnswers", undefined), _defineProperty(_Winterfell$defaultPr, "answersSuggestionComponent", undefined), _defineProperty(_Winterfell$defaultPr, "labeledAnswers", []), _defineProperty(_Winterfell$defaultPr, "windowHeight", 0), _defineProperty(_Winterfell$defaultPr, "onSubmit", function onSubmit() {}), _defineProperty(_Winterfell$defaultPr, "onUpdate", function onUpdate() {}), _defineProperty(_Winterfell$defaultPr, "onFocus", function onFocus() {}), _defineProperty(_Winterfell$defaultPr, "onSwitchPanel", function onSwitchPanel() {}), _defineProperty(_Winterfell$defaultPr, "onRender", function onRender() {}), _defineProperty(_Winterfell$defaultPr, "onClickInputIcon", function onClickInputIcon() {}), _Winterfell$defaultPr);
 var _default = Winterfell;
 exports["default"] = _default;

@@ -46,6 +46,7 @@ var inputTypes = {
   passwordInput: _passwordInput["default"],
   radioOptionsInput: _radioOptionsInput["default"],
   selectInput: _selectInput["default"],
+  textAreaInput: _textareaInput["default"],
   textareaInput: _textareaInput["default"],
   textInput: _textInput["default"],
   addressInput: _addressInput["default"],

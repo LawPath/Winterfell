@@ -15,8 +15,6 @@ var _styledComponents = _interopRequireDefault(require("styled-components"));
 
 var _tooltip = _interopRequireDefault(require("../custom/tooltip"));
 
-var _icon = require("../custom/icon");
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
@@ -35,18 +33,8 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-function _templateObject2() {
-  var data = _taggedTemplateLiteral(["\n  position: absolute;\n  top: 0;\n  right: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  padding: 0.375rem 0.75rem;\n  border-left: none;\n  cursor: pointer;\n  background-color: ", ";\n"]);
-
-  _templateObject2 = function _templateObject2() {
-    return data;
-  };
-
-  return data;
-}
-
 function _templateObject() {
-  var data = _taggedTemplateLiteral(["\n  position: relative;\n  min-height: 60px;\n  border: 1px solid #7a8aa0;\n\n  textarea {\n    resize: vertical;\n    padding-right: 45px;\n    min-height: 60px;\n    max-height: 120px;\n    border: none !important;\n    background-color: ", ";\n  }\n"]);
+  var data = _taggedTemplateLiteral(["\n  position: relative;\n\n  textarea {\n    position: absolute;\n    width: 100%;\n    height: 100%;\n    padding-right: 45px;\n    resize: vertical;\n    min-height: 45px;\n    max-height: 135px;\n    background-color: ", ";\n  }\n\n  .input-group-append {\n    position: absolute;\n    top: 0;\n    right: 0;\n    cursor: pointer;\n\n    .input-group-text {\n      background-color: inherit;\n      border: none;\n      padding: 0.5rem 0.75rem;\n    }\n  }\n"]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -64,26 +52,19 @@ var TextareaWrapper = _styledComponents["default"].div.attrs({
   return isActive ? '#e7f2f9' : 'inherit';
 });
 
-var InputGroupIcon = _styledComponents["default"].div.attrs({
-  'data-id': 'input-group-icon'
-})(_templateObject2(), function (_ref2) {
-  var active = _ref2.active;
-  return active ? '#e7f2f9' : 'inherit';
-});
-
-var TextareaInput = function TextareaInput(_ref3) {
-  var name = _ref3.name,
-      id = _ref3.id,
-      value = _ref3.value,
-      labelId = _ref3.labelId,
-      classes = _ref3.classes,
-      placeholder = _ref3.placeholder,
-      required = _ref3.required,
-      onChange = _ref3.onChange,
-      _onFocus = _ref3.onFocus,
-      _onBlur = _ref3.onBlur,
-      onClickInputIcon = _ref3.onClickInputIcon,
-      enablePrefilledAnswer = _ref3.enablePrefilledAnswer;
+var TextareaInput = function TextareaInput(_ref2) {
+  var name = _ref2.name,
+      id = _ref2.id,
+      value = _ref2.value,
+      labelId = _ref2.labelId,
+      classes = _ref2.classes,
+      placeholder = _ref2.placeholder,
+      required = _ref2.required,
+      onChange = _ref2.onChange,
+      _onFocus = _ref2.onFocus,
+      _onBlur = _ref2.onBlur,
+      onClickInputIcon = _ref2.onClickInputIcon,
+      enablePrefilledAnswer = _ref2.enablePrefilledAnswer;
 
   var _useState = (0, _react.useState)(value),
       _useState2 = _slicedToArray(_useState, 2),
@@ -122,11 +103,14 @@ var TextareaInput = function TextareaInput(_ref3) {
     onBlur: function onBlur() {
       return _onBlur(inputValue);
     }
-  }), enablePrefilledAnswer ? /*#__PURE__*/_react["default"].createElement(InputGroupIcon, {
-    active: enablePrefilledAnswer
-  }, /*#__PURE__*/_react["default"].createElement(_tooltip["default"], null, /*#__PURE__*/_react["default"].createElement(_icon.Icon, {
+  }), enablePrefilledAnswer ? /*#__PURE__*/_react["default"].createElement("div", {
+    className: "input-group-append"
+  }, /*#__PURE__*/_react["default"].createElement("span", {
+    className: "input-group-text",
     onClick: onClickInputIcon
-  }))) : null);
+  }, /*#__PURE__*/_react["default"].createElement(_tooltip["default"], null, /*#__PURE__*/_react["default"].createElement("span", {
+    className: "prefill-icon"
+  })))) : null);
 };
 
 TextareaInput.propTypes = {

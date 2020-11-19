@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createRef } from 'react';
 import _ from 'lodash';
 import KeyCodez from 'keycodez';
 import Validation from './lib/validation';
@@ -11,10 +11,20 @@ import ProgressBar from './custom/progressBar';
 
 export const constants = {
   headerHeight: 55,
+  actionButtons: 50,
+  progressBar: 30,
+  buttonsBar: 80,
+  mobileButtonsBarExtra: 60,
+  suggestionContent: '20vh',
+  verticalPadding: 40,
+  footer: 31,
+  suggestionHeader: 54,
 };
 
 export const breakpoint = {
-  desktop: 768,
+  mobile: 768,
+  smallMobile: 450,
+  desktop: 1024,
   wideDesktop: 1200,
 };
 
@@ -23,19 +33,44 @@ export const mediaQuery = {
   wideDesktop: `min-width: ${breakpoint.wideDesktop}px`,
 };
 
+const gaps =
+  constants.actionButtons +
+  constants.progressBar +
+  constants.buttonsBar +
+  constants.verticalPadding +
+  constants.footer;
+
 const QuestionPanelStyleComponent = styled.div.attrs({ 'data-id': 'winterfell-question-panel' })`
   display: grid;
   height: 100%;
-  grid-template-rows: auto 1fr calc(20vh + 155px) auto;
+  grid-template-rows: auto 1fr auto;
   grid-template-areas:
     'header'
     'body'
-    'bodyFooter'
     'footer';
 
-  @media only screen and (max-width: 768px) {
-    grid-template-rows: auto auto auto auto;
+  .winterfell-question-sets {
+    min-height: calc(
+      ${({ windowHeight }) => windowHeight}px - ${gaps}px - ${constants.suggestionContent} -
+        ${({ suggestionHeaderHeight }) => suggestionHeaderHeight}px
+    );
+    @media only screen and (max-width: ${breakpoint.smallMobile}px),
+      (min-width: ${breakpoint.mobile + 1}px) and (max-width: ${breakpoint.desktop + 1}px) {
+      min-height: calc(
+        ${({ windowHeight }) => windowHeight}px - ${gaps + constants.mobileButtonsBarExtra}px -
+          ${constants.suggestionContent} -
+          ${({ suggestionHeaderHeight }) => suggestionHeaderHeight}px
+      );
+    }
+  }
+
+  @media only screen and (max-width: ${breakpoint.mobile}px) {
+    grid-template-rows: auto auto auto;
     height: auto;
+
+    .winterfell-question-sets {
+      min-height: auto;
+    }
   }
 `;
 
@@ -47,6 +82,7 @@ export default class QuestionPanel extends React.Component {
       validationErrors: this.props.validationErrors,
       currentQuestion: null,
     };
+    this.suggestionHeaderRef = createRef();
   }
 
   componentWillReceiveProps(newprops) {
@@ -274,44 +310,54 @@ export default class QuestionPanel extends React.Component {
           questionAnswers={this.props.questionAnswers}
           onAnswerChange={this.props.onAnswerChange}
           defaultSuggestions={this.props.defaultSuggestions}
+          headerRef={this.suggestionHeaderRef}
         />
       );
     });
 
     return (
-      <QuestionPanelStyleComponent>
+      <QuestionPanelStyleComponent
+        windowHeight={this.props.windowHeight}
+        suggestionHeaderHeight={
+          this.suggestionHeaderRef.current
+            ? this.suggestionHeaderRef.current.clientHeight
+            : constants.suggestionHeader
+        }
+      >
         <div className="question-panel-header">
           {this.props.panelAcions}
           <ProgressBar progress={completionPercent} text={progressText} />
         </div>
         <div className="question-panel-body">
           <div className={this.props.classes.questionSets}>{questionSets}</div>
-        </div>
 
-        <div className="question-panel-body-footer">
-          <div
-            className={`${this.props.classes.buttonBar} ${this.props.extraClasses.buttonBar || ''}`}
-          >
-            {this.props.currentPanelIndex > 0 && !this.props.backButton.disabled ? (
-              <Button
-                text={this.props.backButton.text || 'Back'}
-                onClick={this.handleBackButtonClick}
-                className={`${this.props.classes.backButton} ${
-                  this.props.extraClasses.backButton || ''
-                }`}
-              />
-            ) : undefined}
-            {!this.props.button.disabled ? (
-              <Button
-                text={this.props.button.text}
-                onClick={this.handleMainButtonClick}
-                className={`${this.props.classes.controlButton} ${
-                  this.props.extraClasses.button || ''
-                }`}
-              />
-            ) : undefined}
+          <div className="question-panel-body-footer">
+            <div
+              className={`${this.props.classes.buttonBar} ${
+                this.props.extraClasses.buttonBar || ''
+              }`}
+            >
+              {this.props.currentPanelIndex > 0 && !this.props.backButton.disabled ? (
+                <Button
+                  text={this.props.backButton.text || 'Back'}
+                  onClick={this.handleBackButtonClick}
+                  className={`${this.props.classes.backButton} ${
+                    this.props.extraClasses.backButton || ''
+                  }`}
+                />
+              ) : undefined}
+              {!this.props.button.disabled ? (
+                <Button
+                  text={this.props.button.text}
+                  onClick={this.handleMainButtonClick}
+                  className={`${this.props.classes.controlButton} ${
+                    this.props.extraClasses.button || ''
+                  }`}
+                />
+              ) : undefined}
+            </div>
+            <div className="d-none d-md-block">{suggestionSets}</div>
           </div>
-          <div className="d-none d-md-block">{suggestionSets}</div>
         </div>
         <div className="question-panel-footer">
           <div className="prefill-action-bar">
@@ -369,6 +415,7 @@ QuestionPanel.defaultProps = {
   renderError: undefined,
   renderRequiredAsterisk: undefined,
   currentQuestionId: undefined,
+  windowHeight: 0,
   onAnswerChange: () => {},
   onSwitchPanel: () => {},
   onPanelBack: () => {},

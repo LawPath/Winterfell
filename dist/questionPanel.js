@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = exports.mediaQuery = exports.breakpoint = exports.constants = void 0;
 
-var _react = _interopRequireDefault(require("react"));
+var _react = _interopRequireWildcard(require("react"));
 
 var _lodash = _interopRequireDefault(require("lodash"));
 
@@ -26,6 +26,10 @@ var _styledComponents = _interopRequireDefault(require("styled-components"));
 var _progressBar = _interopRequireDefault(require("./custom/progressBar"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -52,7 +56,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _templateObject() {
-  var data = _taggedTemplateLiteral(["\n  display: grid;\n  height: 100%;\n  grid-template-rows: auto 1fr calc(20vh + 155px) auto;\n  grid-template-areas:\n    'header'\n    'body'\n    'bodyFooter'\n    'footer';\n\n  @media only screen and (max-width: 768px) {\n    grid-template-rows: auto auto auto auto;\n    height: auto;\n  }\n"]);
+  var data = _taggedTemplateLiteral(["\n  display: grid;\n  height: 100%;\n  grid-template-rows: auto 1fr auto;\n  grid-template-areas:\n    'header'\n    'body'\n    'footer';\n\n  .winterfell-question-sets {\n    min-height: calc(\n      ", "px - ", "px - ", " -\n        ", "px\n    );\n    @media only screen and (max-width: ", "px),\n      (min-width: ", "px) and (max-width: ", "px) {\n      min-height: calc(\n        ", "px - ", "px -\n          ", " -\n          ", "px\n      );\n    }\n  }\n\n  @media only screen and (max-width: ", "px) {\n    grid-template-rows: auto auto auto;\n    height: auto;\n\n    .winterfell-question-sets {\n      min-height: auto;\n    }\n  }\n"]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -64,11 +68,21 @@ function _templateObject() {
 function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
 var constants = {
-  headerHeight: 55
+  headerHeight: 55,
+  actionButtons: 50,
+  progressBar: 30,
+  buttonsBar: 80,
+  mobileButtonsBarExtra: 60,
+  suggestionContent: '20vh',
+  verticalPadding: 40,
+  footer: 31,
+  suggestionHeader: 54
 };
 exports.constants = constants;
 var breakpoint = {
-  desktop: 768,
+  mobile: 768,
+  smallMobile: 450,
+  desktop: 1024,
   wideDesktop: 1200
 };
 exports.breakpoint = breakpoint;
@@ -77,10 +91,23 @@ var mediaQuery = {
   wideDesktop: "min-width: ".concat(breakpoint.wideDesktop, "px")
 };
 exports.mediaQuery = mediaQuery;
+var gaps = constants.actionButtons + constants.progressBar + constants.buttonsBar + constants.verticalPadding + constants.footer;
 
 var QuestionPanelStyleComponent = _styledComponents["default"].div.attrs({
   'data-id': 'winterfell-question-panel'
-})(_templateObject());
+})(_templateObject(), function (_ref) {
+  var windowHeight = _ref.windowHeight;
+  return windowHeight;
+}, gaps, constants.suggestionContent, function (_ref2) {
+  var suggestionHeaderHeight = _ref2.suggestionHeaderHeight;
+  return suggestionHeaderHeight;
+}, breakpoint.smallMobile, breakpoint.mobile + 1, breakpoint.desktop + 1, function (_ref3) {
+  var windowHeight = _ref3.windowHeight;
+  return windowHeight;
+}, gaps + constants.mobileButtonsBarExtra, constants.suggestionContent, function (_ref4) {
+  var suggestionHeaderHeight = _ref4.suggestionHeaderHeight;
+  return suggestionHeaderHeight;
+}, breakpoint.mobile);
 
 var QuestionPanel = /*#__PURE__*/function (_React$Component) {
   _inherits(QuestionPanel, _React$Component);
@@ -266,6 +293,7 @@ var QuestionPanel = /*#__PURE__*/function (_React$Component) {
       validationErrors: _this.props.validationErrors,
       currentQuestion: null
     };
+    _this.suggestionHeaderRef = /*#__PURE__*/(0, _react.createRef)();
     return _this;
   }
 
@@ -339,10 +367,14 @@ var QuestionPanel = /*#__PURE__*/function (_React$Component) {
           panelConstants: _this2.props.panelConstants,
           questionAnswers: _this2.props.questionAnswers,
           onAnswerChange: _this2.props.onAnswerChange,
-          defaultSuggestions: _this2.props.defaultSuggestions
+          defaultSuggestions: _this2.props.defaultSuggestions,
+          headerRef: _this2.suggestionHeaderRef
         });
       });
-      return /*#__PURE__*/_react["default"].createElement(QuestionPanelStyleComponent, null, /*#__PURE__*/_react["default"].createElement("div", {
+      return /*#__PURE__*/_react["default"].createElement(QuestionPanelStyleComponent, {
+        windowHeight: this.props.windowHeight,
+        suggestionHeaderHeight: this.suggestionHeaderRef.current ? this.suggestionHeaderRef.current.clientHeight : constants.suggestionHeader
+      }, /*#__PURE__*/_react["default"].createElement("div", {
         className: "question-panel-header"
       }, this.props.panelAcions, /*#__PURE__*/_react["default"].createElement(_progressBar["default"], {
         progress: completionPercent,
@@ -351,7 +383,7 @@ var QuestionPanel = /*#__PURE__*/function (_React$Component) {
         className: "question-panel-body"
       }, /*#__PURE__*/_react["default"].createElement("div", {
         className: this.props.classes.questionSets
-      }, questionSets)), /*#__PURE__*/_react["default"].createElement("div", {
+      }, questionSets), /*#__PURE__*/_react["default"].createElement("div", {
         className: "question-panel-body-footer"
       }, /*#__PURE__*/_react["default"].createElement("div", {
         className: "".concat(this.props.classes.buttonBar, " ").concat(this.props.extraClasses.buttonBar || '')
@@ -365,7 +397,7 @@ var QuestionPanel = /*#__PURE__*/function (_React$Component) {
         className: "".concat(this.props.classes.controlButton, " ").concat(this.props.extraClasses.button || '')
       }) : undefined), /*#__PURE__*/_react["default"].createElement("div", {
         className: "d-none d-md-block"
-      }, suggestionSets)), /*#__PURE__*/_react["default"].createElement("div", {
+      }, suggestionSets))), /*#__PURE__*/_react["default"].createElement("div", {
         className: "question-panel-footer"
       }, /*#__PURE__*/_react["default"].createElement("div", {
         className: "prefill-action-bar"
@@ -418,6 +450,7 @@ QuestionPanel.defaultProps = {
   renderError: undefined,
   renderRequiredAsterisk: undefined,
   currentQuestionId: undefined,
+  windowHeight: 0,
   onAnswerChange: function onAnswerChange() {},
   onSwitchPanel: function onSwitchPanel() {},
   onPanelBack: function onPanelBack() {},

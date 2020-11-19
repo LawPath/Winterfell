@@ -184,8 +184,7 @@ var Question = /*#__PURE__*/function (_Component) {
         onBlur: this.handleInputBlur.bind(this, this.props.questionId),
         onFocus: this.props.onFocus,
         onKeyDown: this.props.onKeyDown,
-        onClickInputIcon: this.props.onClickInputIcon,
-        inputIconTooltipContent: this.props.panelConstants.tooltipContent
+        onClickInputIcon: this.props.onClickInputIcon
       }, _typeof(this.props.input.props) === 'object' ? this.props.input.props : {})), !!this.props.suggestions ? /*#__PURE__*/_react["default"].createElement("p", {
         className: this.props.classes.questionPostText
       }, this.props.panelConstants.suggestionHintText) : undefined, conditionalItems);

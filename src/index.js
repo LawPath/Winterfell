@@ -383,6 +383,7 @@ export class Winterfell extends Component {
             currentQuestionId={this.state.currentQuestionId}
             onEnablePrefilledAnswer={this.handleOnEnablePrefilledAnswer}
             answersSuggestionComponent={this.props.answersSuggestionComponent}
+            windowHeight={this.props.windowHeight}
           />
         </div>
       </form>
@@ -417,6 +418,7 @@ Winterfell.defaultProps = {
   questionAnswers: undefined,
   answersSuggestionComponent: undefined,
   labeledAnswers: [],
+  windowHeight: 0,
   onSubmit: () => {},
   onUpdate: () => {},
   onFocus: () => {},

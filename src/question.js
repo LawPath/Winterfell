@@ -160,7 +160,6 @@ export default class Question extends Component {
           onFocus={this.props.onFocus}
           onKeyDown={this.props.onKeyDown}
           onClickInputIcon={this.props.onClickInputIcon}
-          inputIconTooltipContent={this.props.panelConstants.tooltipContent}
           {...(typeof this.props.input.props === 'object' ? this.props.input.props : {})}
         />
         {!!this.props.suggestions ? (

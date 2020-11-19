@@ -22,6 +22,7 @@ const inputTypes = {
   passwordInput: PasswordInput,
   radioOptionsInput: RadioOptionsInput,
   selectInput: SelectInput,
+  textAreaInput: TextareaInput,
   textareaInput: TextareaInput,
   textInput: TextInput,
   addressInput: AddressInput,
