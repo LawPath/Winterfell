@@ -83,7 +83,9 @@ var TextareaInput = function TextareaInput(_ref3) {
       _onFocus = _ref3.onFocus,
       _onBlur = _ref3.onBlur,
       onClickInputIcon = _ref3.onClickInputIcon,
-      enablePrefilledAnswer = _ref3.enablePrefilledAnswer;
+      enablePrefilledAnswer = _ref3.enablePrefilledAnswer,
+      questionLabel = _ref3.questionLabel,
+      prefilledData = _ref3.prefilledData;
 
   var _useState = (0, _react.useState)(value),
       _useState2 = _slicedToArray(_useState, 2),
@@ -122,7 +124,7 @@ var TextareaInput = function TextareaInput(_ref3) {
     onBlur: function onBlur() {
       return _onBlur(inputValue);
     }
-  }), enablePrefilledAnswer ? /*#__PURE__*/_react["default"].createElement(InputGroupIcon, {
+  }), enablePrefilledAnswer || !enablePrefilledAnswer && questionLabel && !prefilledData ? /*#__PURE__*/_react["default"].createElement(InputGroupIcon, {
     active: enablePrefilledAnswer
   }, /*#__PURE__*/_react["default"].createElement(_tooltip["default"], null, /*#__PURE__*/_react["default"].createElement(_icon.Icon, {
     onClick: onClickInputIcon

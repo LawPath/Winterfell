@@ -89,6 +89,7 @@ var Switch = function Switch(_ref) {
 
   return /*#__PURE__*/_react["default"].createElement(_tooltip["default"], {
     content: disabled ? InavailablePrefill : checked ? DisabledPrefill : EnabledPrefill,
+    arrowStyle: "right: 20px;",
     placement: "top"
   }, /*#__PURE__*/_react["default"].createElement(_reactSwitch["default"], _extends({}, switchConfig, {
     className: "switch-control ".concat(disabled ? 'switch-control-disabled' : checked ? 'switch-control-active' : 'switch-control-inactive'),

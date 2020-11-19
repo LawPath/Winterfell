@@ -16,6 +16,8 @@ const TextInput = ({
   onClickInputIcon,
   enablePrefilledAnswer,
   inputIconTooltipContent,
+  prefilledData,
+  questionLabel,
 }) => {
   const [inputValue, setInputValue] = useState(value);
 
@@ -35,6 +37,7 @@ const TextInput = ({
   return (
     <IconInput
       active={enablePrefilledAnswer}
+      showIcon={!enablePrefilledAnswer && !prefilledData && questionLabel}
       onClick={onClickInputIcon}
       tooltipContent={inputIconTooltipContent}
     >

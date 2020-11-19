@@ -64,7 +64,8 @@ var CustomInput = function CustomInput(_ref) {
     isSecure: isSecure,
     id: id,
     className: style,
-    onClick: onClick
+    onClick: onClick,
+    autoComplete: "off"
   }));
 };
 

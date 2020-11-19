@@ -79,6 +79,7 @@ export default class Question extends Component {
                 validateOn={conditionalQuestion.validateOn}
                 validations={conditionalQuestion.validations}
                 value={answer ? answer.value : undefined}
+                questionLabel={conditionalQuestion.label}
                 prefilledData={answer ? answer.prefilledData : undefined}
                 enablePrefilledAnswer={answer ? answer.enablePrefilledAnswer : undefined}
                 input={conditionalQuestion.input}
@@ -148,6 +149,7 @@ export default class Question extends Component {
           id={this.props.questionId}
           labelId={labelId}
           value={value}
+          questionLabel={this.props.label}
           prefilledData={this.props.prefilledData}
           enablePrefilledAnswer={this.props.enablePrefilledAnswer}
           text={this.props.input.text}

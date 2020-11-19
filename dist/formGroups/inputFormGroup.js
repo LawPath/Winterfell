@@ -58,14 +58,14 @@ var IconInput = function IconInput(_ref2) {
       iconUrl = _ref2.iconUrl,
       children = _ref2.children;
   return /*#__PURE__*/_react["default"].createElement(InputGroup, null, children, active || showIcon ? /*#__PURE__*/_react["default"].createElement(InputGroupIcon, {
-    active: active,
-    icon: iconUrl
+    active: active
   }, showTooltip ? /*#__PURE__*/_react["default"].createElement(_tooltip["default"], {
     content: tooltipContent
   }, /*#__PURE__*/_react["default"].createElement(_icon.Icon, {
-    onClick: onClick
-  })) : /*#__PURE__*/_react["default"].createElement("span", {
-    className: "icon"
+    onClick: onClick,
+    icon: iconUrl
+  })) : /*#__PURE__*/_react["default"].createElement(_icon.Icon, {
+    icon: iconUrl
   })) : null);
 };
 

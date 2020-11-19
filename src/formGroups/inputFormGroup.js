@@ -44,13 +44,13 @@ const IconInput = ({
     <InputGroup>
       {children}
       {active || showIcon ? (
-        <InputGroupIcon active={active} icon={iconUrl}>
+        <InputGroupIcon active={active}>
           {showTooltip ? (
             <Tooltip content={tooltipContent}>
-              <Icon onClick={onClick} />
+              <Icon onClick={onClick} icon={iconUrl} />
             </Tooltip>
           ) : (
-            <span className="icon" />
+            <Icon icon={iconUrl} />
           )}
         </InputGroupIcon>
       ) : null}

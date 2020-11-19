@@ -31,6 +31,7 @@ const CustomInput = ({
         id={id}
         className={style}
         onClick={onClick}
+        autoComplete="off"
       />
     </IconInput>
   );
