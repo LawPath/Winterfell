@@ -40,7 +40,24 @@ export default class QuestionSet extends Component {
       );
     });
 
-    return <div className={this.props.classes.questionSet}>{questions}</div>;
+    return (
+      <div className={this.props.classes.questionSet}>
+        {typeof this.props.questionSetHeader !== 'undefined' ||
+        typeof this.props.questionSetText !== 'undefined' ? (
+          <div className={this.props.classes.questionSetHeaderContainer}>
+            {typeof this.props.questionSetHeader !== 'undefined' ? (
+              <h4 className={this.props.classes.questionSetHeader}>
+                {this.props.questionSetHeader}
+              </h4>
+            ) : undefined}
+            {typeof this.props.questionSetText !== 'undefined' ? (
+              <p className={this.props.classes.questionSetText}>{this.props.questionSetText}</p>
+            ) : undefined}
+          </div>
+        ) : undefined}
+        {questions}
+      </div>
+    );
   }
 }
 
