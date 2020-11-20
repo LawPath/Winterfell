@@ -17,7 +17,7 @@ const TextareaWrapper = styled.div.attrs({
     min-height: 60px;
     max-height: 120px;
     border: none !important;
-    background-color: ${({ isActive }) => (isActive ? '#e7f2f9' : 'inherit')};
+    background-color: ${({ active }) => (active ? '#e7f2f9' : 'inherit')} !important;
   }
 `;
 
@@ -66,7 +66,7 @@ const TextareaInput = ({
     onChange(e.target.value);
   };
   return (
-    <TextareaWrapper isActive={enablePrefilledAnswer}>
+    <TextareaWrapper active={enablePrefilledAnswer}>
       <textarea
         type="text"
         name={name}

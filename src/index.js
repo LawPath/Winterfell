@@ -284,6 +284,10 @@ export class Winterfell extends Component {
       this.panelHistory.push(panel.panelId);
     }
 
+    if (panel && panel.panelId === 'final-panel') {
+      /* The final panel does not contain any question */
+      this.setState({ currentQuestionId: undefined });
+    }
     this.setState({ currentPanel: panel });
     this.props.onSwitchPanel(panel);
   };
@@ -381,7 +385,7 @@ export class Winterfell extends Component {
             onQuestionMounted={this.onQuestionMounted.bind(this)}
             labeledAnswers={this.props.labeledAnswers}
             currentQuestionId={this.state.currentQuestionId}
-            onEnablePrefilledAnswer={this.handleOnEnablePrefilledAnswer}
+            onEnablePrefilledAnswer={this.handleOnEnablePrefilledAnswer.bind(this)}
             answersSuggestionComponent={this.props.answersSuggestionComponent}
             windowHeight={this.props.windowHeight}
           />

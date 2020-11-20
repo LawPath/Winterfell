@@ -19,6 +19,7 @@ export const constants = {
   verticalPadding: 40,
   footer: 31,
   suggestionHeader: 54,
+  magicHeight: 10,
 };
 
 export const breakpoint = {
@@ -62,6 +63,13 @@ const QuestionPanelStyleComponent = styled.div.attrs({ 'data-id': 'winterfell-qu
           ${({ suggestionHeaderHeight }) => suggestionHeaderHeight}px
       );
     }
+    @media only screen and (min-width: ${breakpoint.desktop + 1}px) {
+      min-height: calc(
+        ${({ windowHeight }) => windowHeight}px - ${gaps + constants.mobileButtonsBarExtra}px -
+          ${constants.suggestionContent} - ${constants.magicHeight}% -
+          ${({ suggestionHeaderHeight }) => suggestionHeaderHeight}px
+      );
+    }
   }
 
   @media only screen and (max-width: ${breakpoint.mobile}px) {
@@ -92,6 +100,8 @@ export default class QuestionPanel extends React.Component {
         : null;
       if (!currentQuestion) return;
       this.setState({ currentQuestion });
+    } else {
+      this.setState({ currentQuestion: null });
     }
   }
 
@@ -314,7 +324,6 @@ export default class QuestionPanel extends React.Component {
         />
       );
     });
-
     return (
       <QuestionPanelStyleComponent
         windowHeight={this.props.windowHeight}
@@ -371,12 +380,11 @@ export default class QuestionPanel extends React.Component {
                 <Switch
                   active={this.state.currentQuestion.enablePrefilledAnswer}
                   onChange={this.props.onEnablePrefilledAnswer}
-                  disabled={
-                    !this.state.currentQuestion ||
-                    (this.state.currentQuestion && !this.state.currentQuestion.label)
-                  }
+                  disabled={!this.state.currentQuestion.label}
                 />
-              ) : null}
+              ) : (
+                <Switch active={false} disabled={true} />
+              )}
             </span>
           </div>
         </div>
