@@ -56,7 +56,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _templateObject() {
-  var data = _taggedTemplateLiteral(["\n  display: grid;\n  height: 100%;\n  grid-template-rows: auto 1fr auto;\n  grid-template-areas:\n    'header'\n    'body'\n    'footer';\n\n  .winterfell-question-sets {\n    min-height: calc(\n      ", "px - ", "px - ", " -\n        ", "px\n    );\n    @media only screen and (max-width: ", "px),\n      (min-width: ", "px) and (max-width: ", "px) {\n      min-height: calc(\n        ", "px - ", "px -\n          ", " -\n          ", "px\n      );\n    }\n  }\n\n  @media only screen and (max-width: ", "px) {\n    grid-template-rows: auto auto auto;\n    height: auto;\n\n    .winterfell-question-sets {\n      min-height: auto;\n    }\n  }\n"]);
+  var data = _taggedTemplateLiteral(["\n  display: grid;\n  height: 100%;\n  grid-template-rows: auto 1fr auto;\n  grid-template-areas:\n    'header'\n    'body'\n    'footer';\n\n  .winterfell-question-sets {\n    min-height: calc(\n      ", "px - ", "px - ", " -\n        ", "px\n    );\n    @media only screen and (max-width: ", "px),\n      (min-width: ", "px) and (max-width: ", "px) {\n      min-height: calc(\n        ", "px - ", "px -\n          ", " -\n          ", "px\n      );\n    }\n    @media only screen and (min-width: ", "px) {\n      min-height: calc(\n        ", "px - ", "px -\n          ", " - ", "% -\n          ", "px\n      );\n    }\n  }\n\n  @media only screen and (max-width: ", "px) {\n    grid-template-rows: auto auto auto;\n    height: auto;\n\n    .winterfell-question-sets {\n      min-height: auto;\n    }\n  }\n"]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -76,7 +76,8 @@ var constants = {
   suggestionContent: '20vh',
   verticalPadding: 40,
   footer: 31,
-  suggestionHeader: 54
+  suggestionHeader: 54,
+  magicHeight: 10
 };
 exports.constants = constants;
 var breakpoint = {
@@ -106,6 +107,12 @@ var QuestionPanelStyleComponent = _styledComponents["default"].div.attrs({
   return windowHeight;
 }, gaps + constants.mobileButtonsBarExtra, constants.suggestionContent, function (_ref4) {
   var suggestionHeaderHeight = _ref4.suggestionHeaderHeight;
+  return suggestionHeaderHeight;
+}, breakpoint.desktop + 1, function (_ref5) {
+  var windowHeight = _ref5.windowHeight;
+  return windowHeight;
+}, gaps + constants.mobileButtonsBarExtra, constants.suggestionContent, constants.magicHeight, function (_ref6) {
+  var suggestionHeaderHeight = _ref6.suggestionHeaderHeight;
   return suggestionHeaderHeight;
 }, breakpoint.mobile);
 
@@ -306,6 +313,10 @@ var QuestionPanel = /*#__PURE__*/function (_React$Component) {
         this.setState({
           currentQuestion: currentQuestion
         });
+      } else {
+        this.setState({
+          currentQuestion: null
+        });
       }
     }
   }, {
@@ -411,8 +422,11 @@ var QuestionPanel = /*#__PURE__*/function (_React$Component) {
       }, this.state.currentQuestion ? /*#__PURE__*/_react["default"].createElement(_switch["default"], {
         active: this.state.currentQuestion.enablePrefilledAnswer,
         onChange: this.props.onEnablePrefilledAnswer,
-        disabled: !this.state.currentQuestion || this.state.currentQuestion && !this.state.currentQuestion.label
-      }) : null))));
+        disabled: !this.state.currentQuestion.label
+      }) : /*#__PURE__*/_react["default"].createElement(_switch["default"], {
+        active: false,
+        disabled: true
+      })))));
     }
   }]);
 

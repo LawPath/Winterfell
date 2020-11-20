@@ -199,6 +199,13 @@ var Winterfell = /*#__PURE__*/function (_Component) {
         _this.panelHistory.push(panel.panelId);
       }
 
+      if (panel && panel.panelId === 'final-panel') {
+        /* The final panel does not contain any question */
+        _this.setState({
+          currentQuestionId: undefined
+        });
+      }
+
       _this.setState({
         currentPanel: panel
       });
@@ -429,7 +436,7 @@ var Winterfell = /*#__PURE__*/function (_Component) {
         onQuestionMounted: this.onQuestionMounted.bind(this),
         labeledAnswers: this.props.labeledAnswers,
         currentQuestionId: this.state.currentQuestionId,
-        onEnablePrefilledAnswer: this.handleOnEnablePrefilledAnswer,
+        onEnablePrefilledAnswer: this.handleOnEnablePrefilledAnswer.bind(this),
         answersSuggestionComponent: this.props.answersSuggestionComponent,
         windowHeight: this.props.windowHeight
       })));

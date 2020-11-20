@@ -46,7 +46,7 @@ function _templateObject2() {
 }
 
 function _templateObject() {
-  var data = _taggedTemplateLiteral(["\n  position: relative;\n  min-height: 60px;\n  border: 1px solid #7a8aa0;\n\n  textarea {\n    resize: vertical;\n    padding-right: 45px;\n    min-height: 60px;\n    max-height: 120px;\n    border: none !important;\n    background-color: ", ";\n  }\n"]);
+  var data = _taggedTemplateLiteral(["\n  position: relative;\n  min-height: 60px;\n  border: 1px solid #7a8aa0;\n\n  textarea {\n    resize: vertical;\n    padding-right: 45px;\n    min-height: 60px;\n    max-height: 120px;\n    border: none !important;\n    background-color: ", " !important;\n  }\n"]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -60,8 +60,8 @@ function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(
 var TextareaWrapper = _styledComponents["default"].div.attrs({
   'data-id': 'textarea-wrapper'
 })(_templateObject(), function (_ref) {
-  var isActive = _ref.isActive;
-  return isActive ? '#e7f2f9' : 'inherit';
+  var active = _ref.active;
+  return active ? '#e7f2f9' : 'inherit';
 });
 
 var InputGroupIcon = _styledComponents["default"].div.attrs({
@@ -107,7 +107,7 @@ var TextareaInput = function TextareaInput(_ref3) {
   };
 
   return /*#__PURE__*/_react["default"].createElement(TextareaWrapper, {
-    isActive: enablePrefilledAnswer
+    active: enablePrefilledAnswer
   }, /*#__PURE__*/_react["default"].createElement("textarea", {
     type: "text",
     name: name,
