@@ -1,6 +1,6 @@
 {
   "name": "winterfell",
-  "version": "1.1.4",
+  "version": "1.2.0",
   "description": "Generate complex, validated and extendable JSON-based forms in React",
   "main": "dist/index.js",
   "scripts": {
@@ -32,7 +32,7 @@
   "peerDependencies": {
     "react": ">= 15.6.1 < 17.0.0-0",
     "react-dom": ">= 15.6.1 < 17.0.0-0",
-    "styled-components":">= 5.2.0"
+    "styled-components": ">= 5.2.0"
   },
   "dependencies": {
     "keycodez": "^1.0.0",
@@ -66,11 +66,11 @@
     "sass-loader": "^9.0.3",
     "scss-loader": "^0.0.1",
     "style-loader": "^1.2.1",
+    "styled-components": "^5.2.0",
     "uglifyjs-webpack-plugin": "^2.2.0",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "webpack": "^4.44.1",
-    "webpack-cli": "^4.0.0",
-    "styled-components": "^5.2.0"
+    "webpack-cli": "^4.0.0"
   }
 }
