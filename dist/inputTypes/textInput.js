@@ -71,7 +71,7 @@ var TextInput = function TextInput(_ref) {
 
   return /*#__PURE__*/_react["default"].createElement(_inputFormGroup["default"], {
     active: enablePrefilledAnswer,
-    showIcon: !enablePrefilledAnswer && !prefilledData && questionLabel,
+    showIcon: enablePrefilledAnswer || !prefilledData && questionLabel,
     onClick: onClickInputIcon,
     tooltipContent: inputIconTooltipContent
   }, /*#__PURE__*/_react["default"].createElement("input", {

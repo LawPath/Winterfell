@@ -131,12 +131,21 @@ export class Winterfell extends Component {
     if (!_.isEqual(this.props.labeledAnswers, nextProps.labeledAnswers)) {
       /* Update the the labeledAswers when they got updated from parent*/
       _.forEach(nextProps.questionAnswers, (value, key) => {
+        let mergedData;
         const prefillData = getPrefillData(nextProps.labeledAnswers, value.label);
         if (value.enablePrefilledAnswer) {
-          const mergedData = _.merge(value, {
+          /* if the prefillData toggle is enabled, it will replace the input data */
+          mergedData = _.merge(value, {
             value: prefillData,
             prefilledData: prefillData,
           });
+        } else if (!_.isEqual(prefillData, value.prefilledData)) {
+          /* Update prefill data only */
+          mergedData = _.merge(value, {
+            prefilledData: prefillData,
+          });
+        }
+        if (mergedData) {
           _.set(newState.questionAnswers, [key], { ...mergedData });
         }
       });
@@ -183,7 +192,10 @@ export class Winterfell extends Component {
             prefilledData: prefillData,
           });
         } else {
-          console.log('Set prefill data: answer is empty and no prefill data');
+          console.log(
+            'Set prefill data: answer is empty and no prefill data ',
+            this.props.labeledAnswers,
+          );
 
           _.set(currentQuestionAnswers, questionId, {
             label: label,

@@ -106,7 +106,7 @@ var Winterfell = /*#__PURE__*/function (_Component) {
               prefilledData: prefillData
             });
           } else {
-            console.log('Set prefill data: answer is empty and no prefill data');
+            console.log('Set prefill data: answer is empty and no prefill data ', _this.props.labeledAnswers);
 
             _lodash["default"].set(currentQuestionAnswers, questionId, {
               label: label,
@@ -369,14 +369,23 @@ var Winterfell = /*#__PURE__*/function (_Component) {
       if (!_lodash["default"].isEqual(this.props.labeledAnswers, nextProps.labeledAnswers)) {
         /* Update the the labeledAswers when they got updated from parent*/
         _lodash["default"].forEach(nextProps.questionAnswers, function (value, key) {
+          var mergedData;
           var prefillData = (0, _questionAnswers.getPrefillData)(nextProps.labeledAnswers, value.label);
 
           if (value.enablePrefilledAnswer) {
-            var mergedData = _lodash["default"].merge(value, {
+            /* if the prefillData toggle is enabled, it will replace the input data */
+            mergedData = _lodash["default"].merge(value, {
               value: prefillData,
               prefilledData: prefillData
             });
+          } else if (!_lodash["default"].isEqual(prefillData, value.prefilledData)) {
+            /* Update prefill data only */
+            mergedData = _lodash["default"].merge(value, {
+              prefilledData: prefillData
+            });
+          }
 
+          if (mergedData) {
             _lodash["default"].set(newState.questionAnswers, [key], _objectSpread({}, mergedData));
           }
         });

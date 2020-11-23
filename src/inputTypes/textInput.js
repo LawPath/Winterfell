@@ -37,7 +37,7 @@ const TextInput = ({
   return (
     <IconInput
       active={enablePrefilledAnswer}
-      showIcon={!enablePrefilledAnswer && !prefilledData && questionLabel}
+      showIcon={enablePrefilledAnswer || (!prefilledData && questionLabel)}
       onClick={onClickInputIcon}
       tooltipContent={inputIconTooltipContent}
     >
