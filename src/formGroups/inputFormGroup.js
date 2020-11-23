@@ -50,7 +50,7 @@ const IconInput = ({
               <Icon showingPointer={true} onClick={onClick} icon={iconUrl} />
             </Tooltip>
           ) : (
-            <Icon icon={iconUrl} />
+            <Icon showingPointer={true} icon={iconUrl} onClick={onClick} />
           )}
         </InputGroupIcon>
       ) : null}

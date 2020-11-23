@@ -66,7 +66,9 @@ var IconInput = function IconInput(_ref2) {
     onClick: onClick,
     icon: iconUrl
   })) : /*#__PURE__*/_react["default"].createElement(_icon.Icon, {
-    icon: iconUrl
+    showingPointer: true,
+    icon: iconUrl,
+    onClick: onClick
   })) : null);
 };
 
