@@ -14,7 +14,7 @@ var _styledComponents = require("styled-components");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _templateObject() {
-  var data = _taggedTemplateLiteral(["\n        div[class$='BaseToolTop'] {\n          left: unset;\n          right: 0;\n          transform: translateX(5%);\n        }\n        div[class$='BaseArrow'] {\n          left: unset;\n          ", "\n        }\n      "]);
+  var data = _taggedTemplateLiteral(["\n        /*Class selector does not work on production. Using position selector to query */\n        > :nth-child(2) {\n          left: unset;\n          right: 0;\n          transform: translateX(5%);\n\n          > :first-child > :first-child {\n            left: unset;\n            ", "\n          }\n        }\n      "]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -48,6 +48,7 @@ var Tooltip = function Tooltip(_ref) {
     border: "#FFEABC",
     radius: 3,
     background: "#FFEABC",
+    fixed: true,
     customCss: (0, _styledComponents.css)(_templateObject(), arrowStyle),
     style: {
       whiteSpace: 'nowrap',

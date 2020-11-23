@@ -29,15 +29,18 @@ const Tooltip = ({
       border="#FFEABC"
       radius={3}
       background="#FFEABC"
+      fixed
       customCss={css`
-        div[class$='BaseToolTop'] {
+        /*Class selector does not work on production. Using position selector to query */
+        > :nth-child(2) {
           left: unset;
           right: 0;
           transform: translateX(5%);
-        }
-        div[class$='BaseArrow'] {
-          left: unset;
-          ${arrowStyle}
+
+          > :first-child > :first-child {
+            left: unset;
+            ${arrowStyle}
+          }
         }
       `}
       style={{ whiteSpace: 'nowrap', textAlign: 'center' }}
