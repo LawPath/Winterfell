@@ -29,7 +29,6 @@ const Tooltip = ({
       border="#FFEABC"
       radius={3}
       background="#FFEABC"
-      fixed
       customCss={css`
         /*Class selector does not work on production. Using position selector to query */
         > :nth-child(2) {

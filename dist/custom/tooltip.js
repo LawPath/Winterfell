@@ -48,7 +48,6 @@ var Tooltip = function Tooltip(_ref) {
     border: "#FFEABC",
     radius: 3,
     background: "#FFEABC",
-    fixed: true,
     customCss: (0, _styledComponents.css)(_templateObject(), arrowStyle),
     style: {
       whiteSpace: 'nowrap',
