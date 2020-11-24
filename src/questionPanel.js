@@ -63,12 +63,21 @@ const QuestionPanelStyleComponent = styled.div.attrs({ 'data-id': 'winterfell-qu
           ${({ suggestionHeaderHeight }) => suggestionHeaderHeight}px
       );
     }
+
     @media only screen and (min-width: ${breakpoint.desktop + 1}px) {
+      /* Move the suggestion panel up to fill the empty space */
       min-height: calc(
         ${({ windowHeight }) => windowHeight}px - ${gaps + constants.mobileButtonsBarExtra}px -
-          ${constants.suggestionContent} - ${constants.magicHeight}% -
+          ${constants.suggestionContent} - ${constants.magicHeight}vh -
           ${({ suggestionHeaderHeight }) => suggestionHeaderHeight}px
       );
+    }
+  }
+
+  /* Add 10vh for the suggestion body because the height of the suggestion is moved up to 10vh  */
+  @media only screen and (min-width: ${breakpoint.desktop + 1}px) {
+    .question-panel-suggestion-body {
+      height: calc(20vh + 10vh) !important;
     }
   }
 

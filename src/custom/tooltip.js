@@ -1,12 +1,18 @@
 import React from 'react';
 import SimpleTooltip from 'react-simple-tooltip';
-import { css } from 'styled-components';
+import styled, { css } from 'styled-components';
+
+const TooltipContent = styled.span.attrs({ 'data-id': 'tooltip-content' })`
+  a {
+    color: #0075bf !important;
+  }
+`;
 
 const DefaultTooltipContent = () => (
-  <span>
-    This field has been <br />
-    pre-filled. Click <a>here</a> to edit <br /> your pre-filled information
-  </span>
+  <TooltipContent>
+    This is a pre-fillable field. <br />
+    Click <a>here</a> to edit <br /> your pre-filled information
+  </TooltipContent>
 );
 
 const arrowDefaultStyle = `

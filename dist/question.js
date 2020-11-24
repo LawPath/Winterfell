@@ -167,9 +167,7 @@ var Question = /*#__PURE__*/function (_Component) {
         className: this.props.classes.label,
         id: labelId,
         htmlFor: this.props.questionId
-      }, this.props.question, typeof this.props.renderRequiredAsterisk !== 'undefined' && this.props.input.required ? this.props.renderRequiredAsterisk() : undefined) : undefined, !!this.props.text ? /*#__PURE__*/_react["default"].createElement("p", {
-        className: this.props.classes.questionText
-      }, this.props.text) : undefined, validationErrors, /*#__PURE__*/_react["default"].createElement(Input, _extends({
+      }, this.props.question, typeof this.props.renderRequiredAsterisk !== 'undefined' && this.props.input.required ? this.props.renderRequiredAsterisk() : undefined) : undefined, validationErrors, /*#__PURE__*/_react["default"].createElement(Input, _extends({
         name: this.props.questionId,
         id: this.props.questionId,
         labelId: labelId,

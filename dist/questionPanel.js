@@ -56,7 +56,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _templateObject() {
-  var data = _taggedTemplateLiteral(["\n  display: grid;\n  height: 100%;\n  grid-template-rows: auto 1fr auto;\n  grid-template-areas:\n    'header'\n    'body'\n    'footer';\n\n  .winterfell-question-sets {\n    min-height: calc(\n      ", "px - ", "px - ", " -\n        ", "px\n    );\n    @media only screen and (max-width: ", "px),\n      (min-width: ", "px) and (max-width: ", "px) {\n      min-height: calc(\n        ", "px - ", "px -\n          ", " -\n          ", "px\n      );\n    }\n    @media only screen and (min-width: ", "px) {\n      min-height: calc(\n        ", "px - ", "px -\n          ", " - ", "% -\n          ", "px\n      );\n    }\n  }\n\n  @media only screen and (max-width: ", "px) {\n    grid-template-rows: auto auto auto;\n    height: auto;\n\n    .winterfell-question-sets {\n      min-height: auto;\n    }\n  }\n"]);
+  var data = _taggedTemplateLiteral(["\n  display: grid;\n  height: 100%;\n  grid-template-rows: auto 1fr auto;\n  grid-template-areas:\n    'header'\n    'body'\n    'footer';\n\n  .winterfell-question-sets {\n    min-height: calc(\n      ", "px - ", "px - ", " -\n        ", "px\n    );\n    @media only screen and (max-width: ", "px),\n      (min-width: ", "px) and (max-width: ", "px) {\n      min-height: calc(\n        ", "px - ", "px -\n          ", " -\n          ", "px\n      );\n    }\n\n    @media only screen and (min-width: ", "px) {\n      /* Move the suggestion panel up to fill the empty space */\n      min-height: calc(\n        ", "px - ", "px -\n          ", " - ", "vh -\n          ", "px\n      );\n    }\n  }\n\n  /* Add 10vh for the suggestion body because the height of the suggestion is moved up to 10vh  */\n  @media only screen and (min-width: ", "px) {\n    .question-panel-suggestion-body {\n      height: calc(20vh + 10vh) !important;\n    }\n  }\n\n  @media only screen and (max-width: ", "px) {\n    grid-template-rows: auto auto auto;\n    height: auto;\n\n    .winterfell-question-sets {\n      min-height: auto;\n    }\n  }\n"]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -114,7 +114,7 @@ var QuestionPanelStyleComponent = _styledComponents["default"].div.attrs({
 }, gaps + constants.mobileButtonsBarExtra, constants.suggestionContent, constants.magicHeight, function (_ref6) {
   var suggestionHeaderHeight = _ref6.suggestionHeaderHeight;
   return suggestionHeaderHeight;
-}, breakpoint.mobile);
+}, breakpoint.desktop + 1, breakpoint.mobile);
 
 var QuestionPanel = /*#__PURE__*/function (_React$Component) {
   _inherits(QuestionPanel, _React$Component);

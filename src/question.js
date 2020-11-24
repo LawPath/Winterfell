@@ -140,9 +140,6 @@ export default class Question extends Component {
               : undefined}
           </p>
         ) : undefined}
-        {!!this.props.text ? (
-          <p className={this.props.classes.questionText}>{this.props.text}</p>
-        ) : undefined}
         {validationErrors}
         <Input
           name={this.props.questionId}
