@@ -19,12 +19,14 @@ export const constants = {
   verticalPadding: 40,
   footer: 31,
   suggestionHeader: 54,
-  magicHeight: 10,
+  magicHeight: '8vh',
 };
 
 export const breakpoint = {
-  mobile: 768,
   smallMobile: 450,
+  mobile: 575,
+  tablet: 767,
+  widerThanTablet: 850,
   desktop: 1024,
   wideDesktop: 1200,
 };
@@ -56,7 +58,7 @@ const QuestionPanelStyleComponent = styled.div.attrs({ 'data-id': 'winterfell-qu
         ${({ suggestionHeaderHeight }) => suggestionHeaderHeight}px
     );
     @media only screen and (max-width: ${breakpoint.smallMobile}px),
-      (min-width: ${breakpoint.mobile + 1}px) and (max-width: ${breakpoint.desktop + 1}px) {
+      (min-width: ${breakpoint.tablet + 1}px) and (max-width: ${breakpoint.desktop + 1}px) {
       min-height: calc(
         ${({ windowHeight }) => windowHeight}px - ${gaps + constants.mobileButtonsBarExtra}px -
           ${constants.suggestionContent} -
@@ -68,7 +70,7 @@ const QuestionPanelStyleComponent = styled.div.attrs({ 'data-id': 'winterfell-qu
       /* Move the suggestion panel up to fill the empty space */
       min-height: calc(
         ${({ windowHeight }) => windowHeight}px - ${gaps + constants.mobileButtonsBarExtra}px -
-          ${constants.suggestionContent} - ${constants.magicHeight}vh -
+          ${constants.suggestionContent} - ${constants.magicHeight} -
           ${({ suggestionHeaderHeight }) => suggestionHeaderHeight}px
       );
     }
@@ -77,11 +79,16 @@ const QuestionPanelStyleComponent = styled.div.attrs({ 'data-id': 'winterfell-qu
   /* Add 10vh for the suggestion body because the height of the suggestion is moved up to 10vh  */
   @media only screen and (min-width: ${breakpoint.desktop + 1}px) {
     .question-panel-suggestion-body {
-      height: calc(20vh + 10vh) !important;
+      min-height: calc(${({ windowHeight }) => windowHeight / 4}px) !important;
+      overflow-y: unset !important;
+      height: auto !important;
+    }
+    .winterfell-suggestion-panel {
+      overflow-y: unset;
     }
   }
 
-  @media only screen and (max-width: ${breakpoint.mobile}px) {
+  @media only screen and (max-width: ${breakpoint.widerThanTablet}px) {
     grid-template-rows: auto auto auto;
     height: auto;
 
@@ -91,6 +98,13 @@ const QuestionPanelStyleComponent = styled.div.attrs({ 'data-id': 'winterfell-qu
   }
 `;
 
+const SuggesstionWrapper = styled.div.attrs({ 'data-id': 'winterfell-suggestion-wrapper' })`
+  display: block;
+  background-color: #e7f2f9;
+  @media only screen and (max-width: ${breakpoint.widerThanTablet + 1}px) {
+    display: none;
+  }
+`;
 export default class QuestionPanel extends React.Component {
   constructor(props) {
     super(props);
@@ -374,7 +388,7 @@ export default class QuestionPanel extends React.Component {
                 />
               ) : undefined}
             </div>
-            <div className="d-none d-md-block">{suggestionSets}</div>
+            <SuggesstionWrapper>{suggestionSets}</SuggesstionWrapper>
           </div>
         </div>
         <div className="question-panel-footer">
