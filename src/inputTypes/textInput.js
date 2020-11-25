@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import IconInput from '../formGroups/inputFormGroup';
+import useFocus from '../lib/hooks/useFocus';
 
 const TextInput = ({
   name,
@@ -20,10 +21,11 @@ const TextInput = ({
   questionLabel,
 }) => {
   const [inputValue, setInputValue] = useState(value);
+  const [inputRef, setInputFocus] = useFocus();
 
   useEffect(() => {
+    setInputFocus();
     setInputValue(value);
-
     if (enablePrefilledAnswer) {
       onFocus(id);
     }
@@ -42,6 +44,7 @@ const TextInput = ({
       tooltipContent={inputIconTooltipContent}
     >
       <input
+        ref={inputRef}
         type="text"
         name={name}
         id={id}

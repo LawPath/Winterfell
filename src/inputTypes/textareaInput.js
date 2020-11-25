@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Tooltip from '../custom/tooltip';
 import { Icon } from '../custom/icon';
+import useFocus from '../lib/hooks/useFocus';
 
 const TextareaWrapper = styled.div.attrs({
   'data-id': 'textarea-wrapper',
@@ -51,10 +52,11 @@ const TextareaInput = ({
   prefilledData,
 }) => {
   const [inputValue, setInputValue] = useState(value);
+  const [inputRef, setInputFocus] = useFocus();
 
   useEffect(() => {
+    setInputFocus();
     setInputValue(value);
-
     if (enablePrefilledAnswer) {
       onFocus(id);
     }
@@ -68,6 +70,7 @@ const TextareaInput = ({
   return (
     <TextareaWrapper active={enablePrefilledAnswer}>
       <textarea
+        ref={inputRef}
         type="text"
         name={name}
         id={id}

@@ -47,10 +47,11 @@ export default class DateInputType extends React.Component {
     if (date === null) {
       return;
     }
-
+    
     this.setState({
       value: date,
     });
+    this.props.onFocus(this.props.id)
     this.props.onChange({ type: 'date', value: moment(date) });
   };
 
