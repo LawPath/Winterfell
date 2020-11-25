@@ -114,19 +114,19 @@ var QuestionPanelStyleComponent = _styledComponents["default"].div.attrs({
 }, gaps, constants.suggestionContent, function (_ref2) {
   var suggestionHeaderHeight = _ref2.suggestionHeaderHeight;
   return suggestionHeaderHeight;
-}, breakpoint.smallMobile, breakpoint.tablet + 1, breakpoint.desktop + 1, function (_ref3) {
+}, breakpoint.smallMobile, breakpoint.tablet + 1, breakpoint.wideDesktop + 1, function (_ref3) {
   var windowHeight = _ref3.windowHeight;
   return windowHeight;
 }, gaps + constants.mobileButtonsBarExtra, constants.suggestionContent, function (_ref4) {
   var suggestionHeaderHeight = _ref4.suggestionHeaderHeight;
   return suggestionHeaderHeight;
-}, breakpoint.desktop + 1, function (_ref5) {
+}, breakpoint.wideDesktop + 1, function (_ref5) {
   var windowHeight = _ref5.windowHeight;
   return windowHeight;
 }, gaps + constants.mobileButtonsBarExtra, constants.suggestionContent, constants.magicHeight, function (_ref6) {
   var suggestionHeaderHeight = _ref6.suggestionHeaderHeight;
   return suggestionHeaderHeight;
-}, breakpoint.desktop + 1, function (_ref7) {
+}, breakpoint.wideDesktop + 1, function (_ref7) {
   var windowHeight = _ref7.windowHeight;
   return windowHeight / 4;
 }, breakpoint.widerThanTablet);

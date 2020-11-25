@@ -58,7 +58,7 @@ const QuestionPanelStyleComponent = styled.div.attrs({ 'data-id': 'winterfell-qu
         ${({ suggestionHeaderHeight }) => suggestionHeaderHeight}px
     );
     @media only screen and (max-width: ${breakpoint.smallMobile}px),
-      (min-width: ${breakpoint.tablet + 1}px) and (max-width: ${breakpoint.desktop + 1}px) {
+      (min-width: ${breakpoint.tablet + 1}px) and (max-width: ${breakpoint.wideDesktop + 1}px) {
       min-height: calc(
         ${({ windowHeight }) => windowHeight}px - ${gaps + constants.mobileButtonsBarExtra}px -
           ${constants.suggestionContent} -
@@ -66,7 +66,7 @@ const QuestionPanelStyleComponent = styled.div.attrs({ 'data-id': 'winterfell-qu
       );
     }
 
-    @media only screen and (min-width: ${breakpoint.desktop + 1}px) {
+    @media only screen and (min-width: ${breakpoint.wideDesktop + 1}px) {
       /* Move the suggestion panel up to fill the empty space */
       min-height: calc(
         ${({ windowHeight }) => windowHeight}px - ${gaps + constants.mobileButtonsBarExtra}px -
@@ -77,7 +77,7 @@ const QuestionPanelStyleComponent = styled.div.attrs({ 'data-id': 'winterfell-qu
   }
 
   /* Add 10vh for the suggestion body because the height of the suggestion is moved up to 10vh  */
-  @media only screen and (min-width: ${breakpoint.desktop + 1}px) {
+  @media only screen and (min-width: ${breakpoint.wideDesktop + 1}px) {
     .question-panel-suggestion-body {
       min-height: calc(${({ windowHeight }) => windowHeight / 4}px) !important;
       overflow-y: unset !important;
