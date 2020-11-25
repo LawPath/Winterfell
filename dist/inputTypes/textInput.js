@@ -11,6 +11,8 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _inputFormGroup = _interopRequireDefault(require("../formGroups/inputFormGroup"));
 
+var _useFocus3 = _interopRequireDefault(require("../lib/hooks/useFocus"));
+
 var _TextInput$defaultPro;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
@@ -56,7 +58,13 @@ var TextInput = function TextInput(_ref) {
       inputValue = _useState2[0],
       setInputValue = _useState2[1];
 
+  var _useFocus = (0, _useFocus3["default"])(),
+      _useFocus2 = _slicedToArray(_useFocus, 2),
+      inputRef = _useFocus2[0],
+      setInputFocus = _useFocus2[1];
+
   (0, _react.useEffect)(function () {
+    setInputFocus();
     setInputValue(value);
 
     if (enablePrefilledAnswer) {
@@ -75,6 +83,7 @@ var TextInput = function TextInput(_ref) {
     onClick: onClickInputIcon,
     tooltipContent: inputIconTooltipContent
   }, /*#__PURE__*/_react["default"].createElement("input", {
+    ref: inputRef,
     type: "text",
     name: name,
     id: id,

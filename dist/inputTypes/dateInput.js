@@ -100,6 +100,8 @@ var DateInputType = /*#__PURE__*/function (_React$Component) {
         value: date
       });
 
+      _this.props.onFocus(_this.props.id);
+
       _this.props.onChange({
         type: 'date',
         value: (0, _moment["default"])(date)

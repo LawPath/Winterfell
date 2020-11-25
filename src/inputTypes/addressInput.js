@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import IconInput from '../formGroups/inputFormGroup';
@@ -71,6 +71,9 @@ const getAddress = (address) => {
 export default class AddressInputType extends React.Component {
   constructor(props) {
     super(props);
+
+    this.addressNumberRef = createRef();
+
     let value = DEFAULT_ADDRESS;
     if (this.props.value) {
       const valueObj = getAddress(this.props.value);
@@ -89,6 +92,11 @@ export default class AddressInputType extends React.Component {
       const valueObj = getAddress(nextProps.value);
       this.setState({ value: valueObj.type ? valueObj.value : valueObj });
     }
+  }
+
+  componentDidMount() {
+    console.log('This function is called: ', this.addressNumberRef.current);
+    this.addressNumberRef.current.focus();
   }
 
   handleSelectState = (e) => {
@@ -159,6 +167,7 @@ export default class AddressInputType extends React.Component {
             <div className="input-group">
               <input
                 type="text"
+                ref={this.addressNumberRef}
                 name={`${this.props.name}-line1`}
                 id={`${this.props.id}-line1`}
                 aria-labelledby={`${this.props.labelId}-line1`}
@@ -175,10 +184,7 @@ export default class AddressInputType extends React.Component {
             </div>
           </div>
           <div className="address-line-2">
-            <IconInput
-              active={enablePrefilledAnswer}
-              onClick={this.props.onClickInputIcon}
-            >
+            <IconInput active={enablePrefilledAnswer} onClick={this.props.onClickInputIcon}>
               <input
                 type="text"
                 name={`${this.props.name}-line2`}

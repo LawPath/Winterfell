@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = exports.DEFAULT_ADDRESS = exports.DEFAULT_STATE = exports.STATES = void 0;
 
-var _react = _interopRequireDefault(require("react"));
+var _react = _interopRequireWildcard(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
@@ -14,6 +14,10 @@ var _lodash = _interopRequireDefault(require("lodash"));
 var _inputFormGroup = _interopRequireDefault(require("../formGroups/inputFormGroup"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -195,6 +199,7 @@ var AddressInputType = /*#__PURE__*/function (_React$Component) {
       }, options);
     });
 
+    _this.addressNumberRef = /*#__PURE__*/(0, _react.createRef)();
     var value = DEFAULT_ADDRESS;
 
     if (_this.props.value) {
@@ -224,6 +229,12 @@ var AddressInputType = /*#__PURE__*/function (_React$Component) {
       }
     }
   }, {
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      console.log('This function is called: ', this.addressNumberRef.current);
+      this.addressNumberRef.current.focus();
+    }
+  }, {
     key: "render",
     value: function render() {
       var _this2 = this;
@@ -242,6 +253,7 @@ var AddressInputType = /*#__PURE__*/function (_React$Component) {
         className: "input-group"
       }, /*#__PURE__*/_react["default"].createElement("input", {
         type: "text",
+        ref: this.addressNumberRef,
         name: "".concat(this.props.name, "-line1"),
         id: "".concat(this.props.id, "-line1"),
         "aria-labelledby": "".concat(this.props.labelId, "-line1"),

@@ -92,7 +92,13 @@ var TextareaInput = function TextareaInput(_ref3) {
       inputValue = _useState2[0],
       setInputValue = _useState2[1];
 
+  var _useFocus = useFocus(),
+      _useFocus2 = _slicedToArray(_useFocus, 2),
+      inputRef = _useFocus2[0],
+      setInputFocus = _useFocus2[1];
+
   (0, _react.useEffect)(function () {
+    setInputFocus();
     setInputValue(value);
 
     if (enablePrefilledAnswer) {
@@ -109,6 +115,7 @@ var TextareaInput = function TextareaInput(_ref3) {
   return /*#__PURE__*/_react["default"].createElement(TextareaWrapper, {
     active: enablePrefilledAnswer
   }, /*#__PURE__*/_react["default"].createElement("textarea", {
+    ref: inputRef,
     type: "text",
     name: name,
     id: id,
