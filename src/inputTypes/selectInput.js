@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import _ from 'lodash';
 
 const SelectInput = ({
   name,
@@ -13,6 +14,13 @@ const SelectInput = ({
 }) => {
   const selectRef = useRef(null);
   const [inputValue, setInputValue] = useState(value);
+
+  useEffect(() => {
+    if (_.isEmpty(value) && options && _.isArray(options) && options.length > 0) {
+      onChange(options[0].value);
+    }
+    onFocus(id)
+  }, []);
 
   useEffect(() => {
     setInputValue(value);
@@ -37,8 +45,8 @@ const SelectInput = ({
       value={inputValue}
       required={required ? 'required' : undefined}
       onChange={handleChange}
-      onFocus={() => onFocus.bind(id)}
-      onBlur={() => onBlur.bind(inputValue)}
+      onFocus={() => onFocus(id)}
+      onBlur={() => onBlur(inputValue)}
     >
       {selectOptions}
     </select>

@@ -6,7 +6,7 @@ import IconInput from '../formGroups/inputFormGroup';
 
 const calendarIconUrl = 'https://assets.lawpath.com/images/svg/calendar.svg';
 
-const CustomInput = ({ style, onChange, placeholder, value, isSecure, id, onClick }) => {
+const CustomInput = ({ style, onChange, onFocus, placeholder, value, isSecure, id, onClick }) => {
   const inputRef = useRef();
   return (
     <IconInput
@@ -26,6 +26,7 @@ const CustomInput = ({ style, onChange, placeholder, value, isSecure, id, onClic
         id={id}
         className={style}
         onClick={onClick}
+        onFocus={onFocus}
         autoComplete="off"
       />
     </IconInput>
@@ -39,7 +40,6 @@ export default class DateInputType extends React.Component {
     this.state = {
       value: this.props.value && this.props.value.type && moment(this.props.value.value),
     };
-    this.handleChange = this.handleChange.bind(this);
   }
 
   handleChange = (date) => {
@@ -48,19 +48,19 @@ export default class DateInputType extends React.Component {
       return;
     }
 
-    this.setState(
-      {
-        value: date,
-      },
-      this.props.onChange.bind(null, { type: 'date', value: moment(date) }),
-    );
+    this.setState({
+      value: date,
+    });
+    this.props.onChange({ type: 'date', value: moment(date) });
   };
 
   render() {
     const { onFocus } = this.props;
     return (
       <DatePicker
-        customInput={<CustomInput style={this.props.classes.input} />}
+        customInput={
+          <CustomInput style={this.props.classes.input} onFocus={() => onFocus(this.props.id)} />
+        }
         name={`${this.props.name}`}
         id={`${this.props.id}`}
         aria-labelledby={`${this.props.labelId}`}

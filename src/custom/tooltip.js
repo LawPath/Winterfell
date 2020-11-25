@@ -2,11 +2,7 @@ import React from 'react';
 import SimpleTooltip from 'react-simple-tooltip';
 import styled, { css } from 'styled-components';
 
-const TooltipContent = styled.span.attrs({ 'data-id': 'tooltip-content' })`
-  a {
-    color: #0075bf !important;
-  }
-`;
+const TooltipContent = styled.span.attrs({ 'data-id': 'tooltip-content' })``;
 
 const DefaultTooltipContent = () => (
   <TooltipContent>
