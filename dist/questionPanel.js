@@ -55,8 +55,18 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+function _templateObject2() {
+  var data = _taggedTemplateLiteral(["\n  display: block;\n  background-color: #e7f2f9;\n  @media only screen and (max-width: ", "px) {\n    display: none;\n  }\n"]);
+
+  _templateObject2 = function _templateObject2() {
+    return data;
+  };
+
+  return data;
+}
+
 function _templateObject() {
-  var data = _taggedTemplateLiteral(["\n  display: grid;\n  height: 100%;\n  grid-template-rows: auto 1fr auto;\n  grid-template-areas:\n    'header'\n    'body'\n    'footer';\n\n  .winterfell-question-sets {\n    min-height: calc(\n      ", "px - ", "px - ", " -\n        ", "px\n    );\n    @media only screen and (max-width: ", "px),\n      (min-width: ", "px) and (max-width: ", "px) {\n      min-height: calc(\n        ", "px - ", "px -\n          ", " -\n          ", "px\n      );\n    }\n\n    @media only screen and (min-width: ", "px) {\n      /* Move the suggestion panel up to fill the empty space */\n      min-height: calc(\n        ", "px - ", "px -\n          ", " - ", "vh -\n          ", "px\n      );\n    }\n  }\n\n  /* Add 10vh for the suggestion body because the height of the suggestion is moved up to 10vh  */\n  @media only screen and (min-width: ", "px) {\n    .question-panel-suggestion-body {\n      height: calc(20vh + 10vh) !important;\n    }\n  }\n\n  @media only screen and (max-width: ", "px) {\n    grid-template-rows: auto auto auto;\n    height: auto;\n\n    .winterfell-question-sets {\n      min-height: auto;\n    }\n  }\n"]);
+  var data = _taggedTemplateLiteral(["\n  display: grid;\n  height: 100%;\n  grid-template-rows: auto 1fr auto;\n  grid-template-areas:\n    'header'\n    'body'\n    'footer';\n\n  .winterfell-question-sets {\n    min-height: calc(\n      ", "px - ", "px - ", " -\n        ", "px\n    );\n    @media only screen and (max-width: ", "px),\n      (min-width: ", "px) and (max-width: ", "px) {\n      min-height: calc(\n        ", "px - ", "px -\n          ", " -\n          ", "px\n      );\n    }\n\n    @media only screen and (min-width: ", "px) {\n      /* Move the suggestion panel up to fill the empty space */\n      min-height: calc(\n        ", "px - ", "px -\n          ", " - ", " -\n          ", "px\n      );\n    }\n  }\n\n  /* Add 10vh for the suggestion body because the height of the suggestion is moved up to 10vh  */\n  @media only screen and (min-width: ", "px) {\n    .question-panel-suggestion-body {\n      min-height: calc(", "px) !important;\n      overflow-y: unset !important;\n      height: auto !important;\n    }\n    .winterfell-suggestion-panel {\n      overflow-y: unset;\n    }\n  }\n\n  @media only screen and (max-width: ", "px) {\n    grid-template-rows: auto auto auto;\n    height: auto;\n\n    .winterfell-question-sets {\n      min-height: auto;\n    }\n  }\n"]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -77,12 +87,14 @@ var constants = {
   verticalPadding: 40,
   footer: 31,
   suggestionHeader: 54,
-  magicHeight: 10
+  magicHeight: '8vh'
 };
 exports.constants = constants;
 var breakpoint = {
-  mobile: 768,
   smallMobile: 450,
+  mobile: 575,
+  tablet: 767,
+  widerThanTablet: 850,
   desktop: 1024,
   wideDesktop: 1200
 };
@@ -102,7 +114,7 @@ var QuestionPanelStyleComponent = _styledComponents["default"].div.attrs({
 }, gaps, constants.suggestionContent, function (_ref2) {
   var suggestionHeaderHeight = _ref2.suggestionHeaderHeight;
   return suggestionHeaderHeight;
-}, breakpoint.smallMobile, breakpoint.mobile + 1, breakpoint.desktop + 1, function (_ref3) {
+}, breakpoint.smallMobile, breakpoint.tablet + 1, breakpoint.desktop + 1, function (_ref3) {
   var windowHeight = _ref3.windowHeight;
   return windowHeight;
 }, gaps + constants.mobileButtonsBarExtra, constants.suggestionContent, function (_ref4) {
@@ -114,7 +126,14 @@ var QuestionPanelStyleComponent = _styledComponents["default"].div.attrs({
 }, gaps + constants.mobileButtonsBarExtra, constants.suggestionContent, constants.magicHeight, function (_ref6) {
   var suggestionHeaderHeight = _ref6.suggestionHeaderHeight;
   return suggestionHeaderHeight;
-}, breakpoint.desktop + 1, breakpoint.mobile);
+}, breakpoint.desktop + 1, function (_ref7) {
+  var windowHeight = _ref7.windowHeight;
+  return windowHeight / 4;
+}, breakpoint.widerThanTablet);
+
+var SuggesstionWrapper = _styledComponents["default"].div.attrs({
+  'data-id': 'winterfell-suggestion-wrapper'
+})(_templateObject2(), breakpoint.widerThanTablet + 1);
 
 var QuestionPanel = /*#__PURE__*/function (_React$Component) {
   _inherits(QuestionPanel, _React$Component);
@@ -406,9 +425,7 @@ var QuestionPanel = /*#__PURE__*/function (_React$Component) {
         text: this.props.button.text,
         onClick: this.handleMainButtonClick,
         className: "".concat(this.props.classes.controlButton, " ").concat(this.props.extraClasses.button || '')
-      }) : undefined), /*#__PURE__*/_react["default"].createElement("div", {
-        className: "d-none d-md-block"
-      }, suggestionSets))), /*#__PURE__*/_react["default"].createElement("div", {
+      }) : undefined), /*#__PURE__*/_react["default"].createElement(SuggesstionWrapper, null, suggestionSets))), /*#__PURE__*/_react["default"].createElement("div", {
         className: "question-panel-footer"
       }, /*#__PURE__*/_react["default"].createElement("div", {
         className: "prefill-action-bar"

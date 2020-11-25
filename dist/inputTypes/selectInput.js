@@ -9,6 +9,10 @@ exports["default"] = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
+var _lodash = _interopRequireDefault(require("lodash"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -43,6 +47,13 @@ var SelectInput = function SelectInput(_ref) {
       setInputValue = _useState2[1];
 
   (0, _react.useEffect)(function () {
+    if (_lodash["default"].isEmpty(value) && options && _lodash["default"].isArray(options) && options.length > 0) {
+      onChange(options[0].value);
+    }
+
+    _onFocus(id);
+  }, []);
+  (0, _react.useEffect)(function () {
     setInputValue(value);
   }, [value]);
 
@@ -66,10 +77,10 @@ var SelectInput = function SelectInput(_ref) {
     required: required ? 'required' : undefined,
     onChange: handleChange,
     onFocus: function onFocus() {
-      return _onFocus.bind(id);
+      return _onFocus(id);
     },
     onBlur: function onBlur() {
-      return _onBlur.bind(inputValue);
+      return _onBlur(inputValue);
     }
   }, selectOptions);
 };

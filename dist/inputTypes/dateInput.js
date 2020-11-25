@@ -50,6 +50,7 @@ var calendarIconUrl = 'https://assets.lawpath.com/images/svg/calendar.svg';
 var CustomInput = function CustomInput(_ref) {
   var style = _ref.style,
       onChange = _ref.onChange,
+      onFocus = _ref.onFocus,
       placeholder = _ref.placeholder,
       value = _ref.value,
       isSecure = _ref.isSecure,
@@ -72,6 +73,7 @@ var CustomInput = function CustomInput(_ref) {
     id: id,
     className: style,
     onClick: onClick,
+    onFocus: onFocus,
     autoComplete: "off"
   }));
 };
@@ -96,16 +98,17 @@ var DateInputType = /*#__PURE__*/function (_React$Component) {
 
       _this.setState({
         value: date
-      }, _this.props.onChange.bind(null, {
+      });
+
+      _this.props.onChange({
         type: 'date',
         value: (0, _moment["default"])(date)
-      }));
+      });
     });
 
     _this.state = {
       value: _this.props.value && _this.props.value.type && (0, _moment["default"])(_this.props.value.value)
     };
-    _this.handleChange = _this.handleChange.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -117,7 +120,10 @@ var DateInputType = /*#__PURE__*/function (_React$Component) {
       var _onFocus = this.props.onFocus;
       return /*#__PURE__*/_react["default"].createElement(_reactDatepicker["default"], {
         customInput: /*#__PURE__*/_react["default"].createElement(CustomInput, {
-          style: this.props.classes.input
+          style: this.props.classes.input,
+          onFocus: function onFocus() {
+            return _onFocus(_this2.props.id);
+          }
         }),
         name: "".concat(this.props.name),
         id: "".concat(this.props.id),

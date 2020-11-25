@@ -30,7 +30,7 @@ function _templateObject2() {
 }
 
 function _templateObject() {
-  var data = _taggedTemplateLiteral(["\n  a {\n    color: #0075bf !important;\n  }\n"]);
+  var data = _taggedTemplateLiteral([""]);
 
   _templateObject = function _templateObject() {
     return data;
