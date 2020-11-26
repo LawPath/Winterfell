@@ -153,10 +153,16 @@ var Winterfell = /*#__PURE__*/function (_Component) {
 
         _lodash["default"].set(currentQuestionAnswers, [questionId], _objectSpread({}, _mergedData));
       }
+      /* Add mounted question to the questions in the panel  */
+
+
+      var newCurrentQuestions = _this.state.currentQuestions;
+      newCurrentQuestions[questionId] = currentQuestionAnswers[questionId];
 
       _this.setState({
         questionAnswers: currentQuestionAnswers,
-        currentQuestionId: questionId
+        currentQuestionId: questionId,
+        currentQuestions: newCurrentQuestions
       });
 
       _this.props.onRender({
@@ -168,22 +174,30 @@ var Winterfell = /*#__PURE__*/function (_Component) {
     });
 
     _defineProperty(_assertThisInitialized(_this), "handleOnEnablePrefilledAnswer", function (enable) {
-      var mergedData = _lodash["default"].merge(_lodash["default"].get(_this.state.questionAnswers, [_this.state.currentQuestionId]), {
-        enablePrefilledAnswer: enable
+      var questionAnswers = _objectSpread({}, _this.state.questionAnswers);
+
+      _lodash["default"].forEach(_this.state.currentQuestions, function (value, key) {
+        if (value && value.label) {
+          var mergedData = _lodash["default"].merge(_lodash["default"].get(questionAnswers, [key]), {
+            enablePrefilledAnswer: enable
+          });
+
+          if (mergedData.enablePrefilledAnswer) {
+            /* if the prefill-value is enabled, we will replace the inputed text  */
+            mergedData.value = mergedData.prefilledData;
+          }
+
+          questionAnswers = _lodash["default"].chain(questionAnswers).set(key, mergedData).value();
+        }
       });
 
-      if (mergedData.enablePrefilledAnswer) {
-        /* if the prefill-value is enabled, we will replace the inputed text  */
-        mergedData.value = mergedData.prefilledData;
+      if (questionAnswers) {
+        _this.setState({
+          questionAnswers: questionAnswers
+        });
+
+        _this.props.onUpdate(questionAnswers);
       }
-
-      var questionAnswers = _lodash["default"].chain(_this.state.questionAnswers).set(_this.state.currentQuestionId, mergedData).value();
-
-      _this.setState({
-        questionAnswers: questionAnswers
-      });
-
-      _this.props.onUpdate(questionAnswers);
     });
 
     _defineProperty(_assertThisInitialized(_this), "handleSwitchPanel", function (panelId, preventHistory) {
@@ -205,9 +219,13 @@ var Winterfell = /*#__PURE__*/function (_Component) {
           currentQuestionId: undefined
         });
       }
+      /* Clear questions on panel */
+
 
       _this.setState({
-        currentPanel: panel
+        currentPanel: panel,
+        conditionalQuestionId: undefined,
+        currentQuestions: {}
       });
 
       _this.props.onSwitchPanel(panel);
@@ -217,6 +235,12 @@ var Winterfell = /*#__PURE__*/function (_Component) {
       if (_this.panelHistory.length > 1) {
         _this.panelHistory.pop();
       }
+      /* Clear questions on panel */
+
+
+      _this.setState({
+        currentQuestions: {}
+      });
 
       _this.handleSwitchPanel.call(_assertThisInitialized(_this), _this.panelHistory[_this.panelHistory.length - 1], true); // let panelIndex = this.state.schema.formPanels.find(fp =>
       //   fp.panelId === this.state.currentPanel.panelId).index;
@@ -288,7 +312,8 @@ var Winterfell = /*#__PURE__*/function (_Component) {
       action: props.action,
       questionAnswers: props.questionAnswers,
       panelMoved: false,
-      currentQuestionId: undefined
+      currentQuestionId: undefined,
+      currentQuestions: {}
     };
     return _this;
   }
@@ -456,7 +481,8 @@ var Winterfell = /*#__PURE__*/function (_Component) {
         currentQuestionId: this.state.currentQuestionId,
         onEnablePrefilledAnswer: this.handleOnEnablePrefilledAnswer.bind(this),
         answersSuggestionComponent: this.props.answersSuggestionComponent,
-        windowHeight: this.props.windowHeight
+        windowHeight: this.props.windowHeight,
+        currentQuestionsOnPanel: this.state.currentQuestions
       })));
     }
   }]);

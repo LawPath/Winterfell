@@ -127,7 +127,7 @@ var Question = /*#__PURE__*/function (_Component) {
               validateOn: conditionalQuestion.validateOn,
               validations: conditionalQuestion.validations,
               value: answer ? answer.value : undefined,
-              questionLabel: conditionalQuestion.label,
+              label: conditionalQuestion.label,
               prefilledData: answer ? answer.prefilledData : undefined,
               enablePrefilledAnswer: answer ? answer.enablePrefilledAnswer : undefined,
               input: conditionalQuestion.input,
