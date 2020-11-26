@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Tooltip from '../custom/tooltip';
 import { Icon } from '../custom/icon';
+import useFocus from '../lib/hooks/useFocus';
 
 const TextareaWrapper = styled.div.attrs({
   'data-id': 'textarea-wrapper',

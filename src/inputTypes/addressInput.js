@@ -95,7 +95,6 @@ export default class AddressInputType extends React.Component {
   }
 
   componentDidMount() {
-    console.log('This function is called: ', this.addressNumberRef.current);
     this.addressNumberRef.current.focus();
   }
 
@@ -158,7 +157,14 @@ export default class AddressInputType extends React.Component {
   };
 
   render() {
-    const { onFocus, placeholders, enablePrefilledAnswer } = this.props;
+    const {
+      onFocus,
+      placeholders,
+      enablePrefilledAnswer,
+      prefilledData,
+      questionLabel,
+    } = this.props;
+
     const sel = this.renderSelect();
     const address = (
       <div>
@@ -184,7 +190,11 @@ export default class AddressInputType extends React.Component {
             </div>
           </div>
           <div className="address-line-2">
-            <IconInput active={enablePrefilledAnswer} onClick={this.props.onClickInputIcon}>
+            <IconInput
+              active={enablePrefilledAnswer}
+              showIcon={enablePrefilledAnswer || (!prefilledData && questionLabel)}
+              onClick={this.props.onClickInputIcon}
+            >
               <input
                 type="text"
                 name={`${this.props.name}-line2`}
