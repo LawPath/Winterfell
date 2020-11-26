@@ -112,6 +112,7 @@ export default class QuestionPanel extends React.Component {
     this.state = {
       validationErrors: this.props.validationErrors,
       currentQuestion: null,
+      prefillQuestion: undefined,
     };
     this.suggestionHeaderRef = createRef();
   }
@@ -125,6 +126,19 @@ export default class QuestionPanel extends React.Component {
       this.setState({ currentQuestion });
     } else {
       this.setState({ currentQuestion: null });
+    }
+
+    /* Check prefill questions status */
+    if (newprops.currentQuestionsOnPanel) {
+      let prefillQuestion = _.find(newprops.currentQuestionsOnPanel, (item) => {
+        return item.label && item.enablePrefilledAnswer;
+      });
+      if (!prefillQuestion) {
+        prefillQuestion = _.find(newprops.currentQuestionsOnPanel, (item) => {
+          return item.label;
+        });
+      }
+      this.setState({ prefillQuestion });
     }
   }
 
@@ -205,14 +219,16 @@ export default class QuestionPanel extends React.Component {
      */
     conditions.forEach((condition) => {
       const answerObject = this.props.questionAnswers[condition.questionId];
-      const { value: answer } = answerObject;
-      action =
-        answer == condition.value
-          ? {
-              action: condition.action,
-              target: condition.target,
-            }
-          : action;
+      if (answerObject) {
+        const { value: answer } = answerObject;
+        action =
+          answer == condition.value
+            ? {
+                action: condition.action,
+                target: condition.target,
+              }
+            : action;
+      }
     });
 
     /*
@@ -399,11 +415,11 @@ export default class QuestionPanel extends React.Component {
             />
             <span className="prefill-action-bar-text">Use pre-fill information</span>
             <span className="prefill-action-bar-action">
-              {this.state.currentQuestion ? (
+              {this.state.prefillQuestion ? (
                 <Switch
-                  active={this.state.currentQuestion.enablePrefilledAnswer}
-                  onChange={this.props.onEnablePrefilledAnswer}
-                  disabled={!this.state.currentQuestion.label}
+                  active={this.state.prefillQuestion.enablePrefilledAnswer}
+                  onChange={(status) => this.props.onEnablePrefilledAnswer(status)}
+                  disabled={!this.state.prefillQuestion.label}
                 />
               ) : (
                 <Switch active={false} disabled={true} />
@@ -447,6 +463,7 @@ QuestionPanel.defaultProps = {
   renderRequiredAsterisk: undefined,
   currentQuestionId: undefined,
   windowHeight: 0,
+  currentQuestionsOnPanel: {},
   onAnswerChange: () => {},
   onSwitchPanel: () => {},
   onPanelBack: () => {},

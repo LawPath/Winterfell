@@ -227,11 +227,14 @@ var QuestionPanel = /*#__PURE__*/function (_React$Component) {
 
       conditions.forEach(function (condition) {
         var answerObject = _this.props.questionAnswers[condition.questionId];
-        var answer = answerObject.value;
-        action = answer == condition.value ? {
-          action: condition.action,
-          target: condition.target
-        } : action;
+
+        if (answerObject) {
+          var answer = answerObject.value;
+          action = answer == condition.value ? {
+            action: condition.action,
+            target: condition.target
+          } : action;
+        }
       });
       /*
        * Decide which action to take depending on
@@ -317,7 +320,8 @@ var QuestionPanel = /*#__PURE__*/function (_React$Component) {
 
     _this.state = {
       validationErrors: _this.props.validationErrors,
-      currentQuestion: null
+      currentQuestion: null,
+      prefillQuestion: undefined
     };
     _this.suggestionHeaderRef = /*#__PURE__*/(0, _react.createRef)();
     return _this;
@@ -335,6 +339,24 @@ var QuestionPanel = /*#__PURE__*/function (_React$Component) {
       } else {
         this.setState({
           currentQuestion: null
+        });
+      }
+      /* Check prefill questions status */
+
+
+      if (newprops.currentQuestionsOnPanel) {
+        var prefillQuestion = _lodash["default"].find(newprops.currentQuestionsOnPanel, function (item) {
+          return item.label && item.enablePrefilledAnswer;
+        });
+
+        if (!prefillQuestion) {
+          prefillQuestion = _lodash["default"].find(newprops.currentQuestionsOnPanel, function (item) {
+            return item.label;
+          });
+        }
+
+        this.setState({
+          prefillQuestion: prefillQuestion
         });
       }
     }
@@ -436,10 +458,12 @@ var QuestionPanel = /*#__PURE__*/function (_React$Component) {
         className: "prefill-action-bar-text"
       }, "Use pre-fill information"), /*#__PURE__*/_react["default"].createElement("span", {
         className: "prefill-action-bar-action"
-      }, this.state.currentQuestion ? /*#__PURE__*/_react["default"].createElement(_switch["default"], {
-        active: this.state.currentQuestion.enablePrefilledAnswer,
-        onChange: this.props.onEnablePrefilledAnswer,
-        disabled: !this.state.currentQuestion.label
+      }, this.state.prefillQuestion ? /*#__PURE__*/_react["default"].createElement(_switch["default"], {
+        active: this.state.prefillQuestion.enablePrefilledAnswer,
+        onChange: function onChange(status) {
+          return _this2.props.onEnablePrefilledAnswer(status);
+        },
+        disabled: !this.state.prefillQuestion.label
       }) : /*#__PURE__*/_react["default"].createElement(_switch["default"], {
         active: false,
         disabled: true
@@ -482,6 +506,7 @@ QuestionPanel.defaultProps = {
   renderRequiredAsterisk: undefined,
   currentQuestionId: undefined,
   windowHeight: 0,
+  currentQuestionsOnPanel: {},
   onAnswerChange: function onAnswerChange() {},
   onSwitchPanel: function onSwitchPanel() {},
   onPanelBack: function onPanelBack() {},
