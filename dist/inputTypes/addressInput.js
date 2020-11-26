@@ -231,7 +231,6 @@ var AddressInputType = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "componentDidMount",
     value: function componentDidMount() {
-      console.log('This function is called: ', this.addressNumberRef.current);
       this.addressNumberRef.current.focus();
     }
   }, {
@@ -242,7 +241,9 @@ var AddressInputType = /*#__PURE__*/function (_React$Component) {
       var _this$props = this.props,
           _onFocus = _this$props.onFocus,
           placeholders = _this$props.placeholders,
-          enablePrefilledAnswer = _this$props.enablePrefilledAnswer;
+          enablePrefilledAnswer = _this$props.enablePrefilledAnswer,
+          prefilledData = _this$props.prefilledData,
+          questionLabel = _this$props.questionLabel;
       var sel = this.renderSelect();
 
       var address = /*#__PURE__*/_react["default"].createElement("div", null, /*#__PURE__*/_react["default"].createElement("div", {
@@ -272,6 +273,7 @@ var AddressInputType = /*#__PURE__*/function (_React$Component) {
         className: "address-line-2"
       }, /*#__PURE__*/_react["default"].createElement(_inputFormGroup["default"], {
         active: enablePrefilledAnswer,
+        showIcon: enablePrefilledAnswer || !prefilledData && questionLabel,
         onClick: this.props.onClickInputIcon
       }, /*#__PURE__*/_react["default"].createElement("input", {
         type: "text",

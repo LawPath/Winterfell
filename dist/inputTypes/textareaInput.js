@@ -17,6 +17,8 @@ var _tooltip = _interopRequireDefault(require("../custom/tooltip"));
 
 var _icon = require("../custom/icon");
 
+var _useFocus3 = _interopRequireDefault(require("../lib/hooks/useFocus"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
@@ -92,7 +94,7 @@ var TextareaInput = function TextareaInput(_ref3) {
       inputValue = _useState2[0],
       setInputValue = _useState2[1];
 
-  var _useFocus = useFocus(),
+  var _useFocus = (0, _useFocus3["default"])(),
       _useFocus2 = _slicedToArray(_useFocus, 2),
       inputRef = _useFocus2[0],
       setInputFocus = _useFocus2[1];

@@ -374,7 +374,16 @@ var Winterfell = /*#__PURE__*/function (_Component) {
 
           if (value.enablePrefilledAnswer) {
             /* if the prefillData toggle is enabled, it will replace the input data */
+
+            /* if the current data is empty, it will set the prefill value */
             mergedData = _lodash["default"].merge(value, {
+              value: prefillData,
+              prefilledData: prefillData
+            });
+          } else if (!value.enablePrefilledAnswer && prefillData && _lodash["default"].isEmpty(value.prefilledData)) {
+            /* if the current data is empty and there is prefill data, we will enable prefill data and set the value to the answer */
+            mergedData = _lodash["default"].merge(value, {
+              enablePrefilledAnswer: true,
               value: prefillData,
               prefilledData: prefillData
             });
