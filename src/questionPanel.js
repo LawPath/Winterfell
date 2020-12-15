@@ -72,7 +72,7 @@ const QuestionPanelStyleComponent = styled.div.attrs({ 'data-id': 'winterfell-qu
             ${constants.suggestionContent} -
             ${({ suggestionHeaderHeight }) => suggestionHeaderHeight}px
         ),
-        ${({ windowHeight }) => (windowHeight - gaps) / 2}px
+        ${({ windowHeight }) => (windowHeight - gaps- constants.mobileButtonsBarExtra) / 2}px
       );
     }
 

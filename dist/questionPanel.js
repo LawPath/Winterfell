@@ -129,7 +129,7 @@ var QuestionPanelStyleComponent = _styledComponents["default"].div.attrs({
   return suggestionHeaderHeight;
 }, function (_ref7) {
   var windowHeight = _ref7.windowHeight;
-  return (windowHeight - gaps) / 2;
+  return (windowHeight - gaps - constants.mobileButtonsBarExtra) / 2;
 }, breakpoint.wideDesktop + 1, constants.minQuestionSection, function (_ref8) {
   var windowHeight = _ref8.windowHeight;
   return windowHeight;
