@@ -1,6 +1,6 @@
 {
   "name": "winterfell",
-  "version": "1.2.10",
+  "version": "1.2.11",
   "description": "Generate complex, validated and extendable JSON-based forms in React",
   "main": "dist/index.js",
   "scripts": {

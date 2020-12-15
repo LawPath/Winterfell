@@ -19,7 +19,8 @@ export const constants = {
   verticalPadding: 40,
   footer: 31,
   suggestionHeader: 54,
-  magicHeight: '8vh',
+  magicHeight: '10vh',
+  minQuestionSection: '230px',
 };
 
 export const breakpoint = {
@@ -37,11 +38,7 @@ export const mediaQuery = {
 };
 
 const gaps =
-  constants.actionButtons +
-  constants.progressBar +
-  constants.buttonsBar +
-  constants.verticalPadding +
-  constants.footer;
+  constants.actionButtons + constants.progressBar + constants.buttonsBar + constants.footer;
 
 const QuestionPanelStyleComponent = styled.div.attrs({ 'data-id': 'winterfell-question-panel' })`
   display: grid;
@@ -57,8 +54,8 @@ const QuestionPanelStyleComponent = styled.div.attrs({ 'data-id': 'winterfell-qu
       ${({ windowHeight }) => windowHeight}px - ${gaps}px - ${constants.suggestionContent} -
         ${({ suggestionHeaderHeight }) => suggestionHeaderHeight}px
     );
-    @media only screen and (max-width: ${breakpoint.smallMobile}px),
-      (min-width: ${breakpoint.tablet + 1}px) and (max-width: ${breakpoint.wideDesktop + 1}px) {
+
+    @media only screen and (max-width: ${breakpoint.smallMobile}px) {
       min-height: calc(
         ${({ windowHeight }) => windowHeight}px - ${gaps + constants.mobileButtonsBarExtra}px -
           ${constants.suggestionContent} -
@@ -66,12 +63,29 @@ const QuestionPanelStyleComponent = styled.div.attrs({ 'data-id': 'winterfell-qu
       );
     }
 
+    @media only screen and (min-width: ${breakpoint.tablet +
+      1}px) and (max-width: ${breakpoint.wideDesktop + 1}px) {
+      min-height: clamp(
+        ${constants.minQuestionSection},
+        calc(
+          ${({ windowHeight }) => windowHeight}px - ${gaps + constants.mobileButtonsBarExtra}px -
+            ${constants.suggestionContent} -
+            ${({ suggestionHeaderHeight }) => suggestionHeaderHeight}px
+        ),
+        ${({ windowHeight }) => (windowHeight - gaps) / 2}px
+      );
+    }
+
     @media only screen and (min-width: ${breakpoint.wideDesktop + 1}px) {
       /* Move the suggestion panel up to fill the empty space */
-      min-height: calc(
-        ${({ windowHeight }) => windowHeight}px - ${gaps + constants.mobileButtonsBarExtra}px -
-          ${constants.suggestionContent} - ${constants.magicHeight} -
-          ${({ suggestionHeaderHeight }) => suggestionHeaderHeight}px
+      min-height: clamp(
+        ${constants.minQuestionSection},
+        calc(
+          ${({ windowHeight }) => windowHeight}px - ${gaps}px - ${constants.suggestionContent} -
+            ${({ suggestionHeaderHeight }) => suggestionHeaderHeight}px -
+            ${({ windowHeight }) => (windowHeight - gaps) / 4}px
+        ),
+        ${({ windowHeight }) => (windowHeight - gaps) / 2}px
       );
     }
   }
@@ -79,7 +93,7 @@ const QuestionPanelStyleComponent = styled.div.attrs({ 'data-id': 'winterfell-qu
   /* Add 10vh for the suggestion body because the height of the suggestion is moved up to 10vh  */
   @media only screen and (min-width: ${breakpoint.wideDesktop + 1}px) {
     .question-panel-suggestion-body {
-      min-height: calc(${({ windowHeight }) => windowHeight / 4}px) !important;
+      min-height: min(${({ windowHeight }) => (windowHeight - gaps) / 4}px, 20vh) !important;
       overflow-y: unset !important;
       height: auto !important;
     }
