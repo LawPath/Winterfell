@@ -1,23 +1,15 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-export default class Button extends Component {
-  handleClick(e) {
+const Button = ({ className = undefined, onClick = () => {}, text = 'Submit' }) => {
+  const handleClick = (e) => {
     e.preventDefault();
+    onClick();
+  };
 
-    this.props.onClick();
-  }
-
-  render() {
-    return (
-      <button href="#" className={this.props.className} onClick={this.handleClick.bind(this)}>
-        {this.props.text}
-      </button>
-    );
-  }
-}
-
-Button.defaultProps = {
-  text: 'Submit',
-  className: undefined,
-  onClick: () => {},
+  return (
+    <button href="#" className={className} onClick={handleClick}>
+      {text}
+    </button>
+  );
 };
+export default Button;
