@@ -72,7 +72,7 @@ const QuestionPanelStyleComponent = styled.div.attrs({ 'data-id': 'winterfell-qu
             ${constants.suggestionContent} -
             ${({ suggestionHeaderHeight }) => suggestionHeaderHeight}px
         ),
-        ${({ windowHeight }) => (windowHeight - gaps- constants.mobileButtonsBarExtra) / 2}px
+        ${({ windowHeight }) => (windowHeight - gaps - constants.mobileButtonsBarExtra) / 2}px
       );
     }
 
@@ -410,6 +410,7 @@ export default class QuestionPanel extends React.Component {
               ) : undefined}
               {!this.props.button.disabled ? (
                 <Button
+                  type="submit"
                   text={this.props.button.text}
                   onClick={this.handleMainButtonClick}
                   className={`${this.props.classes.controlButton} ${

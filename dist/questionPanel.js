@@ -460,6 +460,7 @@ var QuestionPanel = /*#__PURE__*/function (_React$Component) {
         onClick: this.handleBackButtonClick,
         className: "".concat(this.props.classes.backButton, " ").concat(this.props.extraClasses.backButton || '')
       }) : undefined, !this.props.button.disabled ? /*#__PURE__*/_react["default"].createElement(_button["default"], {
+        type: "submit",
         text: this.props.button.text,
         onClick: this.handleMainButtonClick,
         className: "".concat(this.props.classes.controlButton, " ").concat(this.props.extraClasses.button || '')

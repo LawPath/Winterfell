@@ -1,13 +1,18 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
-const Button = ({ className = undefined, onClick = () => {}, text = 'Submit' }) => {
+const Button = ({
+  className = undefined,
+  onClick = () => {},
+  text = 'Submit',
+  type = 'button',
+}) => {
   const handleClick = (e) => {
     e.preventDefault();
     onClick();
   };
 
   return (
-    <button href="#" className={className} onClick={handleClick}>
+    <button type={type} className={className} onClick={handleClick}>
       {text}
     </button>
   );
