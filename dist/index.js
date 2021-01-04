@@ -68,7 +68,9 @@ var Winterfell = /*#__PURE__*/function (_Component) {
     _this = _super.call(this, props);
 
     _defineProperty(_assertThisInitialized(_this), "handleAnswerChange", function (questionId, questionAnswer, questionLabel) {
-      var mergedData = _lodash["default"].merge(_lodash["default"].get(_this.state.questionAnswers, [questionId]), {
+      var currentAnswer = _lodash["default"].get(_this.state.questionAnswers, [questionId]);
+
+      var mergedData = _objectSpread(_objectSpread({}, currentAnswer), {}, {
         value: questionAnswer,
         label: questionLabel
       });
@@ -121,13 +123,13 @@ var Winterfell = /*#__PURE__*/function (_Component) {
           var mergedData;
 
           if (!enablePrefilledAnswer) {
-            mergedData = _lodash["default"].merge(_lodash["default"].get(_this.state.questionAnswers, [questionId]), {
+            mergedData = _objectSpread(_objectSpread({}, _lodash["default"].get(_this.state.questionAnswers, [questionId])), {}, {
               label: label,
               prefilledData: prefillData
             });
             console.log('Set prefill data: answer is existed and prefillMode is disable ', mergedData);
           } else {
-            mergedData = _lodash["default"].merge(_lodash["default"].get(_this.state.questionAnswers, [questionId]), {
+            mergedData = _objectSpread(_objectSpread({}, _lodash["default"].get(_this.state.questionAnswers, [questionId])), {}, {
               label: label,
               enablePrefilledAnswer: true,
               prefilledData: prefillData
@@ -146,7 +148,7 @@ var Winterfell = /*#__PURE__*/function (_Component) {
           _lodash["default"].set(currentQuestionAnswers, [questionId], _objectSpread({}, mergedData));
         }
       } else {
-        var _mergedData = _lodash["default"].merge(_lodash["default"].get(_this.state.questionAnswers, [questionId]), {
+        var _mergedData = _objectSpread(_objectSpread({}, _lodash["default"].get(_this.state.questionAnswers, [questionId])), {}, {
           label: null,
           enablePrefilledAnswer: false
         });
@@ -178,7 +180,7 @@ var Winterfell = /*#__PURE__*/function (_Component) {
 
       _lodash["default"].forEach(_this.state.currentQuestions, function (value, key) {
         if (value && value.label) {
-          var mergedData = _lodash["default"].merge(_lodash["default"].get(questionAnswers, [key]), {
+          var mergedData = _objectSpread(_objectSpread({}, _lodash["default"].get(questionAnswers, [key])), {}, {
             enablePrefilledAnswer: enable
           });
 
@@ -401,20 +403,20 @@ var Winterfell = /*#__PURE__*/function (_Component) {
             /* if the prefillData toggle is enabled, it will replace the input data */
 
             /* if the current data is empty, it will set the prefill value */
-            mergedData = _lodash["default"].merge(value, {
+            mergedData = _objectSpread(_objectSpread({}, value), {}, {
               value: prefillData,
               prefilledData: prefillData
             });
           } else if (!value.enablePrefilledAnswer && prefillData && _lodash["default"].isEmpty(value.prefilledData)) {
             /* if the current data is empty and there is prefill data, we will enable prefill data and set the value to the answer */
-            mergedData = _lodash["default"].merge(value, {
+            mergedData = _objectSpread(_objectSpread({}, value), {}, {
               enablePrefilledAnswer: true,
               value: prefillData,
               prefilledData: prefillData
             });
           } else if (!_lodash["default"].isEqual(prefillData, value.prefilledData)) {
             /* Update prefill data only */
-            mergedData = _lodash["default"].merge(value, {
+            mergedData = _objectSpread(_objectSpread({}, value), {}, {
               prefilledData: prefillData
             });
           }
