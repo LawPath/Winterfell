@@ -137,22 +137,18 @@ export class Winterfell extends Component {
         if (value.enablePrefilledAnswer) {
           /* if the prefillData toggle is enabled, it will replace the input data */
           /* if the current data is empty, it will set the prefill value */
-          mergedData = _.merge(value, {
-            value: prefillData,
-            prefilledData: prefillData,
-          });
+          mergedData = { ...value, value: prefillData, prefilledData: prefillData };
         } else if (!value.enablePrefilledAnswer && prefillData && _.isEmpty(value.prefilledData)) {
           /* if the current data is empty and there is prefill data, we will enable prefill data and set the value to the answer */
-          mergedData = _.merge(value, {
+          mergedData = {
+            ...value,
             enablePrefilledAnswer: true,
             value: prefillData,
             prefilledData: prefillData,
-          });
+          };
         } else if (!_.isEqual(prefillData, value.prefilledData)) {
           /* Update prefill data only */
-          mergedData = _.merge(value, {
-            prefilledData: prefillData,
-          });
+          mergedData = { ...value, prefilledData: prefillData };
         }
         if (mergedData) {
           _.set(newState.questionAnswers, [key], { ...mergedData });
@@ -163,10 +159,8 @@ export class Winterfell extends Component {
   }
 
   handleAnswerChange = (questionId, questionAnswer, questionLabel) => {
-    const mergedData = _.merge(_.get(this.state.questionAnswers, [questionId]), {
-      value: questionAnswer,
-      label: questionLabel,
-    });
+    const currentAnswer = _.get(this.state.questionAnswers, [questionId]);
+    const mergedData = { ...currentAnswer, value: questionAnswer, label: questionLabel };
 
     if (
       mergedData &&
@@ -221,20 +215,22 @@ export class Winterfell extends Component {
 
         let mergedData;
         if (!enablePrefilledAnswer) {
-          mergedData = _.merge(_.get(this.state.questionAnswers, [questionId]), {
+          mergedData = {
+            ..._.get(this.state.questionAnswers, [questionId]),
             label: label,
             prefilledData: prefillData,
-          });
+          };
           console.log(
             'Set prefill data: answer is existed and prefillMode is disable ',
             mergedData,
           );
         } else {
-          mergedData = _.merge(_.get(this.state.questionAnswers, [questionId]), {
+          mergedData = {
+            ..._.get(this.state.questionAnswers, [questionId]),
             label: label,
             enablePrefilledAnswer: true,
             prefilledData: prefillData,
-          });
+          };
           console.log('Set prefill data: answer is existed and prefillMode is enable ', mergedData);
         }
 
@@ -254,10 +250,11 @@ export class Winterfell extends Component {
         _.set(currentQuestionAnswers, [questionId], { ...mergedData });
       }
     } else {
-      const mergedData = _.merge(_.get(this.state.questionAnswers, [questionId]), {
+      const mergedData = {
+        ..._.get(this.state.questionAnswers, [questionId]),
         label: null,
         enablePrefilledAnswer: false,
-      });
+      };
       _.set(currentQuestionAnswers, [questionId], { ...mergedData });
     }
 
@@ -283,9 +280,7 @@ export class Winterfell extends Component {
     let questionAnswers = { ...this.state.questionAnswers };
     _.forEach(this.state.currentQuestions, (value, key) => {
       if (value && value.label) {
-        const mergedData = _.merge(_.get(questionAnswers, [key]), {
-          enablePrefilledAnswer: enable,
-        });
+        const mergedData = { ..._.get(questionAnswers, [key]), enablePrefilledAnswer: enable };
 
         if (mergedData.enablePrefilledAnswer) {
           /* if the prefill-value is enabled, we will replace the inputed text  */
@@ -295,7 +290,7 @@ export class Winterfell extends Component {
       }
     });
 
-    if(questionAnswers){
+    if (questionAnswers) {
       this.setState({ questionAnswers: questionAnswers });
       this.props.onUpdate(questionAnswers);
     }

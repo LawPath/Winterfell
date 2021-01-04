@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import cloneArray from '../lib/cloneArray';
 
 const CheckboxOptionsInput = ({
   classes,
@@ -11,7 +10,6 @@ const CheckboxOptionsInput = ({
   id,
   onBlur,
   value,
-
   onChange,
 }) => {
   const [inputValue, setInputValue] = useState(value.length > 0 ? [...value] : []);
