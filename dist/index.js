@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = exports.Winterfell = void 0;
+exports["default"] = exports.QUESTION_INPUT_TYPES = exports.Winterfell = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
@@ -18,6 +18,8 @@ var _validation = _interopRequireDefault(require("./lib/validation"));
 var _questionPanel = _interopRequireDefault(require("./questionPanel"));
 
 var _questionAnswers = require("./lib/questionAnswers");
+
+var _index = require("./inputTypes/index.js");
 
 var _Winterfell$defaultPr;
 
@@ -514,5 +516,7 @@ Winterfell.defaultProps = (_Winterfell$defaultPr = {
   currentQuestionId: undefined,
   panelConstants: undefined
 }, _defineProperty(_Winterfell$defaultPr, "questionAnswers", undefined), _defineProperty(_Winterfell$defaultPr, "answersSuggestionComponent", undefined), _defineProperty(_Winterfell$defaultPr, "labeledAnswers", []), _defineProperty(_Winterfell$defaultPr, "windowHeight", 0), _defineProperty(_Winterfell$defaultPr, "onSubmit", function onSubmit() {}), _defineProperty(_Winterfell$defaultPr, "onUpdate", function onUpdate() {}), _defineProperty(_Winterfell$defaultPr, "onFocus", function onFocus() {}), _defineProperty(_Winterfell$defaultPr, "onSwitchPanel", function onSwitchPanel() {}), _defineProperty(_Winterfell$defaultPr, "onRender", function onRender() {}), _defineProperty(_Winterfell$defaultPr, "onClickInputIcon", function onClickInputIcon() {}), _Winterfell$defaultPr);
+var QUESTION_INPUT_TYPES = _index.QUESTION_INPUT_TYPES;
+exports.QUESTION_INPUT_TYPES = QUESTION_INPUT_TYPES;
 var _default = Winterfell;
 exports["default"] = _default;

@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = void 0;
+exports["default"] = exports.QUESTION_INPUT_TYPES = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
@@ -37,6 +37,23 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "d
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
+var QUESTION_INPUT_TYPES = {
+  checkbox: ' checkboxInput',
+  checkboxOptions: 'checkboxOptionsInput',
+  email: 'emailInput',
+  file: 'fileInput',
+  hiddenInput: 'hiddenInput',
+  password: 'passwordInput',
+  radio: 'radioOptionsInput',
+  select: 'selectInput',
+  textArea: 'textAreaInput',
+  textarea: 'textareaInput',
+  text: 'textInput',
+  address: 'addressInput',
+  date: 'dateInput',
+  signature: 'signatureInput'
+};
+exports.QUESTION_INPUT_TYPES = QUESTION_INPUT_TYPES;
 var inputTypes = {
   checkboxInput: _checkboxInput["default"],
   checkboxOptionsInput: _checkboxOptionsInput["default"],
