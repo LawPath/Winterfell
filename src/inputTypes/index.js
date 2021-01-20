@@ -13,6 +13,23 @@ import AddressInput from './addressInput';
 import DateInput from './dateInput';
 import SignatureInput from './signatureInput';
 
+export const QUESTION_INPUT_TYPES = {
+  checkbox: ' checkboxInput',
+  checkboxOptions: 'checkboxOptionsInput',
+  email: 'emailInput',
+  file: 'fileInput',
+  hiddenInput: 'hiddenInput',
+  password: 'passwordInput',
+  radio: 'radioOptionsInput',
+  select: 'selectInput',
+  textArea: 'textAreaInput',
+  textarea: 'textareaInput',
+  text: 'textInput',
+  address: 'addressInput',
+  date: 'dateInput',
+  signature: 'signatureInput',
+};
+
 const inputTypes = {
   checkboxInput: CheckboxInput,
   checkboxOptionsInput: CheckboxOptionsInput,

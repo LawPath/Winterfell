@@ -6,6 +6,7 @@ import errorMessages from './lib/errors';
 import validation from './lib/validation';
 import QuestionPanel from './questionPanel';
 import { getPrefillData, groupAnswersByLabel } from './lib/questionAnswers';
+import { QUESTION_INPUT_TYPES as INPUT_TYPES} from './inputTypes/index.js';
 
 export class Winterfell extends Component {
   constructor(props) {
@@ -468,4 +469,6 @@ Winterfell.defaultProps = {
   onRender: () => {},
   onClickInputIcon: () => {},
 };
+
+export const QUESTION_INPUT_TYPES = INPUT_TYPES;
 export default Winterfell;
