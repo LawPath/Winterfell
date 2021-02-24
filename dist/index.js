@@ -378,16 +378,28 @@ var Winterfell = /*#__PURE__*/function (_Component) {
               })[0].conditionalQuestions[0].questionId
             };
           });
+          var data = s.questionSets.filter(function (f) {
+            return f.questions.length;
+          }).filter(function (g) {
+            return g.questions[0].input.options && g.questions[0].input.options.filter(function (q2) {
+              return q2.conditionalQuestions;
+            }).length;
+          }).map(function (e) {
+            return e.questions[0];
+          });
           questionPanel = questionPanels.find(function (qs) {
-            if (qs.questionId === questionsIdWithConditionals.find(function (e) {
+            var conditionalQuestion = questionsIdWithConditionals.find(function (e) {
               return e.conditionalQuestionId === nextProps.currentQuestionId;
-            }).questionId) {
+            });
+            console.log('data: ', nextProps.currentQuestionId, questionsIdWithConditionals, questionPanels, s.questionSets, data);
+
+            if (conditionalQuestion && qs.questionId === conditionalQuestion.questionId) {
               return qs.panel;
             }
           });
         }
 
-        if (this.state.currentPanel.panelId !== questionPanel.panel.panelId) {
+        if (questionPanel && this.state.currentPanel.panelId !== questionPanel.panel.panelId) {
           newState.currentPanel = questionPanel.panel;
           this.panelHistory.push(questionPanel.panel.panelId);
           newState.currentQuestionId = nextProps.currentQuestionId;

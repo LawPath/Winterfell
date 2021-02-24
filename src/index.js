@@ -5,8 +5,8 @@ import inputTypes from './inputTypes';
 import errorMessages from './lib/errors';
 import validation from './lib/validation';
 import QuestionPanel from './questionPanel';
-import { getPrefillData, groupAnswersByLabel } from './lib/questionAnswers';
-import { QUESTION_INPUT_TYPES as INPUT_TYPES} from './inputTypes/index.js';
+import { getPrefillData } from './lib/questionAnswers';
+import { QUESTION_INPUT_TYPES as INPUT_TYPES } from './inputTypes/index.js';
 
 export class Winterfell extends Component {
   constructor(props) {
@@ -111,18 +111,17 @@ export class Winterfell extends Component {
           }));
 
         questionPanel = questionPanels.find((qs) => {
-          if (
-            qs.questionId ===
-            questionsIdWithConditionals.find(
-              (e) => e.conditionalQuestionId === nextProps.currentQuestionId,
-            ).questionId
-          ) {
+          const conditionalQuestion = questionsIdWithConditionals.find(
+            (e) => e.conditionalQuestionId === nextProps.currentQuestionId,
+          );
+
+          if (conditionalQuestion && conditionalQuestion.questionId == qs.questionId ) {
             return qs.panel;
           }
         });
       }
 
-      if (this.state.currentPanel.panelId !== questionPanel.panel.panelId) {
+      if (questionPanel && this.state.currentPanel.panelId !== questionPanel.panel.panelId) {
         newState.currentPanel = questionPanel.panel;
         this.panelHistory.push(questionPanel.panel.panelId);
         newState.currentQuestionId = nextProps.currentQuestionId;
