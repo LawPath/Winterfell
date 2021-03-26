@@ -378,22 +378,12 @@ var Winterfell = /*#__PURE__*/function (_Component) {
               })[0].conditionalQuestions[0].questionId
             };
           });
-          var data = s.questionSets.filter(function (f) {
-            return f.questions.length;
-          }).filter(function (g) {
-            return g.questions[0].input.options && g.questions[0].input.options.filter(function (q2) {
-              return q2.conditionalQuestions;
-            }).length;
-          }).map(function (e) {
-            return e.questions[0];
-          });
           questionPanel = questionPanels.find(function (qs) {
             var conditionalQuestion = questionsIdWithConditionals.find(function (e) {
               return e.conditionalQuestionId === nextProps.currentQuestionId;
             });
-            console.log('data: ', nextProps.currentQuestionId, questionsIdWithConditionals, questionPanels, s.questionSets, data);
 
-            if (conditionalQuestion && qs.questionId === conditionalQuestion.questionId) {
+            if (conditionalQuestion && conditionalQuestion.questionId == qs.questionId) {
               return qs.panel;
             }
           });

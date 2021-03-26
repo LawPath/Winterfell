@@ -355,28 +355,26 @@ export default class QuestionPanel extends React.Component {
     });
 
     /* Append suggestion section to the form builder */
-    const suggestionSets = this.props.questionSets.map((questionSetMeta) => {
-      const questionSet = _.find(this.props.schema.questionSets, {
-        questionSetId: questionSetMeta.questionSetId,
-      });
+    const firstQuestionSet = this.props.questionSets.length > 0 ? this.props.questionSets[0] : null;
 
-      if (!questionSet) {
-        return undefined;
-      }
-      const SuggestionSet = this.props.answersSuggestionComponent;
-      return (
-        <SuggestionSet
-          questions={questionSet.questions}
-          classes={this.props.classes}
-          suggestionPanel={this.props.suggestionPanel}
-          panelConstants={this.props.panelConstants}
-          questionAnswers={this.props.questionAnswers}
-          onAnswerChange={this.props.onAnswerChange}
-          defaultSuggestions={this.props.defaultSuggestions}
-          headerRef={this.suggestionHeaderRef}
-        />
-      );
+    const questionSet = _.find(this.props.schema.questionSets, {
+      questionSetId: firstQuestionSet.questionSetId,
     });
+    const SuggestionSet = this.props.answersSuggestionComponent;
+
+    let suggestionSets = questionSet ? (
+      <SuggestionSet
+        questions={questionSet.questions}
+        classes={this.props.classes}
+        suggestionPanel={this.props.suggestionPanel}
+        panelConstants={this.props.panelConstants}
+        questionAnswers={this.props.questionAnswers}
+        onAnswerChange={this.props.onAnswerChange}
+        defaultSuggestions={this.props.defaultSuggestions}
+        headerRef={this.suggestionHeaderRef}
+      />
+    ) : undefined;
+
     return (
       <QuestionPanelStyleComponent
         windowHeight={this.props.windowHeight}
