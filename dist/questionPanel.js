@@ -418,23 +418,27 @@ var QuestionPanel = /*#__PURE__*/function (_React$Component) {
       });
       /* Append suggestion section to the form builder */
 
-      var firstQuestionSet = this.props.questionSets.length > 0 ? this.props.questionSets[0] : null;
+      var suggestionSets = this.props.questionSets.map(function (questionSetMeta) {
+        var questionSet = _lodash["default"].find(_this2.props.schema.questionSets, {
+          questionSetId: questionSetMeta.questionSetId
+        });
 
-      var questionSet = _lodash["default"].find(this.props.schema.questionSets, {
-        questionSetId: firstQuestionSet.questionSetId
+        if (!questionSet) {
+          return undefined;
+        }
+
+        var SuggestionSet = _this2.props.answersSuggestionComponent;
+        return /*#__PURE__*/_react["default"].createElement(SuggestionSet, {
+          questions: questionSet.questions,
+          classes: _this2.props.classes,
+          suggestionPanel: _this2.props.suggestionPanel,
+          panelConstants: _this2.props.panelConstants,
+          questionAnswers: _this2.props.questionAnswers,
+          onAnswerChange: _this2.props.onAnswerChange,
+          defaultSuggestions: _this2.props.defaultSuggestions,
+          headerRef: _this2.suggestionHeaderRef
+        });
       });
-
-      var SuggestionSet = this.props.answersSuggestionComponent;
-      var suggestionSets = questionSet ? /*#__PURE__*/_react["default"].createElement(SuggestionSet, {
-        questions: questionSet.questions,
-        classes: this.props.classes,
-        suggestionPanel: this.props.suggestionPanel,
-        panelConstants: this.props.panelConstants,
-        questionAnswers: this.props.questionAnswers,
-        onAnswerChange: this.props.onAnswerChange,
-        defaultSuggestions: this.props.defaultSuggestions,
-        headerRef: this.suggestionHeaderRef
-      }) : undefined;
       return /*#__PURE__*/_react["default"].createElement(QuestionPanelStyleComponent, {
         windowHeight: this.props.windowHeight,
         suggestionHeaderHeight: this.suggestionHeaderRef.current ? this.suggestionHeaderRef.current.clientHeight : constants.suggestionHeader
