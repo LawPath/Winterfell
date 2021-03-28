@@ -1,42 +1,43 @@
-var React = require('react');
+import React, { useEffect, useState } from 'react';
 
-class EmailInput extends React.Component {
-  constructor(props) {
-    super(props);
+const EmailInput = ({
+  name,
+  id,
+  labelId,
+  classes,
+  placeholder,
+  required,
+  onFocus,
+  onBlur,
+  onKeyDown,
+}) => {
+  const [inputValue, setInputValue] = useState(value);
+  useEffect(() => {
+    setInputValue(value);
+  }, [value]);
 
-    this.state = {
-      value: this.props.value,
-    };
-  }
+  const handleChange = (e) => {
+    setInputValue(e.target.value);
+    onChange(e.target.value);
+  };
 
-  handleChange(e) {
-    this.setState(
-      {
-        value: e.target.value,
-      },
-      this.props.onChange.bind(null, e.target.value),
-    );
-  }
-
-  render() {
-    return (
-      <input
-        type="email"
-        name={this.props.name}
-        id={this.props.id}
-        aria-labelledby={this.props.labelId}
-        className={this.props.classes.input}
-        placeholder={this.props.placeholder}
-        value={this.state.value}
-        required={this.props.required ? 'required' : undefined}
-        onChange={this.handleChange.bind(this)}
-        onFocus={this.props.onFocus.bind(null, this.props.id)}
-        onBlur={this.props.onBlur.bind(null, this.state.value)}
-        onKeyDown={this.props.onKeyDown}
-      />
-    );
-  }
-}
+  return (
+    <input
+      type="email"
+      name={name}
+      id={id}
+      aria-labelledby={labelId}
+      className={classes.input}
+      placeholder={placeholder}
+      value={inputValue}
+      required={required ? 'required' : undefined}
+      onChange={handleChange}
+      onFocus={() => onFocus.bind(null, id)}
+      onBlur={() => onBlur.bind(null, inputValue)}
+      onKeyDown={onKeyDown}
+    />
+  );
+};
 
 EmailInput.defaultProps = {
   classes: {},
@@ -50,4 +51,4 @@ EmailInput.defaultProps = {
   onFocus: () => {},
 };
 
-module.exports = EmailInput;
+export default EmailInput;

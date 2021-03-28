@@ -1,80 +1,89 @@
-'use strict';
+"use strict";
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+var _react = _interopRequireWildcard(require("react"));
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+var _lodash = _interopRequireDefault(require("lodash"));
 
-var React = require('react');
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-var SelectInput = function (_React$Component) {
-  _inherits(SelectInput, _React$Component);
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
-  function SelectInput(props) {
-    _classCallCheck(this, SelectInput);
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
-    var _this = _possibleConstructorReturn(this, (SelectInput.__proto__ || Object.getPrototypeOf(SelectInput)).call(this, props));
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
-    _this.state = {
-      value: _this.props.value
-    };
-    return _this;
-  }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-  _createClass(SelectInput, [{
-    key: 'handleChange',
-    value: function handleChange(e) {
-      this.setState({
-        value: e.target.value
-      }, this.props.onChange.bind(null, e.target.value));
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+var SelectInput = function SelectInput(_ref) {
+  var name = _ref.name,
+      id = _ref.id,
+      classes = _ref.classes,
+      value = _ref.value,
+      required = _ref.required,
+      onChange = _ref.onChange,
+      _onFocus = _ref.onFocus,
+      _onBlur = _ref.onBlur,
+      options = _ref.options;
+  var selectRef = (0, _react.useRef)(null);
+
+  var _useState = (0, _react.useState)(value),
+      _useState2 = _slicedToArray(_useState, 2),
+      inputValue = _useState2[0],
+      setInputValue = _useState2[1];
+
+  (0, _react.useEffect)(function () {
+    if (_lodash["default"].isEmpty(value) && options && _lodash["default"].isArray(options) && options.length > 0) {
+      onChange(options[0].value);
     }
-  }, {
-    key: 'render',
-    value: function render() {
-      var options = this.props.options.map(function (opt) {
-        return React.createElement(
-          'option',
-          { key: opt.value, value: opt.value },
-          opt.text
-        );
-      });
 
-      return React.createElement(
-        'select',
-        {
-          name: this.props.name,
-          id: this.props.id,
-          className: this.props.classes.select,
-          value: this.state.value,
-          ref: 'select',
-          required: this.props.required ? 'required' : undefined,
-          onChange: this.handleChange.bind(this),
-          onFocus: this.props.onFocus.bind(null, this.props.id),
-          onBlur: this.props.onBlur.bind(null, this.state.value)
-        },
-        options
-      );
-    }
-  }, {
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      /*
-       * Selects automatically pick the first item, so
-       * make sure we set it.
-       */
-      this.handleChange({
-        target: {
-          value: this.refs.select.value
-        }
-      });
-    }
-  }]);
+    _onFocus(id);
+  }, []);
+  (0, _react.useEffect)(function () {
+    setInputValue(value);
+  }, [value]);
 
-  return SelectInput;
-}(React.Component);
+  var handleChange = function handleChange(e) {
+    setInputValue(e.target.value);
+    onChange(e.target.value);
+  };
+
+  var selectOptions = options.map(function (opt) {
+    return /*#__PURE__*/_react["default"].createElement("option", {
+      key: opt.value,
+      value: opt.value
+    }, opt.text);
+  });
+  return /*#__PURE__*/_react["default"].createElement("select", {
+    ref: selectRef,
+    name: name,
+    id: id,
+    className: classes.select,
+    value: inputValue,
+    required: required ? 'required' : undefined,
+    onChange: handleChange,
+    onFocus: function onFocus() {
+      return _onFocus(id);
+    },
+    onBlur: function onBlur() {
+      return _onBlur(inputValue);
+    }
+  }, selectOptions);
+};
 
 SelectInput.defaultProps = {
   classes: {},
@@ -85,5 +94,5 @@ SelectInput.defaultProps = {
   onChange: function onChange() {},
   onBlur: function onBlur() {}
 };
-
-module.exports = SelectInput;
+var _default = SelectInput;
+exports["default"] = _default;

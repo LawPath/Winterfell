@@ -1,48 +1,48 @@
-var React = require('react');
+import React, { useEffect, useState } from 'react';
 
-class RadioOptionsInput extends React.Component {
-  constructor(props) {
-    super(props);
+const RadioOptionsInput = ({
+  id,
+  name,
+  value,
+  classes,
+  options,
+  labelId,
+  required,
+  onFocus,
+  onChange,
+  onBlur,
+}) => {
+  const [inputValue, setInputValue] = useState(value);
 
-    this.state = {
-      value: this.props.value,
-    };
-  }
+  const handleChange = (optionValue) => {
+    setInputValue(optionValue);
+    onChange(optionValue);
+  };
 
-  handleChange(value) {
-    this.setState(
-      {
-        value: value,
-      },
-      this.props.onChange.bind(null, value),
-    );
-  }
-
-  render() {
-    return (
-      <ul className={this.props.classes.radioList}>
-        {this.props.options.map((opt) => (
-          <li key={opt.value} className={this.props.classes.radioListItem}>
-            <label className={this.props.classes.radioLabel} id={this.props.labelId}>
-              <input
-                type="radio"
-                name={this.props.name}
-                aria-labelledby={this.props.labelId}
-                checked={this.state.value == opt.value}
-                className={this.props.classes.radio}
-                required={this.props.required ? 'required' : undefined}
-                onClick={this.props.onFocus.bind(null, this.props.id)}
-                onChange={this.handleChange.bind(this, opt.value)}
-                onBlur={this.props.onBlur.bind(null, this.state.value)}
-              />
-              {opt.text}
-            </label>
-          </li>
-        ))}
-      </ul>
-    );
-  }
-}
+  if (!options) return null;
+  return (
+    <ul className={classes.radioList}>
+      {options.map((opt) => (
+        <li key={opt.value} className={classes.radioListItem}>
+          <label className={classes.radioLabel} id={labelId}>
+            <input
+              type="radio"
+              name={name}
+              aria-labelledby={labelId}
+              checked={inputValue == opt.value}
+              className={classes.radio}
+              required={required ? 'required' : undefined}
+              onClick={() => onFocus(id)}
+              onChange={() => handleChange(opt.value)}
+              onBlur={() => onBlur(inputValue)}
+            />
+            {opt.text}
+          </label>
+        </li>
+      ))}
+    </ul>
+  );
+};
 
 RadioOptionsInput.defaultProps = {
   classes: {},
@@ -54,4 +54,4 @@ RadioOptionsInput.defaultProps = {
   onFocus: () => {},
 };
 
-module.exports = RadioOptionsInput;
+export default RadioOptionsInput;

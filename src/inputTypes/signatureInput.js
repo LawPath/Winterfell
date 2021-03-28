@@ -1,45 +1,49 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
-export default class SignatureInput extends React.Component {
-  constructor(props) {
-    super(props);
+const SignatureInput = ({
+  name,
+  id,
+  value,
+  labelId,
+  classes,
+  placeholder,
+  required,
+  onFocus,
+  onChange,
+  onBlur,
+  onKeyDown,
+}) => {
+  const [inputValue, setInputValue] = useState(value);
 
-    this.state = {
-      value: this.props.value.type ? this.props.value.value : this.props.value,
-    };
-  }
+  useEffect(() => {
+    setValue(value.type ? value.value : value);
+  }, [value]);
 
-  handleChange(e) {
-    this.setState(
-      {
-        value: e.target.value,
-      },
-      this.props.onChange.bind(null, {
-        type: 'signature',
-        value: e.target.value,
-      }),
-    );
-  }
+  const handleChange = (e) => {
+    setInputValue(e.target.value);
+    onChange({
+      type: 'signature',
+      value: e.target.value,
+    });
+  };
 
-  render() {
-    return (
-      <input
-        type="text"
-        name={this.props.name}
-        id={this.props.id}
-        aria-labelledby={this.props.labelId}
-        className={this.props.classes.signature}
-        placeholder={this.props.placeholder}
-        value={this.state.value}
-        required={this.props.required ? 'required' : undefined}
-        onChange={this.handleChange.bind(this)}
-        onFocus={this.props.onFocus.bind(null, this.props.id)}
-        onBlur={this.props.onBlur.bind(null, this.state.value)}
-        onKeyDown={this.props.onKeyDown}
-      />
-    );
-  }
-}
+  return (
+    <input
+      type="text"
+      name={name}
+      id={id}
+      aria-labelledby={labelId}
+      className={classes.signature}
+      placeholder={placeholder}
+      value={inputValue}
+      required={required ? 'required' : undefined}
+      onChange={handleChange}
+      onFocus={() => onFocus(id)}
+      onBlur={() => onBlur(inputValue)}
+      onKeyDown={onKeyDown}
+    />
+  );
+};
 
 SignatureInput.defaultProps = {
   classes: {},
@@ -52,3 +56,5 @@ SignatureInput.defaultProps = {
   onKeyDown: () => {},
   onFocus: () => {},
 };
+
+export default SignatureInput;

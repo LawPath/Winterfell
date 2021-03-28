@@ -1,51 +1,101 @@
-'use strict';
+"use strict";
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var _react = _interopRequireWildcard(require("react"));
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _lodash = _interopRequireDefault(require("lodash"));
+
+var _inputTypes = _interopRequireDefault(require("./inputTypes"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var React = require('react');
-var _ = require('lodash').noConflict();
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
-var InputTypes = require('./inputTypes');
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
-var Question = function (_React$Component) {
-  _inherits(Question, _React$Component);
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var Question = /*#__PURE__*/function (_Component) {
+  _inherits(Question, _Component);
+
+  var _super = _createSuper(Question);
 
   function Question() {
+    var _this;
+
     _classCallCheck(this, Question);
 
-    return _possibleConstructorReturn(this, (Question.__proto__ || Object.getPrototypeOf(Question)).apply(this, arguments));
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = _super.call.apply(_super, [this].concat(args));
+
+    _defineProperty(_assertThisInitialized(_this), "handleInputChange", function (questionId, value) {
+      _this.props.onAnswerChange(questionId, value, _this.props.label, _this.props.validations, _this.props.validateOn);
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "handleInputBlur", function (questionId, value) {
+      _this.props.onQuestionBlur(questionId, value, _this.props.validations, _this.props.validateOn);
+    });
+
+    return _this;
   }
 
   _createClass(Question, [{
-    key: 'handleInputChange',
-    value: function handleInputChange(questionId, value) {
-      this.props.onAnswerChange(questionId, value, this.props.validations, this.props.validateOn);
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this$props = this.props,
+          input = _this$props.input,
+          questionAnswers = _this$props.questionAnswers,
+          questionId = _this$props.questionId,
+          label = _this$props.label;
+      this.props.onMounted(questionId, label);
+
+      if (typeof input["default"] === 'undefined' || input.type === 'checkboxInput' && typeof questionAnswers[questionId] === 'undefined') {
+        return;
+      }
+
+      this.handleInputChange(questionId, input["default"]);
     }
   }, {
-    key: 'handleInputBlur',
-    value: function handleInputBlur(questionId, value) {
-      this.props.onQuestionBlur(questionId, value, this.props.validations, this.props.validateOn);
-    }
-  }, {
-    key: 'render',
+    key: "render",
     value: function render() {
       var _this2 = this;
 
-      var Input = InputTypes[this.props.input.type];
+      var Input = _inputTypes["default"][this.props.input.type];
+
       if (!Input) {
         throw new Error('Winterfell: Input Type "' + this.props.input.type + '" not defined as Winterfell Input Type');
       }
-
       /*
        * Conditional Questions
        *
@@ -55,7 +105,10 @@ var Question = function (_React$Component) {
        * then render this component with the props for the conditional
        * question.
        */
+
+
       var conditionalItems = [];
+
       if (typeof this.props.input.options !== 'undefined') {
         this.props.input.options.filter(function (option) {
           return _this2.props.value instanceof Array ? _this2.props.value.indexOf(option.value) > -1 : _this2.props.value == option.value;
@@ -63,7 +116,8 @@ var Question = function (_React$Component) {
           return typeof option.conditionalQuestions !== 'undefined' && option.conditionalQuestions.length > 0;
         }).forEach(function (option) {
           return [].forEach.bind(option.conditionalQuestions, function (conditionalQuestion) {
-            conditionalItems.push(React.createElement(Question, {
+            var answer = _this2.props.questionAnswers[conditionalQuestion.questionId];
+            conditionalItems.push( /*#__PURE__*/_react["default"].createElement(Question, {
               key: conditionalQuestion.questionId,
               questionSetId: _this2.props.questionSetId,
               questionId: conditionalQuestion.questionId,
@@ -72,93 +126,75 @@ var Question = function (_React$Component) {
               postText: conditionalQuestion.postText,
               validateOn: conditionalQuestion.validateOn,
               validations: conditionalQuestion.validations,
-              value: _this2.props.questionAnswers[conditionalQuestion.questionId],
+              value: answer ? answer.value : undefined,
+              label: conditionalQuestion.label,
+              prefilledData: answer ? answer.prefilledData : undefined,
+              enablePrefilledAnswer: answer ? answer.enablePrefilledAnswer : undefined,
               input: conditionalQuestion.input,
               classes: _this2.props.classes,
               renderError: _this2.props.renderError,
               questionAnswers: _this2.props.questionAnswers,
+              labeledAnswers: _this2.props.labeledAnswers,
+              panelConstants: _this2.props.panelConstants,
               validationErrors: _this2.props.validationErrors,
               onAnswerChange: _this2.props.onAnswerChange,
               onQuestionBlur: _this2.props.onQuestionBlur,
+              onMounted: _this2.props.onMounted,
               onFocus: _this2.props.onFocus,
-              onKeyDown: _this2.props.onKeyDown
+              onKeyDown: _this2.props.onKeyDown,
+              onClickInputIcon: _this2.props.onClickInputIcon
             }));
           })();
         });
-      }
-
-      // Get the current value. If none is set, then use
+      } // Get the current value. If none is set, then use
       // the default if given.
-      var value = typeof this.props.value !== 'undefined' ? this.props.value : typeof this.props.input.default !== 'undefined' ? this.props.input.default : undefined;
 
-      // Retrieve the validation errors for the
+
+      var value = typeof this.props.value !== 'undefined' ? this.props.value : typeof this.props.input["default"] !== 'undefined' ? this.props.input["default"] : undefined; // Retrieve the validation errors for the
       // current question and map them in to
       // error-message blocks.
+
       var validationErrors = typeof this.props.validationErrors[this.props.questionId] !== 'undefined' ? this.props.validationErrors[this.props.questionId].map(function (error) {
-        return typeof _this2.props.renderError === 'function' ? _this2.props.renderError(error, _this2.props.questionId) : React.createElement(
-          'div',
-          {
-            key: _this2.props.questionId + 'Error' + error.type,
-            className: _this2.props.classes.errorMessage
-          },
-          error.message
-        );
+        return typeof _this2.props.renderError === 'function' ? _this2.props.renderError(error, _this2.props.questionId) : /*#__PURE__*/_react["default"].createElement("div", {
+          key: _this2.props.questionId + 'Error' + error.type,
+          className: _this2.props.classes.errorMessage
+        }, error.message);
       }) : [];
-
-      var labelId = this.props.questionId + '-label';
-
-      return React.createElement(
-        'div',
-        { className: this.props.classes.question },
-        !!this.props.question ? React.createElement(
-          'label',
-          { className: this.props.classes.label, id: labelId, htmlFor: this.props.questionId },
-          this.props.question,
-          typeof this.props.renderRequiredAsterisk !== 'undefined' && this.props.input.required ? this.props.renderRequiredAsterisk() : undefined
-        ) : undefined,
-        !!this.props.text ? React.createElement(
-          'p',
-          { className: this.props.classes.questionText },
-          this.props.text
-        ) : undefined,
-        validationErrors,
-        React.createElement(Input, _extends({
-          name: this.props.questionId,
-          id: this.props.questionId,
-          labelId: labelId,
-          value: value,
-          text: this.props.input.text,
-          options: this.props.input.options,
-          placeholder: this.props.input.placeholder,
-          required: this.props.input.required,
-          classes: this.props.classes,
-          onChange: this.handleInputChange.bind(this, this.props.questionId),
-          onBlur: this.handleInputBlur.bind(this, this.props.questionId),
-          onFocus: this.props.onFocus,
-          onKeyDown: this.props.onKeyDown
-        }, _typeof(this.props.input.props) === 'object' ? this.props.input.props : {})),
-        !!this.props.postText ? React.createElement(
-          'p',
-          { className: this.props.classes.questionPostText },
-          this.props.postText
-        ) : undefined,
-        conditionalItems
-      );
-    }
-  }, {
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      if (typeof this.props.input.default === 'undefined' || this.props.input.type === 'checkboxInput' && typeof this.props.questionAnswers[this.props.questionId] === 'undefined') {
-        return;
-      }
-
-      this.handleInputChange.call(this, this.props.questionId, this.props.input.default);
+      var labelId = "".concat(this.props.questionId, "-label");
+      return /*#__PURE__*/_react["default"].createElement("div", {
+        className: this.props.classes.question
+      }, !!this.props.question ? /*#__PURE__*/_react["default"].createElement("p", {
+        className: this.props.classes.label,
+        id: labelId,
+        htmlFor: this.props.questionId
+      }, this.props.question, typeof this.props.renderRequiredAsterisk !== 'undefined' && this.props.input.required ? this.props.renderRequiredAsterisk() : undefined) : undefined, validationErrors, /*#__PURE__*/_react["default"].createElement(Input, _extends({
+        name: this.props.questionId,
+        id: this.props.questionId,
+        labelId: labelId,
+        value: value,
+        questionLabel: this.props.label,
+        prefilledData: this.props.prefilledData,
+        enablePrefilledAnswer: this.props.enablePrefilledAnswer,
+        text: this.props.input.text,
+        options: this.props.input.options,
+        placeholder: this.props.input.placeholder,
+        required: this.props.input.required,
+        classes: this.props.classes,
+        onChange: this.handleInputChange.bind(this, this.props.questionId),
+        onBlur: this.handleInputBlur.bind(this, this.props.questionId),
+        onFocus: this.props.onFocus,
+        onKeyDown: this.props.onKeyDown,
+        onClickInputIcon: this.props.onClickInputIcon
+      }, _typeof(this.props.input.props) === 'object' ? this.props.input.props : {})), !!this.props.suggestions ? /*#__PURE__*/_react["default"].createElement("p", {
+        className: this.props.classes.questionPostText
+      }, this.props.panelConstants.suggestionHintText) : undefined, conditionalItems);
     }
   }]);
 
   return Question;
-}(React.Component);
+}(_react.Component);
 
+exports["default"] = Question;
 Question.defaultProps = {
   questionSetId: undefined,
   questionId: undefined,
@@ -169,20 +205,24 @@ Question.defaultProps = {
   postText: undefined,
   value: undefined,
   input: {
-    default: undefined,
+    "default": undefined,
     type: 'textInput',
     limit: undefined,
     placeholder: undefined
   },
+  enablePrefilledAnswer: false,
+  label: undefined,
   classes: {},
   questionAnswers: {},
+  labeledAnswers: [],
   validationErrors: {},
   onAnswerChange: function onAnswerChange() {},
   onQuestionBlur: function onQuestionBlur() {},
   onKeyDown: function onKeyDown() {},
   onFocus: function onFocus() {},
+  onClickInputIcon: function onClickInputIcon() {},
+  onMounted: function onMounted() {},
   renderError: undefined,
-  renderRequiredAsterisk: undefined
+  renderRequiredAsterisk: undefined,
+  panelConstants: undefined
 };
-
-module.exports = Question;

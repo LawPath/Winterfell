@@ -1,42 +1,67 @@
-var React = require('react');
+import React, { useEffect, useState } from 'react';
+import IconInput from '../formGroups/inputFormGroup';
+import useFocus from '../lib/hooks/useFocus';
 
-class TextInput extends React.Component {
-  constructor(props) {
-    super(props);
+const TextInput = ({
+  name,
+  id,
+  value,
+  required,
+  classes,
+  placeholder,
+  labelId,
+  onChange,
+  onFocus,
+  onBlur,
+  onKeyDown,
+  onClickInputIcon,
+  enablePrefilledAnswer,
+  inputIconTooltipContent,
+  prefilledData,
+  questionLabel,
+}) => {
+  const [inputValue, setInputValue] = useState(value);
+  const [inputRef, setInputFocus] = useFocus();
 
-    this.state = {
-      value: this.props.value,
-    };
-  }
+  useEffect(() => {
+    setInputFocus();
+    setInputValue(value);
+    if (enablePrefilledAnswer) {
+      onFocus(id);
+    }
+  }, [value, enablePrefilledAnswer]);
 
-  handleChange(e) {
-    this.setState(
-      {
-        value: e.target.value,
-      },
-      this.props.onChange.bind(null, e.target.value),
-    );
-  }
+  const handleChange = (e) => {
+    setInputValue(e.target.value);
+    onChange(e.target.value);
+  };
 
-  render() {
-    return (
+  return (
+    <IconInput
+      active={enablePrefilledAnswer}
+      showIcon={enablePrefilledAnswer || (!prefilledData && questionLabel)}
+      onClick={onClickInputIcon}
+      tooltipContent={inputIconTooltipContent}
+    >
       <input
+        ref={inputRef}
         type="text"
-        name={this.props.name}
-        id={this.props.id}
-        aria-labelledby={this.props.labelId}
-        className={this.props.classes.input}
-        placeholder={this.props.placeholder}
-        value={this.state.value}
-        required={this.props.required ? 'required' : undefined}
-        onChange={this.handleChange.bind(this)}
-        onFocus={this.props.onFocus.bind(null, this.props.id)}
-        onBlur={this.props.onBlur.bind(null, this.state.value)}
-        onKeyDown={this.props.onKeyDown}
+        name={name}
+        id={id}
+        aria-labelledby={labelId}
+        className={classes.input}
+        placeholder={placeholder}
+        value={inputValue}
+        required={required ? 'required' : undefined}
+        onChange={handleChange}
+        onFocus={() => onFocus(id)}
+        onBlur={() => onBlur(value)}
+        onKeyDown={onKeyDown}
+        data-prefiled-data={enablePrefilledAnswer}
       />
-    );
-  }
-}
+    </IconInput>
+  );
+};
 
 TextInput.defaultProps = {
   classes: {},
@@ -44,10 +69,13 @@ TextInput.defaultProps = {
   id: '',
   value: '',
   placeholder: '',
+  enablePrefilledAnswer: true,
   onChange: () => {},
   onBlur: () => {},
   onKeyDown: () => {},
   onFocus: () => {},
+  onFocus: () => {},
+  onClickInputIcon: () => {},
 };
 
-module.exports = TextInput;
+export default TextInput;

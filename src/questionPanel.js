@@ -1,23 +1,162 @@
-var React = require('react');
-var _ = require('lodash').noConflict();
-var KeyCodez = require('keycodez');
+import React, { createRef } from 'react';
+import _ from 'lodash';
+import KeyCodez from 'keycodez';
+import Validation from './lib/validation';
+import ErrorMessages from './lib/errors';
+import Button from './button';
+import QuestionSet from './questionSet';
+import Switch from './custom/switch';
+import styled from 'styled-components';
+import ProgressBar from './custom/progressBar';
 
-var Validation = require('./lib/validation');
-var ErrorMessages = require('./lib/errors');
+export const constants = {
+  headerHeight: 55,
+  actionButtons: 50,
+  progressBar: 30,
+  buttonsBar: 80,
+  mobileButtonsBarExtra: 60,
+  suggestionContent: '20vh',
+  verticalPadding: 40,
+  footer: 31,
+  suggestionHeader: 54,
+  magicHeight: '10vh',
+  minQuestionSection: '230px',
+};
 
-var Button = require('./button');
-var QuestionSet = require('./questionSet');
+export const breakpoint = {
+  smallMobile: 450,
+  mobile: 575,
+  tablet: 767,
+  widerThanTablet: 850,
+  desktop: 1024,
+  wideDesktop: 1200,
+};
 
-class QuestionPanel extends React.Component {
+export const mediaQuery = {
+  desktop: `min-width: ${breakpoint.desktop}px`,
+  wideDesktop: `min-width: ${breakpoint.wideDesktop}px`,
+};
+
+const gaps =
+  constants.actionButtons + constants.progressBar + constants.buttonsBar + constants.footer;
+
+const QuestionPanelStyleComponent = styled.div.attrs({ 'data-id': 'winterfell-question-panel' })`
+  display: grid;
+  height: 100%;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas:
+    'header'
+    'body'
+    'footer';
+
+  .winterfell-question-sets {
+    min-height: calc(
+      ${({ windowHeight }) => windowHeight}px - ${gaps}px - ${constants.suggestionContent} -
+        ${({ suggestionHeaderHeight }) => suggestionHeaderHeight}px
+    );
+
+    @media only screen and (max-width: ${breakpoint.smallMobile}px) {
+      min-height: calc(
+        ${({ windowHeight }) => windowHeight}px - ${gaps + constants.mobileButtonsBarExtra}px -
+          ${constants.suggestionContent} -
+          ${({ suggestionHeaderHeight }) => suggestionHeaderHeight}px
+      );
+    }
+
+    @media only screen and (min-width: ${breakpoint.tablet +
+      1}px) and (max-width: ${breakpoint.wideDesktop + 1}px) {
+      min-height: clamp(
+        ${constants.minQuestionSection},
+        calc(
+          ${({ windowHeight }) => windowHeight}px - ${gaps + constants.mobileButtonsBarExtra}px -
+            ${constants.suggestionContent} -
+            ${({ suggestionHeaderHeight }) => suggestionHeaderHeight}px
+        ),
+        ${({ windowHeight }) => (windowHeight - gaps - constants.mobileButtonsBarExtra) / 2}px
+      );
+    }
+
+    @media only screen and (min-width: ${breakpoint.wideDesktop + 1}px) {
+      /* Move the suggestion panel up to fill the empty space */
+      min-height: clamp(
+        ${constants.minQuestionSection},
+        calc(
+          ${({ windowHeight }) => windowHeight}px - ${gaps}px - ${constants.suggestionContent} -
+            ${({ suggestionHeaderHeight }) => suggestionHeaderHeight}px -
+            ${({ windowHeight }) => (windowHeight - gaps) / 4}px
+        ),
+        ${({ windowHeight }) => (windowHeight - gaps) / 2}px
+      );
+    }
+  }
+
+  /* Add 10vh for the suggestion body because the height of the suggestion is moved up to 10vh  */
+  @media only screen and (min-width: ${breakpoint.wideDesktop + 1}px) {
+    .question-panel-suggestion-body {
+      min-height: min(${({ windowHeight }) => (windowHeight - gaps) / 4}px, 20vh) !important;
+      overflow-y: unset !important;
+      height: auto !important;
+    }
+    .winterfell-suggestion-panel {
+      overflow-y: unset;
+    }
+  }
+
+  @media only screen and (max-width: ${breakpoint.widerThanTablet}px) {
+    grid-template-rows: auto auto auto;
+    height: auto;
+
+    .winterfell-question-sets {
+      min-height: auto;
+    }
+  }
+`;
+
+const SuggesstionWrapper = styled.div.attrs({ 'data-id': 'winterfell-suggestion-wrapper' })`
+  display: block;
+  background-color: #e7f2f9;
+  @media only screen and (max-width: ${breakpoint.widerThanTablet + 1}px) {
+    display: none;
+  }
+`;
+export default class QuestionPanel extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
       validationErrors: this.props.validationErrors,
+      currentQuestion: null,
+      prefillQuestion: undefined,
     };
+    this.suggestionHeaderRef = createRef();
   }
 
-  handleAnswerValidate(questionId, questionAnswer, validations) {
+  componentWillReceiveProps(newprops) {
+    if (newprops.currentQuestionId) {
+      let currentQuestion = this.props.questionAnswers
+        ? this.props.questionAnswers[newprops.currentQuestionId]
+        : null;
+      if (!currentQuestion) return;
+      this.setState({ currentQuestion });
+    } else {
+      this.setState({ currentQuestion: null });
+    }
+
+    /* Check prefill questions status */
+    if (newprops.currentQuestionsOnPanel) {
+      let prefillQuestion = _.find(newprops.currentQuestionsOnPanel, (item) => {
+        return item.label && item.enablePrefilledAnswer;
+      });
+      if (!prefillQuestion) {
+        prefillQuestion = _.find(newprops.currentQuestionsOnPanel, (item) => {
+          return item.label;
+        });
+      }
+      this.setState({ prefillQuestion });
+    }
+  }
+
+  handleAnswerValidate = (questionId, questionAnswer, validations) => {
     if (typeof validations === 'undefined' || validations.length === 0) {
       return;
     }
@@ -28,7 +167,7 @@ class QuestionPanel extends React.Component {
      */
     var questionValidationErrors = [];
     validations.forEach((validation) => {
-      if (Validation.validateAnswer(questionAnswer, validation, this.props.questionAnswers)) {
+      if (Validation.validateAnswer(questionAnswer.value, validation, this.props.questionAnswers)) {
         return;
       }
 
@@ -45,9 +184,9 @@ class QuestionPanel extends React.Component {
     this.setState({
       validationErrors: validationErrors,
     });
-  }
+  };
 
-  handleMainButtonClick() {
+  handleMainButtonClick = () => {
     var action = this.props.action.default;
     var conditions = this.props.action.conditions || [];
 
@@ -93,15 +232,17 @@ class QuestionPanel extends React.Component {
      * Check our conditions and act upon them, or the default.
      */
     conditions.forEach((condition) => {
-      var answer = this.props.questionAnswers[condition.questionId];
-
-      action =
-        answer == condition.value
-          ? {
-              action: condition.action,
-              target: condition.target,
-            }
-          : action;
+      const answerObject = this.props.questionAnswers[condition.questionId];
+      if (answerObject) {
+        const { value: answer } = answerObject;
+        action =
+          answer == condition.value
+            ? {
+                action: condition.action,
+                target: condition.target,
+              }
+            : action;
+      }
     });
 
     /*
@@ -117,15 +258,14 @@ class QuestionPanel extends React.Component {
         this.props.onSubmit(action.target);
         break;
     }
-  }
+  };
 
-  handleBackButtonClick() {
+  handleBackButtonClick = () => {
     this.props.onPanelBack();
-  }
+  };
 
-  handleAnswerChange(questionId, questionAnswer, validations, validateOn) {
-    this.props.onAnswerChange(questionId, questionAnswer);
-
+  handleAnswerChange = (questionId, questionAnswer, questionLabel, validations, validateOn) => {
+    this.props.onAnswerChange(questionId, questionAnswer, questionLabel);
     this.setState({
       validationErrors: _.chain(this.state.validationErrors).set(questionId, []).value(),
     });
@@ -133,24 +273,55 @@ class QuestionPanel extends React.Component {
     if (validateOn === 'change') {
       this.handleAnswerValidate(questionId, questionAnswer, validations);
     }
-  }
+  };
 
-  handleQuestionBlur(questionId, questionAnswer, validations, validateOn) {
+  handleQuestionBlur = (questionId, questionAnswer, validations, validateOn) => {
     if (validateOn === 'blur') {
       this.handleAnswerValidate(questionId, questionAnswer, validations);
     }
-  }
+  };
 
-  handleInputKeyDown(e) {
+  handleInputKeyDown = (e) => {
     if (KeyCodez[e.keyCode] === 'enter') {
       e.preventDefault();
       this.handleMainButtonClick.call(this);
     }
-  }
+  };
+
+  getProgressBarInfo = () => {
+    let completionPercent = 0;
+    let progressBarText = '';
+    const { progress } = this.props;
+
+    if (progress) {
+      if (!progress.variation || progress.variation === 'classic') {
+        completionPercent = Math.floor((100 / this.props.numPanels) * this.props.currentPanelIndex);
+      } else if (progress.variation === 'only-completed' && this.props.questionAnswers) {
+        const questionSetsCompleted = this.props.schema.questionSets.reduce(
+          (acc, qs) =>
+            acc.concat(
+              qs.questions.map((q) => ({
+                questionId: q.questionId,
+                answered: !!this.props.questionAnswers[q.questionId],
+              })),
+            ),
+          [],
+        );
+        let nQuestionsCompleted = questionSetsCompleted.filter((e) => e.answered).length;
+        let nQuestionsTotal = questionSetsCompleted.length;
+        completionPercent = Math.floor((100 / nQuestionsTotal) * nQuestionsCompleted);
+      }
+
+      progressBarText = `${progress.preText || ''}${completionPercent}%${progress.postText || ''}`;
+    }
+    return { text: progressBarText, progress: completionPercent };
+  };
 
   render() {
-    var questionSets = this.props.questionSets.map((questionSetMeta) => {
-      var questionSet = _.find(this.props.schema.questionSets, {
+    const { progress: completionPercent, text: progressText } = this.getProgressBarInfo();
+
+    const questionSets = this.props.questionSets.map((questionSetMeta) => {
+      const questionSet = _.find(this.props.schema.questionSets, {
         questionSetId: questionSetMeta.questionSetId,
       });
 
@@ -168,108 +339,110 @@ class QuestionPanel extends React.Component {
           questions={questionSet.questions}
           classes={this.props.classes}
           questionAnswers={this.props.questionAnswers}
+          labeledAnswers={this.props.labeledAnswers}
           renderError={this.props.renderError}
           renderRequiredAsterisk={this.props.renderRequiredAsterisk}
           validationErrors={this.state.validationErrors}
-          onAnswerChange={this.handleAnswerChange.bind(this)}
-          onQuestionBlur={this.handleQuestionBlur.bind(this)}
+          panelConstants={this.props.panelConstants}
+          onAnswerChange={this.handleAnswerChange}
+          onQuestionBlur={this.handleQuestionBlur}
           onFocus={this.props.onFocus}
-          onKeyDown={this.handleInputKeyDown.bind(this)}
+          onKeyDown={this.handleInputKeyDown}
+          onClickInputIcon={this.props.onClickInputIcon}
+          onQuestionMounted={this.props.onQuestionMounted}
         />
       );
     });
 
-    var completionPercent = 0;
-
-    if (typeof this.props.progress !== 'undefined') {
-      if (!this.props.progress.variation || this.props.progress.variation === 'classic') {
-        completionPercent = Math.floor((100 / this.props.numPanels) * this.props.currentPanelIndex);
-      } else if (this.props.progress.variation === 'only-completed' && this.props.questionAnswers) {
-        const questionSetsCompleted = this.props.schema.questionSets.reduce(
-          (acc, qs) =>
-            acc.concat(
-              qs.questions.map((q) => ({
-                questionId: q.questionId,
-                answered: !!this.props.questionAnswers[q.questionId],
-              })),
-            ),
-          [],
-        );
-        let nQuestionsCompleted = questionSetsCompleted.filter((e) => e.answered).length;
-        let nQuestionsTotal = questionSetsCompleted.length;
-        completionPercent = Math.floor((100 / nQuestionsTotal) * nQuestionsCompleted);
+    /* Append suggestion section to the form builder */
+    const suggestionSets = this.props.questionSets.map((questionSetMeta) => {
+      const questionSet = _.find(this.props.schema.questionSets, {
+        questionSetId: questionSetMeta.questionSetId,
+      });
+      if (!questionSet) {
+        return undefined;
       }
-    }
-    var progressBar = undefined;
-    if (typeof this.props.progress !== 'undefined' && this.props.progress.showBar) {
-      progressBar = (
-        <div className={this.props.classes.progressBar}>
-          <div className={this.props.classes.progressBarTitle}>
-            {this.props.progress.text}
-            {this.props.progress.legendPosition === 'inline' ? `${completionPercent}%` : ''}
-          </div>
-          {this.props.progress.legendPosition === 'top' ? (
-            <div className={this.props.classes.progressBarLegend}>
-              {this.props.progress.showPercent ? `${completionPercent}%` : ''}
-            </div>
-          ) : null}
-          <div className={this.props.classes.progressBarIncomplete}>
-            <div
-              className={this.props.classes.progressBarComplete}
-              style={{ width: `${completionPercent}%` }}
-            ></div>
-            {this.props.progress.legendPosition === 'bar' ? (
-              <div className={this.props.classes.progressBarLegend}>
-                {this.props.progress.showPercent ? `${completionPercent}%` : ''}
-              </div>
-            ) : null}
-          </div>
-        </div>
+      const SuggestionSet = this.props.answersSuggestionComponent;
+      return (
+        <SuggestionSet
+          questions={questionSet.questions}
+          classes={this.props.classes}
+          suggestionPanel={this.props.suggestionPanel}
+          panelConstants={this.props.panelConstants}
+          questionAnswers={this.props.questionAnswers}
+          onAnswerChange={this.props.onAnswerChange}
+          defaultSuggestions={this.props.defaultSuggestions}
+          headerRef={this.suggestionHeaderRef}
+        />
       );
-    }
+    });
 
     return (
-      <div className={this.props.classes.questionPanel}>
-        {this.props.progress && this.props.progress.position === 'top' ? progressBar : undefined}
-        {typeof this.props.panelHeader !== 'undefined' ||
-        typeof this.props.panelText !== 'undefined' ? (
-          <div className={this.props.classes.questionPanelHeaderContainer}>
-            {typeof this.props.panelHeader !== 'undefined' ? (
-              <h3 className={this.props.classes.questionPanelHeaderText}>
-                {this.props.panelHeader}
-              </h3>
-            ) : undefined}
-            {typeof this.props.panelText !== 'undefined' ? (
-              <p className={this.props.classes.questionPanelText}>{this.props.panelText}</p>
-            ) : undefined}
-          </div>
-        ) : undefined}
-        <div className={this.props.classes.questionSets}>{questionSets}</div>
-        {this.props.progress && this.props.progress.position === 'middle' ? progressBar : undefined}
-        <div
-          className={`${this.props.classes.buttonBar} ${this.props.extraClasses.buttonBar || ''}`}
-        >
-          {this.props.currentPanelIndex > 0 && !this.props.backButton.disabled ? (
-            <Button
-              text={this.props.backButton.text || 'Back'}
-              onClick={this.handleBackButtonClick.bind(this)}
-              className={`${this.props.classes.backButton} ${
-                this.props.extraClasses.backButton || ''
-              }`}
-            />
-          ) : undefined}
-          {!this.props.button.disabled ? (
-            <Button
-              text={this.props.button.text}
-              onClick={this.handleMainButtonClick.bind(this)}
-              className={`${this.props.classes.controlButton} ${
-                this.props.extraClasses.button || ''
-              }`}
-            />
-          ) : undefined}
+      <QuestionPanelStyleComponent
+        windowHeight={this.props.windowHeight}
+        suggestionHeaderHeight={
+          this.suggestionHeaderRef.current
+            ? this.suggestionHeaderRef.current.clientHeight
+            : constants.suggestionHeader
+        }
+      >
+        <div className="question-panel-header">
+          {this.props.panelAcions}
+          <ProgressBar progress={completionPercent} text={progressText} />
         </div>
-        {this.props.progress && this.props.progress.position === 'bottom' ? progressBar : undefined}
-      </div>
+        <div className="question-panel-body">
+          <div className={this.props.classes.questionSets}>{questionSets}</div>
+
+          <div className="question-panel-body-footer">
+            <div
+              className={`${this.props.classes.buttonBar} ${
+                this.props.extraClasses.buttonBar || ''
+              }`}
+            >
+              {this.props.currentPanelIndex > 0 && !this.props.backButton.disabled ? (
+                <Button
+                  text={this.props.backButton.text || 'Back'}
+                  onClick={this.handleBackButtonClick}
+                  className={`${this.props.classes.backButton} ${
+                    this.props.extraClasses.backButton || ''
+                  }`}
+                />
+              ) : undefined}
+              {!this.props.button.disabled ? (
+                <Button
+                  type="submit"
+                  text={this.props.button.text}
+                  onClick={this.handleMainButtonClick}
+                  className={`${this.props.classes.controlButton} ${
+                    this.props.extraClasses.button || ''
+                  }`}
+                />
+              ) : undefined}
+            </div>
+            <SuggesstionWrapper>{suggestionSets}</SuggesstionWrapper>
+          </div>
+        </div>
+        <div className="question-panel-footer">
+          <div className="prefill-action-bar">
+            <img
+              className="prefill-action-bar-icon"
+              src="https://assets.lawpath.com/images/svg/editor/builder.svg"
+            />
+            <span className="prefill-action-bar-text">Use pre-fill information</span>
+            <span className="prefill-action-bar-action">
+              {this.state.prefillQuestion ? (
+                <Switch
+                  active={this.state.prefillQuestion.enablePrefilledAnswer}
+                  onChange={(status) => this.props.onEnablePrefilledAnswer(status)}
+                  disabled={!this.state.prefillQuestion.label}
+                />
+              ) : (
+                <Switch active={false} disabled={true} />
+              )}
+            </span>
+          </div>
+        </div>
+      </QuestionPanelStyleComponent>
     );
   }
 }
@@ -282,10 +455,13 @@ QuestionPanel.defaultProps = {
   panelId: undefined,
   panelIndex: undefined,
   panelHeader: undefined,
+  panelAcions: undefined,
+  panelConstants: undefined,
   panelText: undefined,
   progress: undefined,
   numPanels: undefined,
   currentPanelIndex: undefined,
+  labeledAnswers: [],
   action: {
     default: {},
     conditions: [],
@@ -300,10 +476,14 @@ QuestionPanel.defaultProps = {
   questionAnswers: {},
   renderError: undefined,
   renderRequiredAsterisk: undefined,
+  currentQuestionId: undefined,
+  windowHeight: 0,
+  currentQuestionsOnPanel: {},
   onAnswerChange: () => {},
   onSwitchPanel: () => {},
   onPanelBack: () => {},
   onFocus: () => {},
+  onClickInputIcon: () => {},
+  onQuestionMounted: () => {},
+  onEnablePrefilledAnswer: () => {},
 };
-
-module.exports = QuestionPanel;

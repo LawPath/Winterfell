@@ -1,72 +1,79 @@
-'use strict';
+"use strict";
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports["default"] = void 0;
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _react = _interopRequireWildcard(require("react"));
 
-var _react = require('react');
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
-var _react2 = _interopRequireDefault(_react);
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-var SignatureInput = function (_React$Component) {
-  _inherits(SignatureInput, _React$Component);
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
-  function SignatureInput(props) {
-    _classCallCheck(this, SignatureInput);
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-    var _this = _possibleConstructorReturn(this, (SignatureInput.__proto__ || Object.getPrototypeOf(SignatureInput)).call(this, props));
+var SignatureInput = function SignatureInput(_ref) {
+  var name = _ref.name,
+      id = _ref.id,
+      value = _ref.value,
+      labelId = _ref.labelId,
+      classes = _ref.classes,
+      placeholder = _ref.placeholder,
+      required = _ref.required,
+      _onFocus = _ref.onFocus,
+      onChange = _ref.onChange,
+      _onBlur = _ref.onBlur,
+      onKeyDown = _ref.onKeyDown;
 
-    _this.state = {
-      value: _this.props.value.type ? _this.props.value.value : _this.props.value
-    };
-    return _this;
-  }
+  var _useState = (0, _react.useState)(value),
+      _useState2 = _slicedToArray(_useState, 2),
+      inputValue = _useState2[0],
+      setInputValue = _useState2[1];
 
-  _createClass(SignatureInput, [{
-    key: 'handleChange',
-    value: function handleChange(e) {
-      this.setState({
-        value: e.target.value
-      }, this.props.onChange.bind(null, {
-        type: 'signature',
-        value: e.target.value
-      }));
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      return _react2.default.createElement('input', {
-        type: 'text',
-        name: this.props.name,
-        id: this.props.id,
-        'aria-labelledby': this.props.labelId,
-        className: this.props.classes.signature,
-        placeholder: this.props.placeholder,
-        value: this.state.value,
-        required: this.props.required ? 'required' : undefined,
-        onChange: this.handleChange.bind(this),
-        onFocus: this.props.onFocus.bind(null, this.props.id),
-        onBlur: this.props.onBlur.bind(null, this.state.value),
-        onKeyDown: this.props.onKeyDown
-      });
-    }
-  }]);
+  (0, _react.useEffect)(function () {
+    setValue(value.type ? value.value : value);
+  }, [value]);
 
-  return SignatureInput;
-}(_react2.default.Component);
+  var handleChange = function handleChange(e) {
+    setInputValue(e.target.value);
+    onChange({
+      type: 'signature',
+      value: e.target.value
+    });
+  };
 
-exports.default = SignatureInput;
-
+  return /*#__PURE__*/_react["default"].createElement("input", {
+    type: "text",
+    name: name,
+    id: id,
+    "aria-labelledby": labelId,
+    className: classes.signature,
+    placeholder: placeholder,
+    value: inputValue,
+    required: required ? 'required' : undefined,
+    onChange: handleChange,
+    onFocus: function onFocus() {
+      return _onFocus(id);
+    },
+    onBlur: function onBlur() {
+      return _onBlur(inputValue);
+    },
+    onKeyDown: onKeyDown
+  });
+};
 
 SignatureInput.defaultProps = {
   classes: {},
@@ -79,3 +86,5 @@ SignatureInput.defaultProps = {
   onKeyDown: function onKeyDown() {},
   onFocus: function onFocus() {}
 };
+var _default = SignatureInput;
+exports["default"] = _default;

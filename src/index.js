@@ -1,9 +1,14 @@
-var React = require('react');
-var _ = require('lodash').noConflict();
+import React, { Component } from 'react';
+import _ from 'lodash';
 
-var QuestionPanel = require('./questionPanel');
+import inputTypes from './inputTypes';
+import errorMessages from './lib/errors';
+import validation from './lib/validation';
+import QuestionPanel from './questionPanel';
+import { getPrefillData } from './lib/questionAnswers';
+import { QUESTION_INPUT_TYPES as INPUT_TYPES } from './inputTypes/index.js';
 
-class Winterfell extends React.Component {
+export class Winterfell extends Component {
   constructor(props) {
     super(props);
 
@@ -11,7 +16,7 @@ class Winterfell extends React.Component {
 
     this.panelHistory = [];
 
-    var schema = _.extend(
+    const schema = _.extend(
       {
         classes: {},
         formPanels: [],
@@ -23,14 +28,14 @@ class Winterfell extends React.Component {
 
     schema.formPanels = schema.formPanels.sort((a, b) => a.index - b.index);
 
-    var panelId =
+    const panelId =
       typeof props.panelId !== 'undefined'
         ? props.panelId
         : schema.formPanels.length > 0
         ? schema.formPanels[0].panelId
         : undefined;
 
-    var currentPanel =
+    const currentPanel =
       typeof schema !== 'undefined' &&
       typeof schema.formPanels !== 'undefined' &&
       typeof panelId !== 'undefined'
@@ -49,7 +54,13 @@ class Winterfell extends React.Component {
       action: props.action,
       questionAnswers: props.questionAnswers,
       panelMoved: false,
+      currentQuestionId: undefined,
+      currentQuestions: {},
     };
+  }
+
+  componentDidMount() {
+    this.props.onRender();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -100,18 +111,17 @@ class Winterfell extends React.Component {
           }));
 
         questionPanel = questionPanels.find((qs) => {
-          if (
-            qs.questionId ===
-            questionsIdWithConditionals.find(
-              (e) => e.conditionalQuestionId === nextProps.currentQuestionId,
-            ).questionId
-          ) {
+          const conditionalQuestion = questionsIdWithConditionals.find(
+            (e) => e.conditionalQuestionId === nextProps.currentQuestionId,
+          );
+
+          if (conditionalQuestion && conditionalQuestion.questionId == qs.questionId ) {
             return qs.panel;
           }
         });
       }
 
-      if (this.state.currentPanel.panelId !== questionPanel.panel.panelId) {
+      if (questionPanel && this.state.currentPanel.panelId !== questionPanel.panel.panelId) {
         newState.currentPanel = questionPanel.panel;
         this.panelHistory.push(questionPanel.panel.panelId);
         newState.currentQuestionId = nextProps.currentQuestionId;
@@ -119,24 +129,175 @@ class Winterfell extends React.Component {
       }
     }
 
+    if (!_.isEqual(this.props.labeledAnswers, nextProps.labeledAnswers)) {
+      /* Update the the labeledAswers when they got updated from parent*/
+      _.forEach(nextProps.questionAnswers, (value, key) => {
+        let mergedData;
+        const prefillData = getPrefillData(nextProps.labeledAnswers, value.label);
+        if (value.enablePrefilledAnswer) {
+          /* if the prefillData toggle is enabled, it will replace the input data */
+          /* if the current data is empty, it will set the prefill value */
+          mergedData = { ...value, value: prefillData, prefilledData: prefillData };
+        } else if (!value.enablePrefilledAnswer && prefillData && _.isEmpty(value.prefilledData)) {
+          /* if the current data is empty and there is prefill data, we will enable prefill data and set the value to the answer */
+          mergedData = {
+            ...value,
+            enablePrefilledAnswer: true,
+            value: prefillData,
+            prefilledData: prefillData,
+          };
+        } else if (!_.isEqual(prefillData, value.prefilledData)) {
+          /* Update prefill data only */
+          mergedData = { ...value, prefilledData: prefillData };
+        }
+        if (mergedData) {
+          _.set(newState.questionAnswers, [key], { ...mergedData });
+        }
+      });
+    }
     this.setState(newState);
   }
 
-  handleAnswerChange(questionId, questionAnswer) {
-    var questionAnswers = _.chain(this.state.questionAnswers)
-      .set(questionId, questionAnswer)
-      .value();
+  handleAnswerChange = (questionId, questionAnswer, questionLabel) => {
+    const currentAnswer = _.get(this.state.questionAnswers, [questionId]);
+    const mergedData = { ...currentAnswer, value: questionAnswer, label: questionLabel };
 
-    this.setState(
-      {
-        questionAnswers: questionAnswers,
-      },
-      this.props.onUpdate.bind(null, questionAnswers),
-    );
-  }
+    if (
+      mergedData &&
+      mergedData.enablePrefilledAnswer &&
+      mergedData.value !== mergedData.prefilledData
+    ) {
+      /* If user edit the prefill data, we will toggle out the prefill toggle */
+      mergedData.enablePrefilledAnswer = false;
+    }
 
-  handleSwitchPanel(panelId, preventHistory) {
-    var panel = _.find(this.props.schema.formPanels, {
+    const questionAnswers = _.set(this.state.questionAnswers, questionId, mergedData);
+    this.setState({ questionAnswers: questionAnswers });
+    this.props.onUpdate(questionAnswers);
+  };
+
+  onQuestionMounted = (questionId, label) => {
+    let currentQuestionAnswers = this.state.questionAnswers;
+
+    if (label) {
+      const prefillData = getPrefillData(this.props.labeledAnswers, label);
+
+      const currentQuestion = _.get(this.state.questionAnswers, questionId);
+
+      if (currentQuestion === null || currentQuestion === undefined) {
+        if (prefillData) {
+          console.log('Set prefill data: answer is empty and have prefill data');
+
+          _.set(currentQuestionAnswers, questionId, {
+            label: label,
+            enablePrefilledAnswer: true,
+            value: prefillData,
+            prefilledData: prefillData,
+          });
+        } else {
+          console.log(
+            'Set prefill data: answer is empty and no prefill data ',
+            this.props.labeledAnswers,
+          );
+
+          _.set(currentQuestionAnswers, questionId, {
+            label: label,
+            enablePrefilledAnswer: false,
+            prefilledData: prefillData,
+          });
+        }
+      } else {
+        /* Get the enable prefill toggle variable*/
+        const enablePrefilledAnswer = _.get(this.state.questionAnswers, [
+          questionId,
+          'enablePrefilledAnswer',
+        ]);
+
+        let mergedData;
+        if (!enablePrefilledAnswer) {
+          mergedData = {
+            ..._.get(this.state.questionAnswers, [questionId]),
+            label: label,
+            prefilledData: prefillData,
+          };
+          console.log(
+            'Set prefill data: answer is existed and prefillMode is disable ',
+            mergedData,
+          );
+        } else {
+          mergedData = {
+            ..._.get(this.state.questionAnswers, [questionId]),
+            label: label,
+            enablePrefilledAnswer: true,
+            prefilledData: prefillData,
+          };
+          console.log('Set prefill data: answer is existed and prefillMode is enable ', mergedData);
+        }
+
+        if (
+          mergedData.value &&
+          mergedData.enablePrefilledAnswer &&
+          !_.isEqual(mergedData.value, mergedData.prefilledData)
+        ) {
+          console.log('Set prefill data: have prefilled data and data is overriden by user');
+          mergedData.enablePrefilledAnswer = false;
+        } else if (!mergedData.value && mergedData.enablePrefilledAnswer) {
+          console.log(
+            'Set prefill data: prefillMode is enable and prefilledData will override the user-input data ',
+          );
+          mergedData.value = mergedData.prefilledData;
+        }
+        _.set(currentQuestionAnswers, [questionId], { ...mergedData });
+      }
+    } else {
+      const mergedData = {
+        ..._.get(this.state.questionAnswers, [questionId]),
+        label: null,
+        enablePrefilledAnswer: false,
+      };
+      _.set(currentQuestionAnswers, [questionId], { ...mergedData });
+    }
+
+    /* Add mounted question to the questions in the panel  */
+    const newCurrentQuestions = this.state.currentQuestions;
+    newCurrentQuestions[questionId] = currentQuestionAnswers[questionId];
+
+    this.setState({
+      questionAnswers: currentQuestionAnswers,
+      currentQuestionId: questionId,
+      currentQuestions: newCurrentQuestions,
+    });
+
+    this.props.onRender({
+      questionAnswers: currentQuestionAnswers,
+      questionId,
+      currentQuestionAnswers,
+      currentPanel: this.state.currentPanel,
+    });
+  };
+
+  handleOnEnablePrefilledAnswer = (enable) => {
+    let questionAnswers = { ...this.state.questionAnswers };
+    _.forEach(this.state.currentQuestions, (value, key) => {
+      if (value && value.label) {
+        const mergedData = { ..._.get(questionAnswers, [key]), enablePrefilledAnswer: enable };
+
+        if (mergedData.enablePrefilledAnswer) {
+          /* if the prefill-value is enabled, we will replace the inputed text  */
+          mergedData.value = mergedData.prefilledData;
+        }
+        questionAnswers = _.chain(questionAnswers).set(key, mergedData).value();
+      }
+    });
+
+    if (questionAnswers) {
+      this.setState({ questionAnswers: questionAnswers });
+      this.props.onUpdate(questionAnswers);
+    }
+  };
+
+  handleSwitchPanel = (panelId, preventHistory) => {
+    const panel = _.find(this.props.schema.formPanels, {
       panelId: panelId,
     });
 
@@ -150,19 +311,28 @@ class Winterfell extends React.Component {
       this.panelHistory.push(panel.panelId);
     }
 
-    this.setState(
-      {
-        currentPanel: panel,
-        currentQuestionId: undefined,
-      },
-      this.props.onSwitchPanel.bind(null, panel),
-    );
-  }
+    if (panel && panel.panelId === 'final-panel') {
+      /* The final panel does not contain any question */
+      this.setState({ currentQuestionId: undefined });
+    }
 
-  handleBackButtonClick() {
+    /* Clear questions on panel */
+    this.setState({
+      currentPanel: panel,
+      conditionalQuestionId: undefined,
+      currentQuestions: {},
+    });
+
+    this.props.onSwitchPanel(panel);
+  };
+
+  handleBackButtonClick = () => {
     if (this.panelHistory.length > 1) {
       this.panelHistory.pop();
     }
+
+    /* Clear questions on panel */
+    this.setState({ currentQuestions: {} });
 
     this.handleSwitchPanel.call(this, this.panelHistory[this.panelHistory.length - 1], true);
     // let panelIndex = this.state.schema.formPanels.find(fp =>
@@ -177,9 +347,9 @@ class Winterfell extends React.Component {
     // this.handleSwitchPanel.call(
     //   this, newPanelIndex ? newPanelIndex.panelId : 0
     // );
-  }
+  };
 
-  handleSubmit(action) {
+  handleSubmit = (action) => {
     if (this.props.disableSubmit) {
       this.props.onSubmit(this.state.questionAnswers, action);
       return;
@@ -201,16 +371,16 @@ class Winterfell extends React.Component {
         this.formComponent.submit();
       },
     );
-  }
+  };
 
   render() {
-    var currentPanel = _.find(
+    const currentPanel = _.find(
       this.state.schema.questionPanels,
       (panel) => panel.panelId == this.state.currentPanel.panelId,
     );
 
-    var numPanels = this.state.schema.questionPanels.length;
-    var currentPanelIndex = _.indexOf(this.state.schema.questionPanels, currentPanel) + 1;
+    const numPanels = this.state.schema.questionPanels.length;
+    const currentPanelIndex = _.indexOf(this.state.schema.questionPanels, currentPanel) + 1;
 
     return (
       <form
@@ -224,6 +394,9 @@ class Winterfell extends React.Component {
           <QuestionPanel
             schema={this.state.schema}
             classes={this.state.schema.classes}
+            panelConstants={this.state.schema.panelConstants}
+            defaultSuggestions={this.state.schema.defaultSuggestions}
+            suggestionPanel={this.state.schema.suggestionPanel}
             panelId={currentPanel.panelId}
             panelIndex={currentPanel.panelIndex}
             panelHeader={currentPanel.panelHeader}
@@ -244,21 +417,25 @@ class Winterfell extends React.Component {
             onPanelBack={this.handleBackButtonClick.bind(this)}
             onSwitchPanel={this.handleSwitchPanel.bind(this)}
             onSubmit={this.handleSubmit.bind(this)}
+            onClickInputIcon={this.props.onClickInputIcon}
+            panelAcions={this.props.extraComponent}
+            onQuestionMounted={this.onQuestionMounted.bind(this)}
+            labeledAnswers={this.props.labeledAnswers}
+            currentQuestionId={this.state.currentQuestionId}
+            onEnablePrefilledAnswer={this.handleOnEnablePrefilledAnswer.bind(this)}
+            answersSuggestionComponent={this.props.answersSuggestionComponent}
+            windowHeight={this.props.windowHeight}
+            currentQuestionsOnPanel={this.state.currentQuestions}
           />
-          {this.props.extraComponent ? this.props.extraComponent : null}
         </div>
       </form>
     );
   }
-
-  componentDidMount() {
-    this.props.onRender();
-  }
 }
 
-Winterfell.inputTypes = require('./inputTypes');
-Winterfell.errorMessages = require('./lib/errors');
-Winterfell.validation = require('./lib/validation');
+Winterfell.inputTypes = inputTypes;
+Winterfell.errorMessages = errorMessages;
+Winterfell.validation = validation;
 
 Winterfell.addInputType = Winterfell.inputTypes.addInputType;
 Winterfell.addInputTypes = Winterfell.inputTypes.addInputTypes;
@@ -279,11 +456,18 @@ Winterfell.defaultProps = {
   renderError: undefined,
   renderRequiredAsterisk: undefined,
   currentQuestionId: undefined,
+  panelConstants: undefined,
+  questionAnswers: undefined,
+  answersSuggestionComponent: undefined,
+  labeledAnswers: [],
+  windowHeight: 0,
   onSubmit: () => {},
   onUpdate: () => {},
   onFocus: () => {},
   onSwitchPanel: () => {},
   onRender: () => {},
+  onClickInputIcon: () => {},
 };
 
-module.exports = Winterfell;
+export const QUESTION_INPUT_TYPES = INPUT_TYPES;
+export default Winterfell;

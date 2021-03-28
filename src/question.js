@@ -1,19 +1,39 @@
-var React = require('react');
-var _ = require('lodash').noConflict();
+import React, { Component } from 'react';
+import _ from 'lodash';
 
-var InputTypes = require('./inputTypes');
+import InputTypes from './inputTypes';
 
-class Question extends React.Component {
-  handleInputChange(questionId, value) {
-    this.props.onAnswerChange(questionId, value, this.props.validations, this.props.validateOn);
+export default class Question extends Component {
+  componentDidMount() {
+    const { input, questionAnswers, questionId, label } = this.props;
+
+    this.props.onMounted(questionId, label);
+
+    if (
+      typeof input.default === 'undefined' ||
+      (input.type === 'checkboxInput' && typeof questionAnswers[questionId] === 'undefined')
+    ) {
+      return;
+    }
+    this.handleInputChange(questionId, input.default);
   }
 
-  handleInputBlur(questionId, value) {
+  handleInputChange = (questionId, value) => {
+    this.props.onAnswerChange(
+      questionId,
+      value,
+      this.props.label,
+      this.props.validations,
+      this.props.validateOn,
+    );
+  };
+
+  handleInputBlur = (questionId, value) => {
     this.props.onQuestionBlur(questionId, value, this.props.validations, this.props.validateOn);
-  }
+  };
 
   render() {
-    var Input = InputTypes[this.props.input.type];
+    const Input = InputTypes[this.props.input.type];
     if (!Input) {
       throw new Error(
         'Winterfell: Input Type "' +
@@ -31,7 +51,7 @@ class Question extends React.Component {
      * then render this component with the props for the conditional
      * question.
      */
-    var conditionalItems = [];
+    const conditionalItems = [];
     if (typeof this.props.input.options !== 'undefined') {
       this.props.input.options
         .filter((option) => {
@@ -47,6 +67,7 @@ class Question extends React.Component {
         })
         .forEach((option) =>
           [].forEach.bind(option.conditionalQuestions, (conditionalQuestion) => {
+            const answer = this.props.questionAnswers[conditionalQuestion.questionId];
             conditionalItems.push(
               <Question
                 key={conditionalQuestion.questionId}
@@ -57,16 +78,23 @@ class Question extends React.Component {
                 postText={conditionalQuestion.postText}
                 validateOn={conditionalQuestion.validateOn}
                 validations={conditionalQuestion.validations}
-                value={this.props.questionAnswers[conditionalQuestion.questionId]}
+                value={answer ? answer.value : undefined}
+                label={conditionalQuestion.label}
+                prefilledData={answer ? answer.prefilledData : undefined}
+                enablePrefilledAnswer={answer ? answer.enablePrefilledAnswer : undefined}
                 input={conditionalQuestion.input}
                 classes={this.props.classes}
                 renderError={this.props.renderError}
                 questionAnswers={this.props.questionAnswers}
+                labeledAnswers={this.props.labeledAnswers}
+                panelConstants={this.props.panelConstants}
                 validationErrors={this.props.validationErrors}
                 onAnswerChange={this.props.onAnswerChange}
                 onQuestionBlur={this.props.onQuestionBlur}
+                onMounted={this.props.onMounted}
                 onFocus={this.props.onFocus}
                 onKeyDown={this.props.onKeyDown}
+                onClickInputIcon={this.props.onClickInputIcon}
               />,
             );
           })(),
@@ -75,17 +103,16 @@ class Question extends React.Component {
 
     // Get the current value. If none is set, then use
     // the default if given.
-    var value =
+    const value =
       typeof this.props.value !== 'undefined'
         ? this.props.value
         : typeof this.props.input.default !== 'undefined'
         ? this.props.input.default
         : undefined;
-
     // Retrieve the validation errors for the
     // current question and map them in to
     // error-message blocks.
-    var validationErrors =
+    const validationErrors =
       typeof this.props.validationErrors[this.props.questionId] !== 'undefined'
         ? this.props.validationErrors[this.props.questionId].map((error) => {
             return typeof this.props.renderError === 'function' ? (
@@ -106,15 +133,12 @@ class Question extends React.Component {
     return (
       <div className={this.props.classes.question}>
         {!!this.props.question ? (
-          <label className={this.props.classes.label} id={labelId} htmlFor={this.props.questionId}>
+          <p className={this.props.classes.label} id={labelId} htmlFor={this.props.questionId}>
             {this.props.question}
             {typeof this.props.renderRequiredAsterisk !== 'undefined' && this.props.input.required
               ? this.props.renderRequiredAsterisk()
               : undefined}
-          </label>
-        ) : undefined}
-        {!!this.props.text ? (
-          <p className={this.props.classes.questionText}>{this.props.text}</p>
+          </p>
         ) : undefined}
         {validationErrors}
         <Input
@@ -122,6 +146,9 @@ class Question extends React.Component {
           id={this.props.questionId}
           labelId={labelId}
           value={value}
+          questionLabel={this.props.label}
+          prefilledData={this.props.prefilledData}
+          enablePrefilledAnswer={this.props.enablePrefilledAnswer}
           text={this.props.input.text}
           options={this.props.input.options}
           placeholder={this.props.input.placeholder}
@@ -131,26 +158,17 @@ class Question extends React.Component {
           onBlur={this.handleInputBlur.bind(this, this.props.questionId)}
           onFocus={this.props.onFocus}
           onKeyDown={this.props.onKeyDown}
+          onClickInputIcon={this.props.onClickInputIcon}
           {...(typeof this.props.input.props === 'object' ? this.props.input.props : {})}
         />
-        {!!this.props.postText ? (
-          <p className={this.props.classes.questionPostText}>{this.props.postText}</p>
+        {!!this.props.suggestions ? (
+          <p className={this.props.classes.questionPostText}>
+            {this.props.panelConstants.suggestionHintText}
+          </p>
         ) : undefined}
         {conditionalItems}
       </div>
     );
-  }
-
-  componentDidMount() {
-    if (
-      typeof this.props.input.default === 'undefined' ||
-      (this.props.input.type === 'checkboxInput' &&
-        typeof this.props.questionAnswers[this.props.questionId] === 'undefined')
-    ) {
-      return;
-    }
-
-    this.handleInputChange.call(this, this.props.questionId, this.props.input.default);
   }
 }
 
@@ -169,15 +187,19 @@ Question.defaultProps = {
     limit: undefined,
     placeholder: undefined,
   },
+  enablePrefilledAnswer: false,
+  label: undefined,
   classes: {},
   questionAnswers: {},
+  labeledAnswers: [],
   validationErrors: {},
   onAnswerChange: () => {},
   onQuestionBlur: () => {},
   onKeyDown: () => {},
   onFocus: () => {},
+  onClickInputIcon: () => {},
+  onMounted: () => {},
   renderError: undefined,
   renderRequiredAsterisk: undefined,
+  panelConstants: undefined,
 };
-
-module.exports = Question;

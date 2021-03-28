@@ -1,11 +1,12 @@
-var React = require('react');
-var _ = require('lodash').noConflict();
+import React, { Component } from 'react';
+import _ from 'lodash';
 
-var Question = require('./question');
+import Question from './question';
 
-class QuestionSet extends React.Component {
+export default class QuestionSet extends Component {
   render() {
-    var questions = this.props.questions.map((question) => {
+    const questions = this.props.questions.map((question) => {
+      const answer = this.props.questionAnswers[question.questionId];
       return (
         <Question
           key={question.questionId}
@@ -16,17 +17,25 @@ class QuestionSet extends React.Component {
           validations={question.validations}
           text={question.text}
           postText={question.postText}
-          value={this.props.questionAnswers[question.questionId]}
+          label={question.label}
+          suggestions={question.suggestions}
+          value={answer ? answer.value : undefined}
+          prefilledData={answer ? answer.prefilledData : undefined}
+          enablePrefilledAnswer={answer ? answer.enablePrefilledAnswer : undefined}
           input={question.input}
           classes={this.props.classes}
           renderError={this.props.renderError}
           renderRequiredAsterisk={this.props.renderRequiredAsterisk}
           questionAnswers={this.props.questionAnswers}
+          labeledAnswers={this.props.labeledAnswers}
+          panelConstants={this.props.panelConstants}
           validationErrors={this.props.validationErrors}
           onAnswerChange={this.props.onAnswerChange}
           onQuestionBlur={this.props.onQuestionBlur}
           onFocus={this.props.onFocus}
           onKeyDown={this.props.onKeyDown}
+          onClickInputIcon={this.props.onClickInputIcon}
+          onMounted={this.props.onQuestionMounted}
         />
       );
     });
@@ -63,10 +72,12 @@ QuestionSet.defaultProps = {
   validationErrors: {},
   renderError: undefined,
   renderRequiredAsterisk: undefined,
+  panelConstants: undefined,
+  labeledAnswers: [],
   onAnswerChange: () => {},
   onQuestionBlur: () => {},
   onKeyDown: () => {},
   onFocus: () => {},
+  onClickInputIcon: () => {},
+  onSwitchQuestion: () => {},
 };
-
-module.exports = QuestionSet;

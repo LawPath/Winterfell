@@ -1,19 +1,50 @@
-var React = require('react');
+import React from 'react';
+import CheckboxInput from './checkboxInput';
+import CheckboxOptionsInput from './checkboxOptionsInput';
+import EmailInput from './emailInput';
+import FileInput from './fileInput';
+import HiddenInput from './hiddenInput';
+import PasswordInput from './passwordInput';
+import RadioOptionsInput from './radioOptionsInput';
+import SelectInput from './selectInput';
+import TextareaInput from './textareaInput';
+import TextInput from './textInput';
+import AddressInput from './addressInput';
+import DateInput from './dateInput';
+import SignatureInput from './signatureInput';
 
-var inputTypes = {
-  checkboxInput: require('./checkboxInput'),
-  checkboxOptionsInput: require('./checkboxOptionsInput'),
-  emailInput: require('./emailInput'),
-  fileInput: require('./fileInput'),
-  hiddenInput: require('./hiddenInput'),
-  passwordInput: require('./passwordInput'),
-  radioOptionsInput: require('./radioOptionsInput'),
-  selectInput: require('./selectInput'),
-  textareaInput: require('./textareaInput'),
-  textInput: require('./textInput'),
-  addressInput: require('./addressInput'),
-  dateInput: require('./dateInput'),
-  signatureInput: require('./signatureInput'),
+export const QUESTION_INPUT_TYPES = {
+  checkbox: ' checkboxInput',
+  checkboxOptions: 'checkboxOptionsInput',
+  email: 'emailInput',
+  file: 'fileInput',
+  hiddenInput: 'hiddenInput',
+  password: 'passwordInput',
+  radio: 'radioOptionsInput',
+  select: 'selectInput',
+  textArea: 'textAreaInput',
+  textarea: 'textareaInput',
+  text: 'textInput',
+  address: 'addressInput',
+  date: 'dateInput',
+  signature: 'signatureInput',
+};
+
+const inputTypes = {
+  checkboxInput: CheckboxInput,
+  checkboxOptionsInput: CheckboxOptionsInput,
+  emailInput: EmailInput,
+  fileInput: FileInput,
+  hiddenInput: HiddenInput,
+  passwordInput: PasswordInput,
+  radioOptionsInput: RadioOptionsInput,
+  selectInput: SelectInput,
+  textAreaInput: TextareaInput,
+  textareaInput: TextareaInput,
+  textInput: TextInput,
+  addressInput: AddressInput,
+  dateInput: DateInput,
+  signatureInput: SignatureInput,
 };
 
 /**
@@ -54,4 +85,4 @@ inputTypes.addInputTypes = (types) => {
   }
 };
 
-module.exports = inputTypes;
+export default inputTypes;

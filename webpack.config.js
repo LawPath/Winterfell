@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
   context: __dirname + '/src',
@@ -7,15 +8,15 @@ module.exports = {
     javascript: './index.js',
   },
   module: {
-    loaders: [
+    rules: [
+    
       {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loaders: ['babel-loader'],
+        test: /\.s?css$/,
+        use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
       },
       {
-        test: /\.css$/,
-        loaders: ['style-loader', 'css-loader'],
+        test: /\.less$/,
+        use: ['style-loader', 'css-loader', 'postcss-loader', 'less-loader'],
       },
     ],
   },
@@ -29,12 +30,20 @@ module.exports = {
     filename: 'winterfell.min.js',
     path: __dirname + '/dist',
   },
-  plugins: [
-    new webpack.optimize.OccurrenceOrderPlugin(),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false,
-      },
-    }),
-  ],
+  optimization: {
+    minimizer: [
+      // we specify a custom UglifyJsPlugin here to get source maps in production
+      new UglifyJsPlugin({
+        cache: true,
+        parallel: true,
+        uglifyOptions: {
+          compress: true,
+          ecma: 6,
+          mangle: true,
+        },
+        sourceMap: true,
+      }),
+    ],
+  },
+  plugins: [new webpack.optimize.OccurrenceOrderPlugin()],
 };

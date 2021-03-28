@@ -1,49 +1,39 @@
-'use strict';
+"use strict";
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+var _react = _interopRequireWildcard(require("react"));
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
-var React = require('react');
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
-var Button = function (_React$Component) {
-  _inherits(Button, _React$Component);
+var Button = function Button(_ref) {
+  var _ref$className = _ref.className,
+      className = _ref$className === void 0 ? undefined : _ref$className,
+      _ref$onClick = _ref.onClick,
+      onClick = _ref$onClick === void 0 ? function () {} : _ref$onClick,
+      _ref$text = _ref.text,
+      text = _ref$text === void 0 ? 'Submit' : _ref$text,
+      _ref$type = _ref.type,
+      type = _ref$type === void 0 ? 'button' : _ref$type;
 
-  function Button() {
-    _classCallCheck(this, Button);
+  var handleClick = function handleClick(e) {
+    e.preventDefault();
+    onClick();
+  };
 
-    return _possibleConstructorReturn(this, (Button.__proto__ || Object.getPrototypeOf(Button)).apply(this, arguments));
-  }
-
-  _createClass(Button, [{
-    key: 'handleClick',
-    value: function handleClick(e) {
-      e.preventDefault();
-
-      this.props.onClick();
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      return React.createElement(
-        'button',
-        { href: '#', className: this.props.className, onClick: this.handleClick.bind(this) },
-        this.props.text
-      );
-    }
-  }]);
-
-  return Button;
-}(React.Component);
-
-Button.defaultProps = {
-  text: 'Submit',
-  className: undefined,
-  onClick: function onClick() {}
+  return /*#__PURE__*/_react["default"].createElement("button", {
+    type: type,
+    className: className,
+    onClick: handleClick
+  }, text);
 };
 
-module.exports = Button;
+var _default = Button;
+exports["default"] = _default;

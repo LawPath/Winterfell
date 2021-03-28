@@ -1,72 +1,81 @@
-'use strict';
+"use strict";
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+var _react = _interopRequireWildcard(require("react"));
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
-var React = require('react');
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
-var RadioOptionsInput = function (_React$Component) {
-  _inherits(RadioOptionsInput, _React$Component);
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
-  function RadioOptionsInput(props) {
-    _classCallCheck(this, RadioOptionsInput);
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-    var _this = _possibleConstructorReturn(this, (RadioOptionsInput.__proto__ || Object.getPrototypeOf(RadioOptionsInput)).call(this, props));
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
-    _this.state = {
-      value: _this.props.value
-    };
-    return _this;
-  }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-  _createClass(RadioOptionsInput, [{
-    key: 'handleChange',
-    value: function handleChange(value) {
-      this.setState({
-        value: value
-      }, this.props.onChange.bind(null, value));
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      var _this2 = this;
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
-      return React.createElement(
-        'ul',
-        { className: this.props.classes.radioList },
-        this.props.options.map(function (opt) {
-          return React.createElement(
-            'li',
-            { key: opt.value, className: _this2.props.classes.radioListItem },
-            React.createElement(
-              'label',
-              { className: _this2.props.classes.radioLabel, id: _this2.props.labelId },
-              React.createElement('input', {
-                type: 'radio',
-                name: _this2.props.name,
-                'aria-labelledby': _this2.props.labelId,
-                checked: _this2.state.value == opt.value,
-                className: _this2.props.classes.radio,
-                required: _this2.props.required ? 'required' : undefined,
-                onClick: _this2.props.onFocus.bind(null, _this2.props.id),
-                onChange: _this2.handleChange.bind(_this2, opt.value),
-                onBlur: _this2.props.onBlur.bind(null, _this2.state.value)
-              }),
-              opt.text
-            )
-          );
-        })
-      );
-    }
-  }]);
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-  return RadioOptionsInput;
-}(React.Component);
+var RadioOptionsInput = function RadioOptionsInput(_ref) {
+  var id = _ref.id,
+      name = _ref.name,
+      value = _ref.value,
+      classes = _ref.classes,
+      options = _ref.options,
+      labelId = _ref.labelId,
+      required = _ref.required,
+      onFocus = _ref.onFocus,
+      onChange = _ref.onChange,
+      _onBlur = _ref.onBlur;
+
+  var _useState = (0, _react.useState)(value),
+      _useState2 = _slicedToArray(_useState, 2),
+      inputValue = _useState2[0],
+      setInputValue = _useState2[1];
+
+  var handleChange = function handleChange(optionValue) {
+    setInputValue(optionValue);
+    onChange(optionValue);
+  };
+
+  if (!options) return null;
+  return /*#__PURE__*/_react["default"].createElement("ul", {
+    className: classes.radioList
+  }, options.map(function (opt) {
+    return /*#__PURE__*/_react["default"].createElement("li", {
+      key: opt.value,
+      className: classes.radioListItem
+    }, /*#__PURE__*/_react["default"].createElement("label", {
+      className: classes.radioLabel,
+      id: labelId
+    }, /*#__PURE__*/_react["default"].createElement("input", {
+      type: "radio",
+      name: name,
+      "aria-labelledby": labelId,
+      checked: inputValue == opt.value,
+      className: classes.radio,
+      required: required ? 'required' : undefined,
+      onClick: function onClick() {
+        return onFocus(id);
+      },
+      onChange: function onChange() {
+        return handleChange(opt.value);
+      },
+      onBlur: function onBlur() {
+        return _onBlur(inputValue);
+      }
+    }), opt.text));
+  }));
+};
 
 RadioOptionsInput.defaultProps = {
   classes: {},
@@ -77,5 +86,5 @@ RadioOptionsInput.defaultProps = {
   onBlur: function onBlur() {},
   onFocus: function onFocus() {}
 };
-
-module.exports = RadioOptionsInput;
+var _default = RadioOptionsInput;
+exports["default"] = _default;

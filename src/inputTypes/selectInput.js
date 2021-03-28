@@ -1,59 +1,57 @@
-var React = require('react');
+import React, { useEffect, useRef, useState } from 'react';
+import _ from 'lodash';
 
-class SelectInput extends React.Component {
-  constructor(props) {
-    super(props);
+const SelectInput = ({
+  name,
+  id,
+  classes,
+  value,
+  required,
+  onChange,
+  onFocus,
+  onBlur,
+  options,
+}) => {
+  const selectRef = useRef(null);
+  const [inputValue, setInputValue] = useState(value);
 
-    this.state = {
-      value: this.props.value,
-    };
-  }
+  useEffect(() => {
+    if (_.isEmpty(value) && options && _.isArray(options) && options.length > 0) {
+      onChange(options[0].value);
+    }
+    onFocus(id)
+  }, []);
 
-  handleChange(e) {
-    this.setState(
-      {
-        value: e.target.value,
-      },
-      this.props.onChange.bind(null, e.target.value),
-    );
-  }
+  useEffect(() => {
+    setInputValue(value);
+  }, [value]);
 
-  render() {
-    var options = this.props.options.map((opt) => (
-      <option key={opt.value} value={opt.value}>
-        {opt.text}
-      </option>
-    ));
+  const handleChange = (e) => {
+    setInputValue(e.target.value);
+    onChange(e.target.value);
+  };
 
-    return (
-      <select
-        name={this.props.name}
-        id={this.props.id}
-        className={this.props.classes.select}
-        value={this.state.value}
-        ref="select"
-        required={this.props.required ? 'required' : undefined}
-        onChange={this.handleChange.bind(this)}
-        onFocus={this.props.onFocus.bind(null, this.props.id)}
-        onBlur={this.props.onBlur.bind(null, this.state.value)}
-      >
-        {options}
-      </select>
-    );
-  }
-
-  componentDidMount() {
-    /*
-     * Selects automatically pick the first item, so
-     * make sure we set it.
-     */
-    this.handleChange({
-      target: {
-        value: this.refs.select.value,
-      },
-    });
-  }
-}
+  const selectOptions = options.map((opt) => (
+    <option key={opt.value} value={opt.value}>
+      {opt.text}
+    </option>
+  ));
+  return (
+    <select
+      ref={selectRef}
+      name={name}
+      id={id}
+      className={classes.select}
+      value={inputValue}
+      required={required ? 'required' : undefined}
+      onChange={handleChange}
+      onFocus={() => onFocus(id)}
+      onBlur={() => onBlur(inputValue)}
+    >
+      {selectOptions}
+    </select>
+  );
+};
 
 SelectInput.defaultProps = {
   classes: {},
@@ -65,4 +63,4 @@ SelectInput.defaultProps = {
   onBlur: () => {},
 };
 
-module.exports = SelectInput;
+export default SelectInput;
