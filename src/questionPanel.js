@@ -421,9 +421,13 @@ export default class QuestionPanel extends React.Component {
             </div>
             <SuggesstionWrapper>{suggestionSets}</SuggesstionWrapper>
           </div>
+
         </div>
-        <div className="question-panel-footer">
-          <div className="prefill-action-bar">
+        <div className="question-panel-footer px-0">
+          <div className="p-3 text-center bg-white">
+            <small className="color-polar-snow">Content on this page is not legal advice and you should always seek advice from a qualified professional.</small>
+          </div>
+          <div className="prefill-action-bar px-3">
             <img
               className="prefill-action-bar-icon"
               src="https://assets.lawpath.com/images/svg/editor/builder.svg"
