@@ -465,9 +465,13 @@ var QuestionPanel = /*#__PURE__*/function (_React$Component) {
         onClick: this.handleMainButtonClick,
         className: "".concat(this.props.classes.controlButton, " ").concat(this.props.extraClasses.button || '')
       }) : undefined), /*#__PURE__*/_react["default"].createElement(SuggesstionWrapper, null, suggestionSets))), /*#__PURE__*/_react["default"].createElement("div", {
-        className: "question-panel-footer"
+        className: "question-panel-footer px-0"
       }, /*#__PURE__*/_react["default"].createElement("div", {
-        className: "prefill-action-bar"
+        className: "p-3 text-center bg-white"
+      }, /*#__PURE__*/_react["default"].createElement("small", {
+        className: "color-polar-snow"
+      }, "Content on this page is not legal advice and you should always seek advice from a qualified professional.")), /*#__PURE__*/_react["default"].createElement("div", {
+        className: "prefill-action-bar px-3"
       }, /*#__PURE__*/_react["default"].createElement("img", {
         className: "prefill-action-bar-icon",
         src: "https://assets.lawpath.com/images/svg/editor/builder.svg"
