@@ -4,3 +4,4 @@ node_modules
 examples/build/app.js
 yarn-error.log
 .vscode/
+dist/
