@@ -6,9 +6,10 @@ const Background = styled.div.attrs({ 'data-id': 'progress-bar-background' })`
   justify-content: center;
   align-items: center;
   width: 100%;
-  background: #0075bf;
+  background: ${({ hasCollaboration }) => (hasCollaboration ? '#00c08b' : '#0075bf')};
   color: #f6f7f9;
 `;
+
 const Foreground = styled.div.attrs({ 'data-id': 'progress-bar-foreground' })`
   position: absolute;
   display: flex;
@@ -23,6 +24,7 @@ const Foreground = styled.div.attrs({ 'data-id': 'progress-bar-foreground' })`
   clip-path: inset(0 0 0 ${({ progress }) => progress}%);
   transition: clip-path 1s ease-in-out;
 `;
+
 const ProgressBarWrapper = styled.div.attrs({ 'data-id': 'progress-bar' })`
   position: relative;
   display: flex;
@@ -33,10 +35,10 @@ const ProgressBarWrapper = styled.div.attrs({ 'data-id': 'progress-bar' })`
   font-weight: bold;
 `;
 
-const ProgressBar = ({ progress, text }) => {
+const ProgressBar = ({ progress, text, hasCollaboration }) => {
   return (
     <ProgressBarWrapper>
-      <Background>{text}</Background>
+      <Background hasCollaboration={hasCollaboration}>{text}</Background>
       <Foreground progress={progress}>{text}</Foreground>
     </ProgressBarWrapper>
   );

@@ -8,6 +8,8 @@ import QuestionPanel from './questionPanel';
 import { getPrefillData } from './lib/questionAnswers';
 import { QUESTION_INPUT_TYPES as INPUT_TYPES } from './inputTypes/index.js';
 
+export { SwitchWithTooltip as WinterfellSwitchWithTooltip } from './custom/switch';
+
 export class Winterfell extends Component {
   constructor(props) {
     super(props);
@@ -115,7 +117,7 @@ export class Winterfell extends Component {
             (e) => e.conditionalQuestionId === nextProps.currentQuestionId,
           );
 
-          if (conditionalQuestion && conditionalQuestion.questionId == qs.questionId ) {
+          if (conditionalQuestion && conditionalQuestion.questionId == qs.questionId) {
             return qs.panel;
           }
         });
@@ -426,6 +428,7 @@ export class Winterfell extends Component {
             answersSuggestionComponent={this.props.answersSuggestionComponent}
             windowHeight={this.props.windowHeight}
             currentQuestionsOnPanel={this.state.currentQuestions}
+            hasCollaboration={this.props.hasCollaboration}
           />
         </div>
       </form>
@@ -453,6 +456,7 @@ Winterfell.defaultProps = {
   action: '',
   panelId: undefined,
   disableSubmit: false,
+  hasCollaboration: false,
   renderError: undefined,
   renderRequiredAsterisk: undefined,
   currentQuestionId: undefined,

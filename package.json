@@ -8,7 +8,8 @@
     "clean": "rimraf dist",
     "build": "babel src -d dist",
     "prepublishOnly": "rimraf dist && npm run build",
-    "publish-to-verdaccio": "npm publish --registry http://deps.lawpath.net:4873"
+    "publish-to-verdaccio": "npm publish --registry http://deps.lawpath.net:4873",
+    "test:platform": "yalc publish && cd ../mylawpath && yalc add winterfell && cd ../mylawpath"
   },
   "keywords": [
     "winterfell",
