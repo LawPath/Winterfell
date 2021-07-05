@@ -19,7 +19,7 @@ var _button = _interopRequireDefault(require("./button"));
 
 var _questionSet = _interopRequireDefault(require("./questionSet"));
 
-var _switch = _interopRequireDefault(require("./custom/switch"));
+var _switch = require("./custom/switch");
 
 var _styledComponents = _interopRequireDefault(require("styled-components"));
 
@@ -446,7 +446,8 @@ var QuestionPanel = /*#__PURE__*/function (_React$Component) {
         className: "question-panel-header"
       }, this.props.panelAcions, /*#__PURE__*/_react["default"].createElement(_progressBar["default"], {
         progress: completionPercent,
-        text: progressText
+        text: progressText,
+        hasCollaboration: this.props.hasCollaboration
       })), /*#__PURE__*/_react["default"].createElement("div", {
         className: "question-panel-body"
       }, /*#__PURE__*/_react["default"].createElement("div", {
@@ -479,13 +480,13 @@ var QuestionPanel = /*#__PURE__*/function (_React$Component) {
         className: "prefill-action-bar-text"
       }, "Use pre-fill information"), /*#__PURE__*/_react["default"].createElement("span", {
         className: "prefill-action-bar-action"
-      }, this.state.prefillQuestion ? /*#__PURE__*/_react["default"].createElement(_switch["default"], {
+      }, this.state.prefillQuestion ? /*#__PURE__*/_react["default"].createElement(_switch.SwitchWithTooltip, {
         active: this.state.prefillQuestion.enablePrefilledAnswer,
         onChange: function onChange(status) {
           return _this2.props.onEnablePrefilledAnswer(status);
         },
         disabled: !this.state.prefillQuestion.label
-      }) : /*#__PURE__*/_react["default"].createElement(_switch["default"], {
+      }) : /*#__PURE__*/_react["default"].createElement(_switch.SwitchWithTooltip, {
         active: false,
         disabled: true
       })))));
@@ -510,6 +511,7 @@ QuestionPanel.defaultProps = {
   progress: undefined,
   numPanels: undefined,
   currentPanelIndex: undefined,
+  hasCollaboration: false,
   labeledAnswers: [],
   action: {
     "default": {},

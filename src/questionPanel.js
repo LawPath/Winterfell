@@ -5,7 +5,7 @@ import Validation from './lib/validation';
 import ErrorMessages from './lib/errors';
 import Button from './button';
 import QuestionSet from './questionSet';
-import Switch from './custom/switch';
+import { SwitchWithTooltip } from './custom/switch';
 import styled from 'styled-components';
 import ProgressBar from './custom/progressBar';
 
@@ -388,7 +388,7 @@ export default class QuestionPanel extends React.Component {
       >
         <div className="question-panel-header">
           {this.props.panelAcions}
-          <ProgressBar progress={completionPercent} text={progressText} />
+          <ProgressBar progress={completionPercent} text={progressText} hasCollaboration={this.props.hasCollaboration} />
         </div>
         <div className="question-panel-body">
           <div className={this.props.classes.questionSets}>{questionSets}</div>
@@ -421,11 +421,13 @@ export default class QuestionPanel extends React.Component {
             </div>
             <SuggesstionWrapper>{suggestionSets}</SuggesstionWrapper>
           </div>
-
         </div>
         <div className="question-panel-footer px-0">
           <div className="p-3 text-center bg-white">
-            <small className="color-polar-snow">Content on this page is not legal advice and you should always seek advice from a qualified professional.</small>
+            <small className="color-polar-snow">
+              Content on this page is not legal advice and you should always seek advice from a
+              qualified professional.
+            </small>
           </div>
           <div className="prefill-action-bar px-3">
             <img
@@ -435,13 +437,13 @@ export default class QuestionPanel extends React.Component {
             <span className="prefill-action-bar-text">Use pre-fill information</span>
             <span className="prefill-action-bar-action">
               {this.state.prefillQuestion ? (
-                <Switch
+                <SwitchWithTooltip
                   active={this.state.prefillQuestion.enablePrefilledAnswer}
                   onChange={(status) => this.props.onEnablePrefilledAnswer(status)}
                   disabled={!this.state.prefillQuestion.label}
                 />
               ) : (
-                <Switch active={false} disabled={true} />
+                <SwitchWithTooltip active={false} disabled={true} />
               )}
             </span>
           </div>
@@ -465,6 +467,7 @@ QuestionPanel.defaultProps = {
   progress: undefined,
   numPanels: undefined,
   currentPanelIndex: undefined,
+  hasCollaboration: false,
   labeledAnswers: [],
   action: {
     default: {},

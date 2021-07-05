@@ -3,6 +3,12 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+Object.defineProperty(exports, "WinterfellSwitchWithTooltip", {
+  enumerable: true,
+  get: function get() {
+    return _switch.SwitchWithTooltip;
+  }
+});
 exports["default"] = exports.QUESTION_INPUT_TYPES = exports.Winterfell = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
@@ -20,6 +26,8 @@ var _questionPanel = _interopRequireDefault(require("./questionPanel"));
 var _questionAnswers = require("./lib/questionAnswers");
 
 var _index = require("./inputTypes/index.js");
+
+var _switch = require("./custom/switch");
 
 var _Winterfell$defaultPr;
 
@@ -488,7 +496,8 @@ var Winterfell = /*#__PURE__*/function (_Component) {
         onEnablePrefilledAnswer: this.handleOnEnablePrefilledAnswer.bind(this),
         answersSuggestionComponent: this.props.answersSuggestionComponent,
         windowHeight: this.props.windowHeight,
-        currentQuestionsOnPanel: this.state.currentQuestions
+        currentQuestionsOnPanel: this.state.currentQuestions,
+        hasCollaboration: this.props.hasCollaboration
       })));
     }
   }]);
@@ -513,6 +522,7 @@ Winterfell.defaultProps = (_Winterfell$defaultPr = {
   action: '',
   panelId: undefined,
   disableSubmit: false,
+  hasCollaboration: false,
   renderError: undefined,
   renderRequiredAsterisk: undefined,
   currentQuestionId: undefined,

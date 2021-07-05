@@ -5,11 +5,13 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = void 0;
+exports.SwitchWithTooltip = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
 var _reactSwitch = _interopRequireDefault(require("react-switch"));
+
+var _styledComponents = _interopRequireDefault(require("styled-components"));
 
 var _tooltip = _interopRequireDefault(require("./tooltip"));
 
@@ -33,28 +35,40 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-var InavailablePrefill = function InavailablePrefill() {
+function _templateObject() {
+  var data = _taggedTemplateLiteral(["\n  font-size: 11px;\n  display: inline-block;\n  padding: 0 5px;\n"]);
+
+  _templateObject = function _templateObject() {
+    return data;
+  };
+
+  return data;
+}
+
+function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+var ToggleText = _styledComponents["default"].div.attrs({
+  'data-id': 'toggle-button-text'
+})(_templateObject());
+
+var UnavailablePrefillMessage = function UnavailablePrefillMessage() {
   return /*#__PURE__*/_react["default"].createElement("span", null, "This field cannot be pre-", /*#__PURE__*/_react["default"].createElement("br", null), "filled.");
 };
 
-var DisabledPrefill = function DisabledPrefill() {
+var PrefillOnMessage = function PrefillOnMessage() {
   return /*#__PURE__*/_react["default"].createElement("span", null, "Pre-fill information has ", /*#__PURE__*/_react["default"].createElement("br", null), " been used. Toggle off to ", /*#__PURE__*/_react["default"].createElement("br", null), " remove.");
 };
 
-var EnabledPrefill = function EnabledPrefill() {
+var PrefillOffMessage = function PrefillOffMessage() {
   return /*#__PURE__*/_react["default"].createElement("span", null, "Pre-fill information is ", /*#__PURE__*/_react["default"].createElement("br", null), " available. Toggle on to use.");
 };
 
 var OffButton = function OffButton() {
-  return /*#__PURE__*/_react["default"].createElement("div", {
-    className: "switch-btn"
-  }, "OFF");
+  return /*#__PURE__*/_react["default"].createElement(ToggleText, null, " OFF ");
 };
 
 var OnButton = function OnButton() {
-  return /*#__PURE__*/_react["default"].createElement("div", {
-    className: "switch-btn"
-  }, "ON");
+  return /*#__PURE__*/_react["default"].createElement(ToggleText, null, " ON ");
 };
 
 var switchConfig = {
@@ -65,19 +79,27 @@ var switchConfig = {
   activeBoxShadow: '0px 1px 3px #00000036',
   boxShadow: '0px 1px 3px #00000036',
   height: 20,
-  width: 45
+  width: 45,
+  fontSize: 11
 };
 
-var Switch = function Switch(_ref) {
-  var active = _ref.active,
-      onChange = _ref.onChange,
-      disabled = _ref.disabled;
+var SwitchWithTooltip = function SwitchWithTooltip(props) {
+  var active = props.active,
+      disabled = props.disabled,
+      inputDisableTooltipMessage = props.disableTooltipMessage,
+      inputOnTooltipMessage = props.onTooltipMessage,
+      inputOffTooltipMessage = props.offTooltipMessage,
+      _props$onChange = props.onChange,
+      onChange = _props$onChange === void 0 ? function () {} : _props$onChange;
 
   var _useState = (0, _react.useState)(active),
       _useState2 = _slicedToArray(_useState, 2),
       checked = _useState2[0],
       setChecked = _useState2[1];
 
+  var disableTooltipMessage = inputDisableTooltipMessage !== null && inputDisableTooltipMessage !== void 0 ? inputDisableTooltipMessage : UnavailablePrefillMessage;
+  var onTooltipMessage = inputOnTooltipMessage !== null && inputOnTooltipMessage !== void 0 ? inputOnTooltipMessage : PrefillOnMessage;
+  var offTooltipMessage = inputOffTooltipMessage !== null && inputOffTooltipMessage !== void 0 ? inputOffTooltipMessage : PrefillOffMessage;
   (0, _react.useEffect)(function () {
     return setChecked(active);
   }, [active]);
@@ -87,12 +109,13 @@ var Switch = function Switch(_ref) {
     setChecked(!checked);
   };
 
+  var isActiveClass = disabled ? 'switch-control-disabled' : checked ? 'switch-control-active' : 'switch-control-inactive';
   return /*#__PURE__*/_react["default"].createElement(_tooltip["default"], {
-    content: disabled ? InavailablePrefill : checked ? DisabledPrefill : EnabledPrefill,
+    content: disabled ? disableTooltipMessage : checked ? onTooltipMessage : offTooltipMessage,
     arrowStyle: "right: 20px;",
     placement: "top"
   }, /*#__PURE__*/_react["default"].createElement(_reactSwitch["default"], _extends({}, switchConfig, {
-    className: "switch-control ".concat(disabled ? 'switch-control-disabled' : checked ? 'switch-control-active' : 'switch-control-inactive'),
+    className: "switch-control ".concat(isActiveClass),
     uncheckedIcon: /*#__PURE__*/_react["default"].createElement(OffButton, null),
     checkedIcon: /*#__PURE__*/_react["default"].createElement(OnButton, null),
     checked: checked,
@@ -101,5 +124,4 @@ var Switch = function Switch(_ref) {
   })));
 };
 
-var _default = Switch;
-exports["default"] = _default;
+exports.SwitchWithTooltip = SwitchWithTooltip;

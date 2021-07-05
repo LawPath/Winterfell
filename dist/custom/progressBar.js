@@ -32,7 +32,7 @@ function _templateObject2() {
 }
 
 function _templateObject() {
-  var data = _taggedTemplateLiteral(["\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  width: 100%;\n  background: #0075bf;\n  color: #f6f7f9;\n"]);
+  var data = _taggedTemplateLiteral(["\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  width: 100%;\n  background: ", ";\n  color: #f6f7f9;\n"]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -45,12 +45,15 @@ function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(
 
 var Background = _styledComponents["default"].div.attrs({
   'data-id': 'progress-bar-background'
-})(_templateObject());
+})(_templateObject(), function (_ref) {
+  var hasCollaboration = _ref.hasCollaboration;
+  return hasCollaboration ? '#00c08b' : '#0075bf';
+});
 
 var Foreground = _styledComponents["default"].div.attrs({
   'data-id': 'progress-bar-foreground'
-})(_templateObject2(), function (_ref) {
-  var progress = _ref.progress;
+})(_templateObject2(), function (_ref2) {
+  var progress = _ref2.progress;
   return progress;
 });
 
@@ -58,10 +61,13 @@ var ProgressBarWrapper = _styledComponents["default"].div.attrs({
   'data-id': 'progress-bar'
 })(_templateObject3());
 
-var ProgressBar = function ProgressBar(_ref2) {
-  var progress = _ref2.progress,
-      text = _ref2.text;
-  return /*#__PURE__*/_react["default"].createElement(ProgressBarWrapper, null, /*#__PURE__*/_react["default"].createElement(Background, null, text), /*#__PURE__*/_react["default"].createElement(Foreground, {
+var ProgressBar = function ProgressBar(_ref3) {
+  var progress = _ref3.progress,
+      text = _ref3.text,
+      hasCollaboration = _ref3.hasCollaboration;
+  return /*#__PURE__*/_react["default"].createElement(ProgressBarWrapper, null, /*#__PURE__*/_react["default"].createElement(Background, {
+    hasCollaboration: hasCollaboration
+  }, text), /*#__PURE__*/_react["default"].createElement(Foreground, {
     progress: progress
   }, text));
 };
