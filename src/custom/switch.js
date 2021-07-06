@@ -56,6 +56,7 @@ export const SwitchWithTooltip = (props) => {
     disableTooltipMessage: inputDisableTooltipMessage,
     onTooltipMessage: inputOnTooltipMessage,
     offTooltipMessage: inputOffTooltipMessage,
+    tooltipPlacement = 'bottom',
     onChange = () => {},
   } = props;
   const [checked, setChecked] = useState(active);
@@ -81,7 +82,7 @@ export const SwitchWithTooltip = (props) => {
     <Tooltip
       content={disabled ? disableTooltipMessage : checked ? onTooltipMessage : offTooltipMessage}
       arrowStyle={`right: 20px;`}
-      placement="top"
+      placement={tooltipPlacement}
     >
       <SimpleSwitch
         {...switchConfig}

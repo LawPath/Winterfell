@@ -291,7 +291,7 @@ export default class QuestionPanel extends React.Component {
   getProgressBarInfo = () => {
     let completionPercent = 0;
     let progressBarText = '';
-    const { progress } = this.props;
+    const { progress, hasCollaboration } = this.props;
 
     if (progress) {
       if (!progress.variation || progress.variation === 'classic') {
@@ -312,7 +312,9 @@ export default class QuestionPanel extends React.Component {
         completionPercent = Math.floor((100 / nQuestionsTotal) * nQuestionsCompleted);
       }
 
-      progressBarText = `${progress.preText || ''}${completionPercent}%${progress.postText || ''}`;
+      progressBarText = `${
+        (hasCollaboration ? progress.collaborationPreText : progress.preText) ?? ''
+      }${completionPercent}%${progress.postText ?? ''}`;
     }
     return { text: progressBarText, progress: completionPercent };
   };
@@ -388,7 +390,11 @@ export default class QuestionPanel extends React.Component {
       >
         <div className="question-panel-header">
           {this.props.panelAcions}
-          <ProgressBar progress={completionPercent} text={progressText} hasCollaboration={this.props.hasCollaboration} />
+          <ProgressBar
+            progress={completionPercent}
+            text={progressText}
+            hasCollaboration={this.props.hasCollaboration}
+          />
         </div>
         <div className="question-panel-body">
           <div className={this.props.classes.questionSets}>{questionSets}</div>
@@ -438,12 +444,13 @@ export default class QuestionPanel extends React.Component {
             <span className="prefill-action-bar-action">
               {this.state.prefillQuestion ? (
                 <SwitchWithTooltip
+                  tooltipPlacement="top"
                   active={this.state.prefillQuestion.enablePrefilledAnswer}
                   onChange={(status) => this.props.onEnablePrefilledAnswer(status)}
                   disabled={!this.state.prefillQuestion.label}
                 />
               ) : (
-                <SwitchWithTooltip active={false} disabled={true} />
+                <SwitchWithTooltip active={false} disabled={true} tooltipPlacement="top" />
               )}
             </span>
           </div>
