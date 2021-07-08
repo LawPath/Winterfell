@@ -10,6 +10,8 @@ import { QUESTION_INPUT_TYPES as INPUT_TYPES } from './inputTypes/index.js';
 
 export { SwitchWithTooltip as WinterfellSwitchWithTooltip } from './custom/switch';
 
+const FINAL_PANEL_ID = 'final-panel';
+
 export class Winterfell extends Component {
   constructor(props) {
     super(props);
@@ -72,6 +74,12 @@ export class Winterfell extends Component {
       schema: s,
       questionAnswers: nextProps.questionAnswers,
     };
+
+    const { collaborationFinished, hasCollaboration } = this.props;
+    if (collaborationFinished && hasCollaboration) {
+      this.handleSwitchPanel(FINAL_PANEL_ID, false);
+      return;
+    }
 
     if (nextProps.currentQuestionId) {
       let questionPanels = s.questionSets
@@ -313,7 +321,7 @@ export class Winterfell extends Component {
       this.panelHistory.push(panel.panelId);
     }
 
-    if (panel && panel.panelId === 'final-panel') {
+    if (panel && panel.panelId === FINAL_PANEL_ID) {
       /* The final panel does not contain any question */
       this.setState({ currentQuestionId: undefined });
     }
@@ -381,6 +389,11 @@ export class Winterfell extends Component {
       (panel) => panel.panelId == this.state.currentPanel.panelId,
     );
 
+    const disableNavigationButtons =
+      currentPanel.panelId === FINAL_PANEL_ID &&
+      this.props.hasCollaboration &&
+      this.props.collaborationFinished;
+
     const numPanels = this.state.schema.questionPanels.length;
     const currentPanelIndex = _.indexOf(this.state.schema.questionPanels, currentPanel) + 1;
 
@@ -429,6 +442,7 @@ export class Winterfell extends Component {
             windowHeight={this.props.windowHeight}
             currentQuestionsOnPanel={this.state.currentQuestions}
             hasCollaboration={this.props.hasCollaboration}
+            disableNavigationButtons={disableNavigationButtons}
           />
         </div>
       </form>
@@ -457,6 +471,7 @@ Winterfell.defaultProps = {
   panelId: undefined,
   disableSubmit: false,
   hasCollaboration: false,
+  collaborationFinished: false,
   renderError: undefined,
   renderRequiredAsterisk: undefined,
   currentQuestionId: undefined,

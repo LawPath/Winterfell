@@ -412,6 +412,7 @@ export default class QuestionPanel extends React.Component {
                   className={`${this.props.classes.backButton} ${
                     this.props.extraClasses.backButton || ''
                   }`}
+                  disabled={this.props.disableNavigationButtons}
                 />
               ) : undefined}
               {!this.props.button.disabled ? (
@@ -422,6 +423,7 @@ export default class QuestionPanel extends React.Component {
                   className={`${this.props.classes.controlButton} ${
                     this.props.extraClasses.button || ''
                   }`}
+                  disabled={this.props.disableNavigationButtons}
                 />
               ) : undefined}
             </div>
@@ -475,6 +477,7 @@ QuestionPanel.defaultProps = {
   numPanels: undefined,
   currentPanelIndex: undefined,
   hasCollaboration: false,
+  disableNavigationButtons: false,
   labeledAnswers: [],
   action: {
     default: {},

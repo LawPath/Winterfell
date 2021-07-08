@@ -5,6 +5,7 @@ const Button = ({
   onClick = () => {},
   text = 'Submit',
   type = 'button',
+  disabled = false,
 }) => {
   const handleClick = (e) => {
     e.preventDefault();
@@ -12,7 +13,7 @@ const Button = ({
   };
 
   return (
-    <button type={type} className={className} onClick={handleClick}>
+    <button type={type} className={className} onClick={handleClick} disabled={disabled}>
       {text}
     </button>
   );
