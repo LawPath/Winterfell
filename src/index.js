@@ -384,8 +384,7 @@ export class Winterfell extends Component {
   };
 
   render() {
-    const currentPanel = _.find(
-      this.state.schema.questionPanels,
+    const currentPanel = this.state.schema.questionPanels.find(
       (panel) => panel.panelId == this.state.currentPanel.panelId,
     );
 

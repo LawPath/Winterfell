@@ -400,33 +400,33 @@ export default class QuestionPanel extends React.Component {
           <div className={this.props.classes.questionSets}>{questionSets}</div>
 
           <div className="question-panel-body-footer">
-            <div
-              className={`${this.props.classes.buttonBar} ${
-                this.props.extraClasses.buttonBar || ''
-              }`}
-            >
-              {this.props.currentPanelIndex > 0 && !this.props.backButton.disabled ? (
-                <Button
-                  text={this.props.backButton.text || 'Back'}
-                  onClick={this.handleBackButtonClick}
-                  className={`${this.props.classes.backButton} ${
-                    this.props.extraClasses.backButton || ''
-                  }`}
-                  disabled={this.props.disableNavigationButtons}
-                />
-              ) : undefined}
-              {!this.props.button.disabled ? (
-                <Button
-                  type="submit"
-                  text={this.props.button.text}
-                  onClick={this.handleMainButtonClick}
-                  className={`${this.props.classes.controlButton} ${
-                    this.props.extraClasses.button || ''
-                  }`}
-                  disabled={this.props.disableNavigationButtons}
-                />
-              ) : undefined}
-            </div>
+            {!this.props.disableNavigationButtons && (
+              <div
+                className={`${this.props.classes.buttonBar} ${
+                  this.props.extraClasses.buttonBar || ''
+                }`}
+              >
+                {this.props.currentPanelIndex > 0 && !this.props.backButton.disabled ? (
+                  <Button
+                    text={this.props.backButton.text || 'Back'}
+                    onClick={this.handleBackButtonClick}
+                    className={`${this.props.classes.backButton} ${
+                      this.props.extraClasses.backButton || ''
+                    }`}
+                  />
+                ) : undefined}
+                {!this.props.button.disabled ? (
+                  <Button
+                    type="submit"
+                    text={this.props.button.text}
+                    onClick={this.handleMainButtonClick}
+                    className={`${this.props.classes.controlButton} ${
+                      this.props.extraClasses.button || ''
+                    }`}
+                  />
+                ) : undefined}
+              </div>
+            )}
             <SuggesstionWrapper>{suggestionSets}</SuggesstionWrapper>
           </div>
         </div>
