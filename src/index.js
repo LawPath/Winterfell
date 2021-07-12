@@ -170,9 +170,20 @@ export class Winterfell extends Component {
     }
 
     if (hasCollaboration && this.state.currentHasCollaboration === false) {
+      /* Toggle off all the prefill data */
       Object.entries(newState.questionAnswers).forEach(({ 0: key, 1: value }) => {
         _.set(newState.questionAnswers, [key], { ...value, enablePrefilledAnswer: false });
       });
+
+      /* Set all current questions on this panel to false */
+      let updatedCurrentQuestions = this.state.currentQuestions;
+      Object.entries(updatedCurrentQuestions).forEach(({ 0: key, 1: value }) => {
+        updatedCurrentQuestions = {
+          ...updatedCurrentQuestions,
+          [key]: { ...value, enablePrefilledAnswer: false },
+        };
+      });
+      newState.currentQuestions = updatedCurrentQuestions;
     }
 
     this.setState(newState);
@@ -213,23 +224,18 @@ export class Winterfell extends Component {
       if (currentQuestion === null || currentQuestion === undefined) {
         if (prefillData) {
           console.log('Set prefill data: answer is empty and have prefill data');
-
-          if (this.props.hasCollaboration && this.state.currentHasCollaboration === false) {
-            Object.entries(newState.questionAnswers).forEach(({ 0: key, 1: value }) => {
-              _.set(currentQuestionAnswers, [questionId], {
-                label: label,
-                enablePrefilledAnswer: false,
-                prefilledData: prefillData,
-              });
-            });
-          } else {
-            _.set(currentQuestionAnswers, questionId, {
-              label: label,
-              enablePrefilledAnswer: true,
-              value: prefillData,
-              prefilledData: prefillData,
-            });
-          }
+          _.set(currentQuestionAnswers, questionId, {
+            label: label,
+            prefilledData: prefillData,
+            ...(this.props.hasCollaboration
+              ? {
+                  enablePrefilledAnswer: false,
+                }
+              : {
+                  enablePrefilledAnswer: true,
+                  value: prefillData,
+                }),
+          });
         } else {
           console.log(
             'Set prefill data: answer is empty and no prefill data ',
