@@ -214,12 +214,22 @@ export class Winterfell extends Component {
         if (prefillData) {
           console.log('Set prefill data: answer is empty and have prefill data');
 
-          _.set(currentQuestionAnswers, questionId, {
-            label: label,
-            enablePrefilledAnswer: true,
-            value: prefillData,
-            prefilledData: prefillData,
-          });
+          if (this.props.hasCollaboration && this.state.currentHasCollaboration === false) {
+            Object.entries(newState.questionAnswers).forEach(({ 0: key, 1: value }) => {
+              _.set(currentQuestionAnswers, [questionId], {
+                label: label,
+                enablePrefilledAnswer: false,
+                prefilledData: prefillData,
+              });
+            });
+          } else {
+            _.set(currentQuestionAnswers, questionId, {
+              label: label,
+              enablePrefilledAnswer: true,
+              value: prefillData,
+              prefilledData: prefillData,
+            });
+          }
         } else {
           console.log(
             'Set prefill data: answer is empty and no prefill data ',
