@@ -60,6 +60,7 @@ export class Winterfell extends Component {
       panelMoved: false,
       currentQuestionId: undefined,
       currentQuestions: {},
+      currentHasCollaboration: undefined,
     };
   }
 
@@ -69,13 +70,15 @@ export class Winterfell extends Component {
 
   componentWillReceiveProps(nextProps) {
     let s = nextProps.schema;
+    const { collaborationFinished, hasCollaboration } = nextProps;
+
     let newState = {
       action: nextProps.action,
       schema: s,
       questionAnswers: nextProps.questionAnswers,
+      currentHasCollaboration: hasCollaboration,
     };
 
-    const { collaborationFinished, hasCollaboration } = this.props;
     if (collaborationFinished && hasCollaboration) {
       this.handleSwitchPanel(FINAL_PANEL_ID, false);
       return;
@@ -165,6 +168,13 @@ export class Winterfell extends Component {
         }
       });
     }
+
+    if (hasCollaboration && this.state.currentHasCollaboration === false) {
+      Object.entries(newState.questionAnswers).forEach(({ 0: key, 1: value }) => {
+        _.set(newState.questionAnswers, [key], { ...value, enablePrefilledAnswer: false });
+      });
+    }
+
     this.setState(newState);
   }
 
@@ -182,7 +192,13 @@ export class Winterfell extends Component {
     }
 
     const questionAnswers = _.set(this.state.questionAnswers, questionId, mergedData);
-    this.setState({ questionAnswers: questionAnswers });
+
+    const newCurrentQuestions = {
+      ...this.state.currentQuestions,
+      [questionId]: questionAnswers[questionId],
+    };
+
+    this.setState({ questionAnswers: questionAnswers, currentQuestions: newCurrentQuestions });
     this.props.onUpdate(questionAnswers);
   };
 
@@ -269,8 +285,10 @@ export class Winterfell extends Component {
     }
 
     /* Add mounted question to the questions in the panel  */
-    const newCurrentQuestions = this.state.currentQuestions;
-    newCurrentQuestions[questionId] = currentQuestionAnswers[questionId];
+    const newCurrentQuestions = {
+      ...this.state.currentQuestions,
+      [questionId]: currentQuestionAnswers[questionId],
+    };
 
     this.setState({
       questionAnswers: currentQuestionAnswers,
@@ -288,20 +306,24 @@ export class Winterfell extends Component {
 
   handleOnEnablePrefilledAnswer = (enable) => {
     let questionAnswers = { ...this.state.questionAnswers };
+    let updatedCurrentQuestions = {};
+
     _.forEach(this.state.currentQuestions, (value, key) => {
       if (value && value.label) {
-        const mergedData = { ..._.get(questionAnswers, [key]), enablePrefilledAnswer: enable };
+        const mergedData = { ...questionAnswers[key], enablePrefilledAnswer: enable };
 
         if (mergedData.enablePrefilledAnswer) {
           /* if the prefill-value is enabled, we will replace the inputed text  */
           mergedData.value = mergedData.prefilledData;
         }
         questionAnswers = _.chain(questionAnswers).set(key, mergedData).value();
+        updatedCurrentQuestions = { ...updatedCurrentQuestions, [key]: mergedData };
       }
     });
 
     if (questionAnswers) {
-      this.setState({ questionAnswers: questionAnswers });
+      const newCurrentQuestions = { ...this.state.currentQuestions, ...updatedCurrentQuestions };
+      this.setState({ questionAnswers: questionAnswers, currentQuestions: newCurrentQuestions });
       this.props.onUpdate(questionAnswers);
     }
   };
