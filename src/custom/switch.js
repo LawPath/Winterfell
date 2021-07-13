@@ -65,7 +65,9 @@ export const SwitchWithTooltip = (props) => {
   const onTooltipMessage = inputOnTooltipMessage ?? PrefillOnMessage;
   const offTooltipMessage = inputOffTooltipMessage ?? PrefillOffMessage;
 
-  useEffect(() => setChecked(active), [active]);
+  useEffect(() => {
+    setChecked(active);
+  }, [active, checked]);
 
   const handleChange = () => {
     onChange(!checked);

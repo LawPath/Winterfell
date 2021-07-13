@@ -184,6 +184,7 @@ export class Winterfell extends Component {
         };
       });
       newState.currentQuestions = updatedCurrentQuestions;
+      this.props.onUpdate(newState.questionAnswers, true);
     }
 
     this.setState(newState);
